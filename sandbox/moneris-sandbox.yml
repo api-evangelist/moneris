@@ -1,0 +1,80 @@
+generated: '2026-07-23'
+method: searched
+source: >-
+  https://developer.moneris.com/moneris-api/docs/getting-started-guide,
+  https://developer.moneris.com/moneris-api/docs/simulator
+notes: >-
+  Moneris publishes a full sandbox environment with a deterministic "Penny Value
+  Simulator": the cent value of the transaction amount selects the authorization
+  response code, so integrators can force approvals and specific declines without
+  real cards. Third parties get full sandbox access with no merchant account; a
+  test Merchant ID is issued from the Developer Portal Access & Credentials page.
+  All values below are published by Moneris verbatim.
+environments:
+  sandbox:
+    api_base: https://api.sb.moneris.io
+    mcp: https://mcp.sb.moneris.io/
+    access: Full sandbox access granted to any Developer Portal account, no merchant account required.
+  production:
+    api_base: https://api.moneris.io
+    mcp: https://mcp.moneris.io/
+    access: Requires a recognized Moneris Merchant account tied to the same email.
+credentials:
+  test_merchant_id: Issued per account from Access & Credentials (developer-account.moneris.com).
+  oauth_token_url: /oauth2/token (grant_type=client_credentials)
+  api_key_header: X-Api-Key
+penny_value_simulator:
+  rule: The transaction cent value determines the response code in sandbox.
+  docs: https://developer.moneris.com/moneris-api/docs/simulator
+  visa_examples:
+    - amount_cents: 0.00
+      code: 00/027
+      result: Approved
+    - amount_cents: 0.05
+      code: 05/481
+      result: Declined
+    - amount_cents: 0.51
+      code: 51/481
+      result: Declined - low funds
+    - amount_cents: 0.54
+      code: 54/482
+      result: Declined - expired card
+    - amount_cents: 0.68
+      code: 68/113
+      result: System timeout
+    - amount_cents: 0.91
+      code: 01/027
+      result: Approved after 5 second delay
+  visa_amount_bands:
+    - band: $11.00-$50.99
+      result: Approved
+    - band: $51.00-$60.00
+      result: Declined 41/421 (hold/call/capture)
+    - band: $60.01-$119.99
+      result: Approved
+    - band: $120.00-$130.00
+      result: Declined 54/482 (expired card)
+    - band: $130.01 and above
+      result: Approved
+  amex_note: For Amex, decline simulation amounts must be exact (e.g. $5.00 -> 50/438 declined); any even .00 amount except $5.00 approves.
+test_cards:
+  always_approved_visa:
+    - '4502285070000007'
+    - '4924190000003750'
+    - '4551210032790206'
+    - '4924190000000145'
+    - '4524000000015080'
+  always_declined_visa:
+    - number: '4355310002576375'
+      iso_decline: '54'
+    - number: '4716091243227333'
+      iso_decline: '62'
+    - number: '4556462273286718'
+      iso_decline: '06'
+    - number: '4217048416210847'
+      iso_decline: '96'
+    - number: '4485621544903528'
+      iso_decline: '51'
+caveats:
+  - Simulator responses may change without notice; not designed for load testing.
+  - Moneris asks for a >=2 second pause between simulator requests.

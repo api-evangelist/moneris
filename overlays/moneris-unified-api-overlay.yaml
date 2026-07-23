@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Moneris Unified API
+  version: 1.0.0
+extends: openapi/moneris-unified-api-openapi.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-provider: moneris
+      x-apievangelist-category: [Payments, Card Payments, Merchant Services, Fintech]
+      x-apievangelist-idempotency:
+        supported: true
+        mechanism: request-body-field
+        field: idempotencyKey
+      x-apievangelist-mcp-server: https://mcp.moneris.io/
+      x-apievangelist-sandbox: https://api.sb.moneris.io
+      x-apievangelist-status-page: https://status.moneris.com
+      x-apievangelist-compliance: [PCI DSS Level 1, EMVCo 3DS 2.2]
+  - target: $.servers
+    update:
+      - url: https://api.moneris.io
+        description: Production
+      - url: https://api.sb.moneris.io
+        description: Sandbox

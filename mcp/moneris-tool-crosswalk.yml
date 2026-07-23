@@ -1,0 +1,146 @@
+generated: '2026-07-23'
+method: derived
+source: mcp/moneris-mcp.yml + openapi/moneris-unified-api-openapi.json
+notes: >-
+  Binds each published Moneris MCP tool to its backing OpenAPI operationId. The
+  MCP surface is a deliberate read-heavy subset of the 54-operation REST API: it
+  exposes payment create/complete/cancel plus retrieve/list across the core
+  resources, but omits most write operations (refund creation, subscription
+  lifecycle mutations, 3-D Secure, Kount, disputes, merchant onboarding). Each
+  bound tool inherits its real input contract from the referenced operation's
+  parameters + requestBody in the spec. The live MCP tools/list is auth-gated
+  (X-API-Key), so bindings are by documented name/semantics; confidence is high
+  where the tool name maps 1:1 to a single operationId.
+surfaces:
+  openapi:
+    file: openapi/moneris-unified-api-openapi.json
+    operations: 54
+  mcp:
+    url: https://mcp.moneris.io/
+    tools_list_gated: true
+    auth: X-API-Key + X-Merchant-Id headers
+  graphql: null
+crosswalk:
+  - tool: create_payment
+    category: Payments
+    rest: [createPayments]
+    binding: rest
+    confidence: high
+  - tool: retrieve_payment
+    category: Payments
+    rest: [getPayment]
+    binding: rest
+    confidence: high
+  - tool: list_payments
+    category: Payments
+    rest: [getPayments]
+    binding: rest
+    confidence: high
+  - tool: cancel_payment
+    category: Payments
+    rest: [cancelPayment]
+    binding: rest
+    confidence: high
+  - tool: complete_payment
+    category: Payments
+    rest: [completePayment]
+    binding: rest
+    confidence: high
+  - tool: retrieve_refund
+    category: Refunds
+    rest: [getRefundById]
+    binding: rest
+    confidence: high
+  - tool: list_refunds
+    category: Refunds
+    rest: [getRefunds]
+    binding: rest
+    confidence: high
+  - tool: retrieve_payment_method
+    category: Payment methods
+    rest: [getPaymentMethod]
+    binding: rest
+    confidence: high
+  - tool: list_payment_methods
+    category: Payment methods
+    rest: [getPaymentMethods]
+    binding: rest
+    confidence: high
+  - tool: retrieve_card_validation
+    category: Card validation
+    rest: [getValidation]
+    binding: rest
+    confidence: high
+  - tool: list_card_validations
+    category: Card validation
+    rest: [getValidations]
+    binding: rest
+    confidence: high
+  - tool: create_customer
+    category: Customers
+    rest: [createCustomers]
+    binding: rest
+    confidence: high
+  - tool: retrieve_customer
+    category: Customers
+    rest: [getCustomer]
+    binding: rest
+    confidence: high
+  - tool: list_customers
+    category: Customers
+    rest: [getCustomers]
+    binding: rest
+    confidence: high
+  - tool: mcpRate
+    category: Multi-currency pricing
+    rest: [mcpRate]
+    binding: rest
+    confidence: high
+  - tool: getMultiCurrencyPricingRateById
+    category: Multi-currency pricing
+    rest: [getMultiCurrencyPricingRateById]
+    binding: rest
+    confidence: high
+  - tool: list_subscriptions
+    category: Subscriptions
+    rest: [getSubscriptions]
+    binding: rest
+    confidence: high
+  - tool: retrieve_subscription
+    category: Subscriptions
+    rest: [getSubscription]
+    binding: rest
+    confidence: high
+  - tool: surcharge_lookup
+    category: Surcharge
+    rest: [surchargeLookUp]
+    binding: rest
+    confidence: high
+mcp_only: []
+rest_only:
+  - capability: Payment methods write
+    operations: [createPaymentMethod, updatePaymentMethod, deletePaymentMethod]
+  - capability: Payments write (pre-auth increment)
+    operations: [incrementPayment]
+  - capability: Customers write
+    operations: [updateCustomer, deleteCustomer]
+  - capability: Refunds create
+    operations: [createRefund]
+  - capability: Subscriptions lifecycle
+    operations: [createSubscriptions, updateSubscription, cancelSubscription, extendSubscription, pauseSubscription, resumeSubscription]
+  - capability: 3-D Secure authentication
+    operations: [createAuthentication, getAuthentication, authenticationValueLookup, cardLookup]
+  - capability: Kount risk inquiry
+    operations: [createKountInquiry, getKountInquiries, getKountInquiryById, kountInquiryAssert]
+  - capability: Disputes / chargebacks
+    operations: [getDisputeByCaseIdAndRecordNumber, acceptDispute, uploadDisputeImage, getDisputeUploadStatus]
+  - capability: Merchant onboarding & ordering
+    operations: [createMerchant, getMerchantDetailsByMerchantId, updateMerchant, createOrder, getOrderDetailsByOrderId, updateOrder, listMerchantSupplies, getRecommenderProducts]
+  - capability: Installments
+    operations: [installmentLookup]
+coverage:
+  tools_named: 19
+  tools_bound: 19
+  mcp_only: 0
+  rest_ops_total: 54
+  rest_ops_with_tool: 19

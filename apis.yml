@@ -48,6 +48,10 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/moneris-unified-api-openapi.json
+  - type: Overlay
+    url: overlays/moneris-unified-api-overlay.yaml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/purchase
   - type: APIReference
@@ -183,6 +187,50 @@ apis:
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
 common:
+- type: DomainSecurity
+  url: security/moneris-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/moneris-agentic-access.yml
+- type: OAuthScopes
+  url: scopes/moneris-scopes.yml
+- type: Authentication
+  url: authentication/moneris-authentication.yml
+- type: MCPServer
+  url: mcp/moneris-mcp.yml
+- type: Conventions
+  url: conventions/moneris-conventions.yml
+- type: Idempotency
+  url: conventions/moneris-conventions.yml
+- type: ErrorCatalog
+  url: errors/moneris-problem-types.yml
+- type: DeclineCodes
+  url: errors/moneris-decline-codes.yml
+- type: Lifecycle
+  url: lifecycle/moneris-lifecycle.yml
+- type: StatusPage
+  url: https://status.moneris.com
+- type: Conformance
+  url: conformance/moneris-conformance.yml
+- type: Compliance
+  url: https://www.moneris.com/en/support/compliance-and-security/pci-data-security
+- type: Webhooks
+  url: asyncapi/moneris-subscriptions-webhooks.yml
+- type: DataModel
+  url: data-model/moneris-data-model.yml
+- type: Sandbox
+  url: sandbox/moneris-sandbox.yml
+- type: WellKnown
+  url: well-known/moneris-well-known.yml
+- type: LLMsTxt
+  url: llms/moneris-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: GettingStarted
+  url: https://developer.moneris.com/moneris-api/docs/getting-started-guide
+- type: ChangeLog
+  url: https://developer.moneris.com/changelog
+- type: SignUp
+  url: https://developer.moneris.com/login
 - type: Website
   url: https://www.moneris.com
 - type: DeveloperPortal

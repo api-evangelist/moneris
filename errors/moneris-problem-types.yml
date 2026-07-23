@@ -1,0 +1,64 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/moneris-unified-api-openapi.json
+docs: https://developer.moneris.com/moneris-api/docs/response-handling
+format: rfc7807
+media_type: application/problem+json
+notes: >-
+  Derived from the 4xx/5xx responses of the Moneris Unified API (v2.6.1). Every
+  error response uses a Problem JSON body per RFC 7807 with the envelope
+  {type, title, status, detail, instance, category, errors[]}. The `errors[]`
+  array carries parameter-level detail (parameterName, parameterValue,
+  reasonCode, errorMessage) on validation failures. `title` is an upper-snake
+  machine token (e.g. FORBIDDEN_REQUEST) and `category` groups the error class
+  (e.g. UNAUTHORIZED_ERROR, VALIDATION_ERROR).
+envelope:
+  type: string (uri linking to error documentation)
+  title: string (machine-readable error token)
+  status: integer (HTTP status)
+  detail: string (nullable, human-readable instance detail)
+  instance: string (nullable)
+  category: string (error class)
+  errors: array of parameterError {parameterName, parameterValue, reasonCode, errorMessage}
+problems:
+  - status: 400
+    title: BAD_REQUEST
+    description: Failed validation - the request body or parameters are malformed.
+    operations_count: 44
+  - status: 401
+    title: UNAUTHORIZED
+    description: Missing or invalid authentication (access token or API key).
+    operations_count: 54
+  - status: 403
+    title: FORBIDDEN_REQUEST
+    category: UNAUTHORIZED_ERROR
+    description: Authenticated but not permitted - insufficient scope or merchant access.
+    operations_count: 54
+  - status: 404
+    title: NOT_FOUND
+    description: The referenced resource (payment, customer, subscription, etc.) does not exist.
+    operations_count: 30
+  - status: 409
+    title: CONFLICT
+    description: >-
+      Conflict with resource state or an existing idempotency key (replayed
+      write with a previously seen idempotencyKey).
+    operations_count: 28
+  - status: 422
+    title: UNPROCESSABLE_ENTITY
+    description: Failed validation - the request was well-formed but semantically rejected.
+    operations_count: 29
+  - status: 429
+    title: TOO_MANY_REQUESTS
+    description: Rate limit exceeded.
+    operations_count: 54
+  - status: 500
+    title: INTERNAL_SERVER_ERROR
+    description: Server-side processing error.
+    operations_count: 54
+  - status: 503
+    title: SERVICE_UNAVAILABLE
+    description: The service is temporarily unavailable.
+    operations_count: 54
+see_also:
+  decline_codes: errors/moneris-decline-codes.yml

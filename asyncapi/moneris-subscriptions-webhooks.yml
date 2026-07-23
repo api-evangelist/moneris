@@ -1,0 +1,48 @@
+generated: '2026-07-23'
+method: searched
+source: >-
+  https://developer.moneris.com/moneris-api/docs/recurring-billing,
+  openapi/moneris-unified-api-openapi.json
+spec_type: Webhooks
+notes: >-
+  Moneris does not publish a formal AsyncAPI document, but it documents an
+  outbound webhook surface for recurring-billing subscriptions. On a successful
+  subscription payment, Moneris POSTs an event to the merchant-supplied
+  callbackUrl set on the Create Subscription request. The event envelope is
+  documented inline in the createSubscriptions operation of the OpenAPI spec.
+delivery:
+  transport: https-webhook
+  method: POST
+  destination: merchant-supplied callbackUrl (set on createSubscriptions request body)
+  content_type: application/json
+  expected_response: 200 OK (400 signals a processing error)
+event_envelope:
+  base: webhookRequest
+  fields:
+    - name: eventId
+      required: true
+      note: Unique event identifier; usable as an idempotency key to detect duplicate deliveries.
+    - name: eventType
+      required: true
+    - name: occuredAt
+      required: true
+      format: date-time
+    - name: apiVersion
+      required: false
+    - name: objectId
+      required: false
+      note: Identifies the API resource (e.g. payment id) for follow-on transactions.
+    - name: href
+      required: false
+      note: URI to retrieve the resource that triggered the event.
+    - name: correlationId
+      required: false
+      note: Correlation id from the original request, for cross-event tracing.
+    - name: data
+      required: false
+      note: Full representation of the resource that triggered the event (e.g. the Payment object).
+events:
+  - type: RECURRING_PAYMENT_CONFIRMED
+    description: A recurring subscription payment transaction has been executed.
+    resource: Subscription / Payment
+    source_operation: openapi/moneris-unified-api-openapi.json#createSubscriptions

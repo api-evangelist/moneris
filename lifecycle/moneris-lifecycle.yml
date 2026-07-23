@@ -1,0 +1,26 @@
+generated: '2026-07-23'
+method: searched
+source: >-
+  https://developer.moneris.com/moneris-api/docs/getting-started-guide,
+  openapi/moneris-unified-api-openapi.json,
+  https://status.moneris.com
+notes: >-
+  Moneris versions the Unified API through a required date-based Api-Version
+  request header, which pins the request/response contract. No public deprecation
+  policy or Sunset/Deprecation (RFC 8594) header support is documented, and no
+  OpenAPI operation is flagged deprecated. Moneris operates a public status page.
+versioning:
+  scheme: header
+  header: Api-Version
+  format: date (YYYY-MM-DD)
+  current: 2.6.1
+  docs: https://developer.moneris.com/moneris-api/docs/getting-started-guide
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation policy or Sunset header support found.
+status_page: https://status.moneris.com
+sla:
+  url: null
+  note: No public SLA / uptime commitment published on the developer portal.
+deprecated_operations: []

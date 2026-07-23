@@ -1,0 +1,16 @@
+generated: '2026-07-23'
+method: generated
+source: openapi/moneris-unified-api-openapi.json
+skills:
+  - file: moneris-create-customer-and-charge.md
+    name: Create a customer and charge them
+    api: openapi/moneris-unified-api-openapi.json
+    operations: [createCustomers, createPaymentMethod, createPayments, getPayment]
+  - file: moneris-preauth-complete-refund.md
+    name: Pre-authorize, complete, and refund a payment
+    api: openapi/moneris-unified-api-openapi.json
+    operations: [createPayments, incrementPayment, completePayment, createRefund, getPayment]
+  - file: moneris-recurring-subscription.md
+    name: Create and manage a recurring subscription
+    api: openapi/moneris-unified-api-openapi.json
+    operations: [createSubscriptions, getSubscription, updateSubscription, pauseSubscription, resumeSubscription, extendSubscription, cancelSubscription]

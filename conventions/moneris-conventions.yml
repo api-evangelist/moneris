@@ -1,0 +1,102 @@
+generated: '2026-07-23'
+method: searched
+source: >-
+  https://developer.moneris.com/moneris-api/docs/getting-started-guide,
+  https://developer.moneris.com/moneris-api/docs/response-handling,
+  openapi/moneris-unified-api-openapi.json
+api: openapi/moneris-unified-api-openapi.json
+notes: >-
+  Cross-cutting request/response semantics for the Moneris Unified API, harvested
+  from the developer docs and derived from the OpenAPI 3.0.3 spec (Moneris API
+  v2.6.1).
+authentication:
+  styles:
+    - type: oauth2
+      flow: clientCredentials
+      token_url: /oauth2/token
+      recommended: true
+      note: Moneris recommends OAuth 2.0 for fine-grained scope-based authorization.
+    - type: apiKey
+      header: X-Api-Key
+      note: API key auth is supported but not Moneris-recommended for transaction processing.
+  bearer_header: Authorization
+  see: authentication/moneris-authentication.yml
+required_headers:
+  - name: Api-Version
+    required: true
+    note: Date-based API version selector (e.g. 2024-09-17); pins the request/response contract.
+  - name: X-Merchant-Id
+    required: true
+    note: Identifies the Moneris merchant the call operates on behalf of.
+  - name: Accept-Language
+    required: true
+  - name: X-Correlation-Id
+    required: false
+    note: Client-supplied correlation id echoed back on responses and webhook events for tracing.
+idempotency:
+  supported: true
+  mechanism: request-body-field
+  field: idempotencyKey
+  scope: per write operation
+  applies_to:
+    - createPayments
+    - completePayment
+    - cancelPayment
+    - incrementPayment
+    - createRefund
+    - createCustomers
+    - createSubscriptions
+    - cancelSubscription
+    - extendSubscription
+    - pauseSubscription
+    - resumeSubscription
+    - createValidation
+    - createAuthentication
+    - cardLookup
+    - createKountInquiry
+    - mcpRate
+    - surchargeLookUp
+    - installmentLookup
+    - createMerchant
+    - createOrder
+  conflict_status: 409
+  conflict_note: >-
+    A replayed request that conflicts with an existing idempotency key returns
+    HTTP 409 ("conflict with resource state or existing idempotency key").
+  docs: https://developer.moneris.com/moneris-go/docs/idempotent-request
+pagination:
+  style: cursor
+  params:
+    - name: page[before]
+      in: query
+      note: Cursor for the previous page (pageBeforeCursor).
+    - name: page[limit]
+      in: query
+      note: Page size (pageLimit).
+  applies_to_list_operations: true
+versioning:
+  scheme: header
+  header: Api-Version
+  format: date (YYYY-MM-DD)
+  current: 2.6.1
+request_tracing:
+  header: X-Correlation-Id
+  echoed_on_webhooks: true
+error_envelope:
+  format: rfc7807
+  media_type: application/problem+json
+  fields: [type, title, status, detail, instance, category, errors]
+  see: errors/moneris-problem-types.yml
+rate_limit_signaling:
+  status: 429
+  note: Rate-limited requests return HTTP 429; per-request throttle limits are enforced but header values are not published in the spec.
+metadata:
+  supported: false
+  note: The Moneris API does not expose a generic customer-defined metadata object; resource-specific fields are used instead.
+cross_links:
+  errors: errors/moneris-problem-types.yml
+  decline_codes: errors/moneris-decline-codes.yml
+  lifecycle: lifecycle/moneris-lifecycle.yml
+  authentication: authentication/moneris-authentication.yml
+  scopes: scopes/moneris-scopes.yml
+  sandbox: sandbox/moneris-sandbox.yml

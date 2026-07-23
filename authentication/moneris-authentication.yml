@@ -1,0 +1,41 @@
+generated: '2026-07-23'
+method: searched
+source: openapi/moneris-unified-api-openapi.json
+docs: https://developer.moneris.com/moneris-api/docs/authentication-api-keys
+notes: >-
+  Moneris recommends OAuth 2.0 client-credentials (POST /oauth2/token,
+  grant_type=client_credentials, scope-limited) over the X-Api-Key header. Both
+  Client Credentials apps and API Key "subscriptions" are self-provisioned from
+  the Developer Portal Access & Credentials page (max 2 of each per account);
+  sandbox and production credentials are separate.
+summary:
+  types:
+  - apiKey
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-Api-Key
+  description: |-
+    An API key is a token that a client provides when making API calls.
+
+    API keys are supposed to be a secret that only the client and server know about.
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: /oauth2/token
+    scopes: 14
+  description: |-
+    OAuth 2.0 is an authorization protocol that gives an API client limited access to user data on a web server.
+
+    OAuth relies on authentication scenarios, that allows the resource owner (user) to share the protected content from the server, hosting the resource, without sharing their credentials. For that purpose, an OAuth 2.0 server issues access tokens that the client applications can use to access
+  sources:
+  - openapi/moneris-unified-api-openapi.json

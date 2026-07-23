@@ -1,0 +1,100 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/moneris-unified-api-openapi.json
+schemes:
+- name: OAuth2
+  source: openapi/moneris-unified-api-openapi.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: /oauth2/token
+  description: |-
+    OAuth 2.0 is an authorization protocol that gives an API client limited access to user data on a web server.
+
+    OAuth relies on authentication scenarios, that allows the resource owner (user) to share the protected content from the server, hosting the resource, without sharing their credentials. For that purpose, an OAuth 2.0 server issues access tokens that the client applications can use to access protected resources on behalf of the resource owner.
+
+    Moneris recommends the use of OAuth 2.0 as it provides fine grained authorization levels.
+scopes:
+- scope: customer.read
+  description: Grants read access to customer data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: customer.write
+  description: Grants read & write access to customer data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: dispute.read
+  description: Grants read access to disputes
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: dispute.write
+  description: Grants read & write access to disputes
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: kount.read
+  description: Grants read access to Kount inquiries
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: kount.write
+  description: Grants read & write access to Kount inquiries
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: onboarding.merchant.read
+  description: Grants read access to merchant onboarding related APIs
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: onboarding.merchant.write
+  description: Grants read & write access to merchant onboarding related APIs
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: onboarding.order.read
+  description: Grants read access to onboarding orders related APIs
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: onboarding.order.write
+  description: Grants read & write access to onboarding orders related APIs
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: payment.read
+  description: Grants read access to payment related APIs
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: payment.write
+  description: Grants read & write access to payment related APIs
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: refund.read
+  description: Grants read access to refunds
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json
+- scope: refund.write
+  description: Grants read & write access to refunds
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/moneris-unified-api-openapi.json

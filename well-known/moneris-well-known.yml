@@ -1,0 +1,50 @@
+generated: '2026-07-23'
+method: searched
+notes: >-
+  Probed the /.well-known/ discovery surface on the API hosts (api.moneris.io,
+  api.sb.moneris.io), the developer portal (developer.moneris.com, a ReadMe hub),
+  and the corporate site (www.moneris.com). The API host returns 404 for all
+  well-known paths; the ReadMe developer hub and the corporate site return HTTP
+  200 for many paths but the body is the ReadMe/marketing SPA HTML shell rather
+  than a real machine-readable document (recorded as spa_shell). The one genuine
+  machine-readable discovery artifact Moneris publishes is the ReadMe-generated
+  llms.txt (captured verbatim to llms/moneris-llms.txt). The hosted MCP server
+  (mcp.moneris.io) has no anonymous OAuth well-known surface - it authenticates
+  with X-API-Key headers.
+hosts:
+  - host: https://api.moneris.io
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /openapi.json
+        status: 404
+  - host: https://mcp.moneris.io
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+  - host: https://developer.moneris.com
+    documents:
+      - path: /llms.txt
+        status: 200
+        result: real
+        file: ../llms/moneris-llms.txt
+      - path: /moneris-api/llms.txt
+        status: 200
+        result: real
+      - path: /.well-known/security.txt
+        status: 200
+        result: spa_shell
+  - host: https://www.moneris.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        result: spa_shell
+      - path: /.well-known/api-catalog
+        status: 200
+        result: spa_shell

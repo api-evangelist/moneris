@@ -1,0 +1,101 @@
+generated: '2026-07-23'
+method: searched
+source: >-
+  https://developer.moneris.com/moneris-api/docs/response-code-tables,
+  https://developer.moneris.com/moneris-api/docs/simulator
+notes: >-
+  Transaction-level authorization response / decline codes for the Moneris
+  Unified API. Moneris returns both an RBC (Moneris host) code and an ISO code on
+  the payment response; the ISO code is the standard card-network response code.
+  These are distinct from the API-level Problem JSON errors in
+  errors/moneris-problem-types.yml (which cover HTTP transport/validation). The
+  full authoritative tables (Visa / Mastercard / Amex / Interac) are published at
+  the response-code-tables page; a representative set of the most common ISO
+  outcome codes is captured here verbatim. Decline reasons are typically masked
+  to the buyer (a generic "declined" is shown) while the merchant receives the
+  specific code.
+envelope:
+  fields:
+    - responseCode (RBC/Moneris host code)
+    - isoResponseCode (ISO 8583 response code)
+  masked_to_buyer: true
+iso_codes:
+  - iso: '00'
+    rbc: '027'
+    meaning: Approved
+    action: Proceed - transaction approved.
+  - iso: '01'
+    rbc: '000'
+    meaning: Approved
+    action: Proceed - transaction approved.
+  - iso: '02'
+    rbc: '483'
+    meaning: Call for authorization / refer to card issuer
+    action: Do not retry automatically; cardholder should contact issuer.
+  - iso: '03'
+    rbc: '476'
+    meaning: Declined - merchant not on file / invalid merchant
+    action: Merchant configuration issue; contact Moneris.
+  - iso: '04'
+    rbc: '421'
+    meaning: Declined - pick up card (no fraud)
+    action: Do not retry; request another payment method.
+  - iso: '05'
+    rbc: '481'
+    meaning: Declined - do not honour
+    action: Request another payment method.
+  - iso: '06'
+    rbc: '050'
+    meaning: Error
+    action: Retry may be possible after correcting the request.
+  - iso: '07'
+    rbc: '421'
+    meaning: Declined - pick up card, special condition (fraud account)
+    action: Do not retry; request another payment method.
+  - iso: '12'
+    rbc: '421'
+    meaning: Declined - invalid transaction
+    action: Do not retry with the same request.
+  - iso: '14'
+    rbc: '477'
+    meaning: Invalid card number
+    action: Request a corrected card number.
+  - iso: '41'
+    rbc: '421'
+    meaning: Declined - lost card, pick up
+    action: Do not retry; request another payment method.
+  - iso: '43'
+    rbc: '421'
+    meaning: Declined - stolen card, pick up
+    action: Do not retry; request another payment method.
+  - iso: '51'
+    rbc: '481'
+    meaning: Declined - insufficient / low funds
+    action: Request another payment method or retry later.
+  - iso: '54'
+    rbc: '482'
+    meaning: Declined - expired card
+    action: Request updated card expiry.
+  - iso: '57'
+    rbc: '421'
+    meaning: Declined - transaction not permitted to cardholder
+    action: Request another payment method.
+  - iso: '62'
+    rbc: '481'
+    meaning: Declined - restricted card
+    action: Request another payment method.
+  - iso: '75'
+    rbc: '481'
+    meaning: Allowable number of PIN tries exceeded (Maestro)
+    action: Cardholder must re-enter / contact issuer.
+  - iso: '96'
+    rbc: '476'
+    meaning: Invalid transaction, system error
+    action: Retry later.
+sandbox_simulation:
+  method: Penny Value Simulator
+  note: >-
+    In sandbox the cent value of the transaction amount deterministically
+    selects the response code (e.g. $x.51 -> 51/481 low funds; $x.54 -> 54/482
+    expired card; $x.05 -> 05/481 declined). See sandbox/moneris-sandbox.yml.
+  docs: https://developer.moneris.com/moneris-api/docs/simulator

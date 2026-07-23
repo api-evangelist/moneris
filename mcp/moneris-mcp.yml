@@ -1,0 +1,104 @@
+generated: '2026-07-23'
+method: searched
+status: published
+source: https://developer.moneris.com/moneris-api/docs/model-context-protocol-mcp
+notes: >-
+  Moneris hosts an official streamable-HTTP MCP server (in preview) that exposes
+  a subset of the Moneris Unified API as agent tools. Authentication is via the
+  X-API-Key and X-Merchant-Id request headers (the same credentials used for the
+  REST API key auth) - there is no anonymous OAuth discovery surface; an
+  anonymous tools/list returns 401 "Unauthorized: Missing Authorization header or
+  X-API-Key header", so the input schemas below require authenticated
+  introspection. Tool names and descriptions are captured verbatim from the
+  published docs. Feedback contact: monerismcp@moneris.com.
+server:
+  name: moneris
+  transport: http
+  streamable: true
+  url: https://mcp.moneris.io/
+  sandbox_url: https://mcp.sb.moneris.io/
+  auth:
+    type: apiKey
+    headers:
+      - X-API-Key
+      - X-Merchant-Id
+  spec_reference: https://modelcontextprotocol.io/specification/2025-11-25
+  preview: true
+error_format: json-rpc
+tools:
+  - name: create_payment
+    resource: Payments
+    description: Create a payment using a payment method ID only
+    source_operation: openapi/moneris-unified-api-openapi.json#createPayments
+  - name: retrieve_payment
+    resource: Payments
+    description: Retrieve a payment by ID
+    source_operation: openapi/moneris-unified-api-openapi.json#getPayment
+  - name: list_payments
+    resource: Payments
+    description: List payments with pagination and filtering
+    source_operation: openapi/moneris-unified-api-openapi.json#getPayments
+  - name: cancel_payment
+    resource: Payments
+    description: Cancel a payment
+    source_operation: openapi/moneris-unified-api-openapi.json#cancelPayment
+  - name: complete_payment
+    resource: Payments
+    description: Complete a payment (for two-step transactions)
+    source_operation: openapi/moneris-unified-api-openapi.json#completePayment
+  - name: retrieve_refund
+    resource: Refunds
+    description: Retrieve a refund by ID
+    source_operation: openapi/moneris-unified-api-openapi.json#getRefundById
+  - name: list_refunds
+    resource: Refunds
+    description: List refunds with pagination and filtering
+    source_operation: openapi/moneris-unified-api-openapi.json#getRefunds
+  - name: retrieve_payment_method
+    resource: Payment methods
+    description: Retrieve a payment method by ID
+    source_operation: openapi/moneris-unified-api-openapi.json#getPaymentMethod
+  - name: list_payment_methods
+    resource: Payment methods
+    description: List payment methods with pagination
+    source_operation: openapi/moneris-unified-api-openapi.json#getPaymentMethods
+  - name: retrieve_card_validation
+    resource: Card validation
+    description: Retrieve card validation results
+    source_operation: openapi/moneris-unified-api-openapi.json#getValidation
+  - name: list_card_validations
+    resource: Card validation
+    description: List card validations with pagination
+    source_operation: openapi/moneris-unified-api-openapi.json#getValidations
+  - name: create_customer
+    resource: Customers
+    description: Create a new customer
+    source_operation: openapi/moneris-unified-api-openapi.json#createCustomers
+  - name: retrieve_customer
+    resource: Customers
+    description: Retrieve customer details by ID
+    source_operation: openapi/moneris-unified-api-openapi.json#getCustomer
+  - name: list_customers
+    resource: Customers
+    description: List customers with pagination and filtering
+    source_operation: openapi/moneris-unified-api-openapi.json#getCustomers
+  - name: mcpRate
+    resource: Multi-currency pricing
+    description: Lock exchange rates for multi-currency payments or refunds
+    source_operation: openapi/moneris-unified-api-openapi.json#mcpRate
+  - name: getMultiCurrencyPricingRateById
+    resource: Multi-currency pricing
+    description: Retrieve the locked MCP rate details by lookup ID
+    source_operation: openapi/moneris-unified-api-openapi.json#getMultiCurrencyPricingRateById
+  - name: list_subscriptions
+    resource: Subscriptions
+    description: Retrieves a list of subscriptions
+    source_operation: openapi/moneris-unified-api-openapi.json#getSubscriptions
+  - name: retrieve_subscription
+    resource: Subscriptions
+    description: Retrieve subscription details by subscription ID
+    source_operation: openapi/moneris-unified-api-openapi.json#getSubscription
+  - name: surcharge_lookup
+    resource: Surcharge
+    description: Performs a surcharge lookup to determine if a payment method is eligible for surcharge
+    source_operation: openapi/moneris-unified-api-openapi.json#surchargeLookUp

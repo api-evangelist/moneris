@@ -1,0 +1,49 @@
+generated: '2026-07-23'
+method: searched
+source: >-
+  openapi/moneris-unified-api-openapi.json,
+  https://developer.moneris.com/moneris-api/docs/response-handling,
+  https://developer.moneris.com/moneris-api/docs/additional-features,
+  https://www.moneris.com/en/support/compliance-and-security/pci-data-security
+notes: >-
+  Standards conformance asserted from the OpenAPI spec, the developer docs, and
+  Moneris' published compliance posture. Moneris is a PCI DSS Level 1 payment
+  processor; the developer docs repeatedly reference PCI DSS scope reduction via
+  Hosted Tokenization / stored payment methods, and 3-D Secure 2.2 (EMVCo) is
+  supported for cardholder authentication.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: openapi securitySchemes declares oauth2 clientCredentials flow with 14 scopes
+  - id: oauth2-client-credentials
+    conforms: true
+    evidence: tokenUrl /oauth2/token, grant_type=client_credentials
+  - id: rfc7807-problem-details
+    conforms: true
+    evidence: all error responses use application/problem+json with type/title/status/detail/instance
+  - id: rfc9457-problem-details
+    conforms: partial
+    evidence: uses the RFC 7807 shape (superseded by 9457) with an added category + errors[] extension
+  - id: pci-dss
+    conforms: true
+    evidence: Moneris is a PCI DSS Level 1 acquirer; Hosted Tokenization removes merchant card-data from PCI scope
+    reference: https://www.moneris.com/en/support/compliance-and-security/pci-data-security
+  - id: emvco-3ds-2.2
+    conforms: true
+    evidence: 3-D Secure 2.2 supported (Visa Secure, Mastercard Identity Check, Amex SafeKey) via Moneris 3DS Server + ACS
+  - id: cursor-pagination
+    conforms: true
+    evidence: list operations use page[before] cursor + page[limit]
+  - id: idempotency
+    conforms: true
+    evidence: write operations accept an idempotencyKey body field; replays return 409
+  - id: fhir-r4
+    conforms: false
+  - id: fapi
+    conforms: false
+  - id: json-api
+    conforms: false
+compliance_programs:
+  - name: PCI DSS
+    level: Level 1
+    url: https://www.moneris.com/en/support/compliance-and-security/pci-data-security

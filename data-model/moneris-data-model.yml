@@ -1,0 +1,103 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/moneris-unified-api-openapi.json
+notes: >-
+  Entity-relationship graph derived from the Moneris Unified API (v2.6.1) path
+  structure and id-reference fields across request/response schemas. Relationships
+  are inferred from foreign-key style fields (paymentId, customerId,
+  paymentMethodId, subscriptionId, merchantId, orderId, etc.) and nested path
+  segments (e.g. /onboarding/merchants/{merchant-id}/orders/{order-id}).
+entities:
+  - name: Customer
+    id_field: id
+    path: /customers
+    description: Customer profile holding non-payment contact details.
+  - name: PaymentMethod
+    id_field: id
+    path: /payment-methods
+    description: Stored/tokenized card or wallet credential (card-on-file).
+  - name: Payment
+    id_field: id
+    path: /payments
+    description: Card payment (purchase, pre-auth, completion, increment).
+  - name: Refund
+    id_field: id
+    path: /refunds
+    description: Payment refund or independent refund.
+  - name: Subscription
+    id_field: id
+    path: /subscriptions
+    description: Recurring-billing subscription series.
+  - name: Validation
+    id_field: id
+    path: /validations
+    description: Card validation request.
+  - name: Authentication
+    id_field: id
+    path: /three-d-secure/authentications
+    description: 3-D Secure cardholder authentication.
+  - name: KountInquiry
+    id_field: id
+    path: /kount-inquiries
+    description: Kount fraud/risk inquiry.
+  - name: MultiCurrencyPricingRate
+    id_field: id
+    path: /multi-currency-pricing-rates
+    description: Locked FX rate lookup for MCP transactions.
+  - name: Merchant
+    id_field: merchantId
+    path: /onboarding/merchants
+    description: Third-party onboarded merchant.
+  - name: Order
+    id_field: merchantOrderId
+    path: /onboarding/merchants/{merchant-id}/orders
+    description: Terminal & service order for a merchant.
+  - name: Dispute
+    id_field: caseId
+    path: /disputes/{case-id}/{case-record-number}
+    description: Chargeback / dispute case.
+relationships:
+  - from: Payment
+    to: PaymentMethod
+    type: belongs_to
+    via: paymentMethodId
+  - from: Payment
+    to: Customer
+    type: belongs_to
+    via: customerId
+  - from: PaymentMethod
+    to: Customer
+    type: belongs_to
+    via: customerId
+  - from: Refund
+    to: Payment
+    type: belongs_to
+    via: paymentId
+  - from: Subscription
+    to: PaymentMethod
+    type: belongs_to
+    via: paymentMethodId
+  - from: Subscription
+    to: Customer
+    type: belongs_to
+    via: customerId
+  - from: Authentication
+    to: PaymentMethod
+    type: references
+    via: cardLookupId / threeDSecureServerTransactionId
+  - from: KountInquiry
+    to: Payment
+    type: references
+    via: paymentId
+  - from: Order
+    to: Merchant
+    type: belongs_to
+    via: merchantId
+  - from: Payment
+    to: MultiCurrencyPricingRate
+    type: references
+    via: multiCurrencyPricingRateLookupId
+  - from: Payment
+    to: Subscription
+    type: references
+    via: subscriptionId
