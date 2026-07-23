@@ -1,0 +1,126 @@
+aid: moneris
+name: Moneris
+review:
+  question: Does Moneris expose a public first-party developer API with a downloadable OpenAPI spec, and what is its Canadian open-finance posture?
+  answer: true
+  date: '2026-07-23'
+  reviewer: API Evangelist
+findings:
+  summary: |
+    Moneris runs a real, publicly accessible first-party developer portal at
+    https://developer.moneris.com (HTTP 200) documenting the Moneris Unified
+    API — a single REST product (OpenAPI 3.0.3, info.version 2.6.1, title
+    "Moneris API") whose resource groups cover payments, tokenized payment
+    methods, refunds, recurring-billing subscriptions, customers, 3-D Secure
+    authentication, Kount fraud/risk, disputes, multi-currency pricing,
+    validations, and third-party merchant onboarding / terminal ordering.
+    Production host is https://api.moneris.io and sandbox is
+    https://api.sb.moneris.io. The portal is built on ReadMe; each API
+    reference page embeds a complete, verbatim OpenAPI 3.0.3 JSON block for
+    its operation carrying the full shared components (schemas + security
+    schemes). No single combined openapi.json/.yaml file is offered as a
+    direct download, but the per-operation OpenAPI blocks are genuine and
+    were harvested and merged (40 paths / 54 operations / 487 schemas) into
+    openapi/moneris-unified-api-openapi.json with provenance recorded below.
+    A public Postman workspace (postman.com/moneris) and an official GitHub
+    organization (github.com/moneris, 22 public repos, pinned "Modernized
+    OpenAPI integration for eCommerce") are also published.
+  authModel:
+    - scheme: OAuth2
+      type: oauth2
+      flow: clientCredentials
+      tokenUrl: /oauth2/token
+      note: Moneris-recommended; fine-grained scopes (payment.read, payment.write, refund.read, refund.write, etc.).
+      documented: true
+    - scheme: ApiKeyAuth
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      documented: true
+  openFinancePosture:
+    firstPartyDeveloperPortal: true
+    downloadableCombinedSpec: false
+    specProvenance: >-
+      Per-operation OpenAPI 3.0.3 blocks embedded verbatim in each ReadMe API
+      reference .md page (e.g. developer.moneris.com/moneris-api/reference/getpayments.md),
+      merged into one document; the shared info/servers/components are identical
+      across pages. Sandbox api.sb.moneris.io, production api.moneris.io.
+    fdxParticipant: false
+    consumerDrivenBankingReportingEntity: false
+    cdbNote: >-
+      Canada's Consumer-Driven Banking framework (Budget 2024 / FES 2024, FCAC
+      oversight) is legislated but not yet operational. Moneris is a payment
+      processor / merchant acquirer, not a deposit-taking bank, so it is not a
+      CDB reporting entity — that obligation sits with its bank owners RBC and
+      BMO. Moneris's public API is a commercial merchant-payments program, not
+      a consumer data-sharing / FDX interface.
+    interacRtrNote: >-
+      Moneris is a Canadian card acquirer/processor and Interac Debit / Interac
+      Online acquirer, but publishes no separate public API around Interac
+      e-Transfer, Payments Canada RTR, or ISO 20022 rails; those are not part of
+      the documented developer surface.
+    aggregatorAccess: >-
+      Not applicable in the consumer-aggregator sense (Flinks/Plaid/MX/Salt Edge
+      address bank-account data). Moneris exposes its own merchant-facing payment
+      API directly; production access requires linking the Developer Portal
+      account to a recognized Moneris merchant account.
+  ownership: >-
+    Joint venture created December 2000, equally owned by RBC and BMO; in
+    2025-2026 the owners explored a sale, with Francisco Partners (owner of
+    Verifone) reported as lead buyer. ~325,000 points of commerce, ~5B
+    transactions/year, ~1 in 3 Canadian card transactions.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.moneris.io
+      documented: true
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.sb.moneris.io
+      note: Sandbox / test-data server.
+      documented: true
+    - protocol: Webhooks
+      scheme: https
+      note: Recurring-billing events (e.g. RECURRING_PAYMENT_CONFIRMED) delivered as HTTP POST callbacks; documented in the subscriptions reference.
+      documented: true
+sources:
+  - url: https://developer.moneris.com/
+    type: DeveloperPortal
+    status: 200
+    note: Live developer hub; lists Moneris API + Moneris Go solutions.
+  - url: https://developer.moneris.com/moneris-api/llms.txt
+    type: Documentation
+    status: 200
+    note: Markdown index of all guides and 54 API reference operations.
+  - url: https://developer.moneris.com/moneris-api/reference/getpayments.md
+    type: APIReference
+    status: 200
+    note: Reference page embedding a verbatim OpenAPI 3.0.3 block (servers, components, ApiKeyAuth + OAuth2 securitySchemes).
+  - url: https://developer.moneris.com/moneris-api/docs/authentication-api-keys.md
+    type: Documentation
+    status: 200
+    note: Confirms API-key + OAuth credential issuance; production requires a linked Moneris merchant account.
+  - url: https://www.postman.com/moneris
+    type: Postman
+    status: 200
+    note: Public Postman workspace referenced from the portal.
+  - url: https://github.com/moneris
+    type: GitHubOrganization
+    status: 200
+    note: Official Moneris org (Canada, moneris.com, 22 public repos).
+  - url: https://www.moneris.com/en/about-moneris
+    type: Website
+    status: 200
+    note: Confirms RBC/BMO joint venture, "Canada's #1 payment processor", 325,000+ points of commerce.
+actions:
+  openapiHarvested: true
+  openapiPath: openapi/moneris-unified-api-openapi.json
+  apisYmlCreated: true
+  reason: |
+    A genuine first-party public API surface exists. The per-operation OpenAPI
+    3.0.3 documents published by Moneris (via ReadMe) were harvested verbatim
+    and merged into a single spec (40 paths, 54 operations, 487 schemas, both
+    ApiKeyAuth and OAuth2 security schemes, sandbox + production servers). Ten
+    apis[] entries map the documented resource groups; common[] carries only
+    verified live pages (no public API pricing page or status page exists, so
+    neither was invented).

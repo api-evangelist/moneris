@@ -1,0 +1,210 @@
+aid: moneris
+url: https://raw.githubusercontent.com/api-evangelist/moneris/refs/heads/main/apis.yml
+name: Moneris
+kind: company
+description: >-
+  Moneris (Moneris Solutions Corporation) is Canada's largest payment processor
+  and merchant-acquiring company, founded in December 2000 as a joint venture
+  equally owned by Royal Bank of Canada (RBC) and Bank of Montreal (BMO). It is
+  a payment-technology and card-acquiring company rather than a deposit-taking
+  Schedule I bank, sitting in the payments-infrastructure layer of Canadian
+  financial services: it serves roughly 325,000 points of commerce, processes
+  close to five billion transactions a year, and handles on the order of one in
+  three Canadian card transactions. In 2025-2026 RBC and BMO explored a sale of
+  the venture, with Francisco Partners (owner of Verifone) reported as the lead
+  buyer. Unlike its bank owners, Moneris is not subject to Canada's coming
+  Consumer-Driven Banking framework; its "open" surface is a commercial,
+  self-serve first-party developer program. Moneris runs a real, public
+  developer portal at developer.moneris.com documenting the Moneris Unified API
+  (REST, OpenAPI 3.0.3, hosts api.moneris.io production / api.sb.moneris.io
+  sandbox) covering payments, tokenized payment methods, refunds, recurring
+  billing/subscriptions, 3-D Secure, Kount fraud/risk, disputes, multi-currency
+  pricing, and third-party merchant onboarding, secured with OAuth 2.0 client
+  credentials and API keys, with a published Postman workspace.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Financial Services
+- Payments
+- Payment Processing
+- Card Payments
+- Merchant Services
+- Acquiring
+- Canada
+- Fintech
+- Infrastructure
+created: '2026-07-23'
+modified: '2026-07-23'
+specificationVersion: '0.19'
+apis:
+- aid: moneris:moneris-payments-api
+  name: Moneris Payments API
+  description: Create, retrieve, list, cancel, complete, and increment card payments
+    (purchase, pre-authorization/completion, incremental and multiple completions)
+    on the Moneris Unified API.
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+- aid: moneris:moneris-payment-methods-api
+  name: Moneris Payment Methods API
+  description: Tokenize and manage stored payment methods (payment tokens) for
+    purchase-with-token and card-on-file flows.
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  baseURL: https://api.moneris.io
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+- aid: moneris:moneris-refunds-api
+  name: Moneris Refunds API
+  description: Create, retrieve, and list payment refunds and independent refunds
+    against processed transactions.
+  humanURL: https://developer.moneris.com/moneris-api/reference/getrefunds
+  baseURL: https://api.moneris.io
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+- aid: moneris:moneris-subscriptions-api
+  name: Moneris Subscriptions API
+  description: Recurring-billing subscriptions - create, update, pause, resume,
+    extend, and cancel - with recurring-payment webhook events.
+  humanURL: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  baseURL: https://api.moneris.io
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+- aid: moneris:moneris-customers-api
+  name: Moneris Customers API
+  description: Create, retrieve, list, update, and delete customer records used
+    to associate stored payment methods and subscriptions.
+  humanURL: https://developer.moneris.com/moneris-api/reference/getcustomers
+  baseURL: https://api.moneris.io
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+- aid: moneris:moneris-3d-secure-api
+  name: Moneris 3-D Secure Authentication API
+  description: 3-D Secure cardholder authentication (browser and requestor-initiated
+    channels), including authentication value lookup for the challenge flow.
+  humanURL: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  baseURL: https://api.moneris.io
+  tags:
+  - 3D Secure
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+- aid: moneris:moneris-kount-risk-api
+  name: Moneris Kount Risk Inquiry API
+  description: Fraud and risk scoring through Kount - create, list, retrieve, and
+    assert Kount inquiries for transaction risk decisioning.
+  humanURL: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  baseURL: https://api.moneris.io
+  tags:
+  - Kount
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+- aid: moneris:moneris-merchant-onboarding-api
+  name: Moneris Merchant Onboarding API
+  description: Third-party merchant onboarding and updating, terminal & service
+    ordering, order-status tracking, supplies, and product recommendations for
+    partners and ISVs.
+  humanURL: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  baseURL: https://api.moneris.io
+  tags:
+  - Merchant Onboarding
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+- aid: moneris:moneris-multi-currency-pricing-api
+  name: Moneris Multi-Currency Pricing API
+  description: Foreign-currency exchange-rate lookup and rate retrieval to lock a
+    rate for a subsequent Multi-Currency Pricing (MCP) transaction.
+  humanURL: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  baseURL: https://api.moneris.io
+  tags:
+  - Multi-Currency Pricing Rate Lookup
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+- aid: moneris:moneris-disputes-api
+  name: Moneris Disputes API
+  description: Chargeback and dispute handling - accept a dispute, retrieve dispute
+    details, upload response documents, and check image-upload status.
+  humanURL: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+  baseURL: https://api.moneris.io
+  tags:
+  - Disputes
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-unified-api-openapi.json
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+common:
+- type: Website
+  url: https://www.moneris.com
+- type: DeveloperPortal
+  url: https://developer.moneris.com
+- type: Documentation
+  url: https://developer.moneris.com/moneris-api/docs/introduction
+- type: Registration
+  url: https://developer.moneris.com/login
+- type: Postman
+  url: https://www.postman.com/moneris
+- type: GitHubOrganization
+  url: https://github.com/moneris
+- type: LinkedIn
+  url: https://www.linkedin.com/company/moneris
+- type: Blog
+  url: https://www.moneris.com/en/blog
+- type: TermsOfService
+  url: https://www.moneris.com/en/legal/terms-of-use
+- type: PrivacyPolicy
+  url: https://www.moneris.com/en/legal/privacy-policy
+- type: Support
+  url: https://www.moneris.com/en/support/contact
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
