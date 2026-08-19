@@ -1,0 +1,2546 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Moneris API",
+    "version": "2.6.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/customers",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a paginated list of customers."
+        },
+        {
+          "info": {
+            "name": "Create Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/customers",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This operation is used to created a new customer."
+        },
+        {
+          "info": {
+            "name": "Retrieve Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/customers/:customer-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "customer-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the customer"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a customer by their Id."
+        },
+        {
+          "info": {
+            "name": "Update Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sb.moneris.io/customers/:customer-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "customer-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the customer"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Updates customer's details such as name, address etc..."
+        },
+        {
+          "info": {
+            "name": "Delete Customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sb.moneris.io/customers/:customer-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "customer-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the customer"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete a customer by their Id"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Disputes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Dispute Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/disputes/:case-id/:case-record-number",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "case-id",
+                "value": "121719004438",
+                "type": "path",
+                "description": "The case ID associated with the uploaded files."
+              },
+              {
+                "name": "case-record-number",
+                "value": "1",
+                "type": "path",
+                "description": "The case record number of the files. This must be a value between \"0\" and \"99\"."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "To determine whether you can upload documents for a specific case."
+        },
+        {
+          "info": {
+            "name": "Accept Dispute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/disputes/:case-id/:case-record-number/accept",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "case-id",
+                "value": "121719004438",
+                "type": "path",
+                "description": "The case ID associated with the uploaded files."
+              },
+              {
+                "name": "case-record-number",
+                "value": "1",
+                "type": "path",
+                "description": "The case record number of the files. This must be a value between \"0\" and \"99\"."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "If no longer want to dispute a chargeback or copy request."
+        },
+        {
+          "info": {
+            "name": "Upload Images",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/disputes/:case-id/:case-record-number/uploads",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "case-id",
+                "value": "121719004438",
+                "type": "path",
+                "description": "The case ID associated with the uploaded files."
+              },
+              {
+                "name": "case-record-number",
+                "value": "1",
+                "type": "path",
+                "description": "The case record number of the files. This must be a value between \"0\" and \"99\"."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "To upload response documents associated with a disputed transaction."
+        },
+        {
+          "info": {
+            "name": "Check image upload status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/disputes/:case-id/:case-record-number/uploads/:upload-reference-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "case-id",
+                "value": "121719004438",
+                "type": "path",
+                "description": "The case ID associated with the uploaded files."
+              },
+              {
+                "name": "case-record-number",
+                "value": "1",
+                "type": "path",
+                "description": "The case record number of the files. This must be a value between \"0\" and \"99\"."
+              },
+              {
+                "name": "upload-reference-id",
+                "value": "IU1001ARZ3NDEKTSV4RRFFQ69G5FAV",
+                "type": "path",
+                "description": "Upload reference Id."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint can be used to check image upload status"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Installments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Installment Plan Lookup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/installments/plans",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns list of installment plans the cardholder is eligible for."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Kount",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Kount Inquiries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/kount-inquiries",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List Kount Inquiries"
+        },
+        {
+          "info": {
+            "name": "Create Kount Inquiry",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/kount-inquiries",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create Kount Inquiry"
+        },
+        {
+          "info": {
+            "name": "Get Kount Inquiry by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/kount-inquiries/:kount-inquiry-id",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "kount-inquiry-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Kount Transaction."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get Kount Inquiry by Id"
+        },
+        {
+          "info": {
+            "name": "Kount Inquiry Assert",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/kount-inquiries/:kount-inquiry-id/assert",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "kount-inquiry-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Kount Transaction."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Kount Inquiry Assert"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Multi-Currency Pricing Rate Lookup",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Multi-Currency Pricing Rate Lookup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/multi-currency-pricing-rates",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Performs a foreign currency exchange rate look-up, and secures that exchange rate for use in a subsequent Multi-Currency Pricing financial transaction. \nThe exchange rate retrieved by this transaction request is represented in the response as the multiCurrencyPricingRateLookupId, and the underlying exchange rate is locked in for a limited time period.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Multi-Currency Pricing Rate by Id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/multi-currency-pricing-rates/:multi-currency-pricing-rate-lookup-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "multi-currency-pricing-rate-lookup-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the multiCurrencyPricing Rate Operation"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve Multi-Currency Pricing Rate results by Id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Merchant Onboarding",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/onboarding/merchants",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Submit a merchant payload to create a merchant"
+        },
+        {
+          "info": {
+            "name": "Get the details of a Merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/onboarding/merchants/:merchant-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-id",
+                "value": "0123456789101",
+                "type": "path",
+                "description": "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get merchant details by ID\n"
+        },
+        {
+          "info": {
+            "name": "Update Merchant",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sb.moneris.io/onboarding/merchants/:merchant-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-id",
+                "value": "0123456789101",
+                "type": "path",
+                "description": "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update merchant based on the supplied payload.\n"
+        },
+        {
+          "info": {
+            "name": "List merchant supplies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/onboarding/merchants/:merchant-id/supplies",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-id",
+                "value": "0123456789101",
+                "type": "path",
+                "description": "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get merchant supplies by merchant ID\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Terminal & Service Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/onboarding/merchants/:merchant-id/orders",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-id",
+                "value": "0123456789101",
+                "type": "path",
+                "description": "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Submit an order payload to create an order for the merchant"
+        },
+        {
+          "info": {
+            "name": "Retrieve order by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/onboarding/merchants/:merchant-id/orders/:merchant-order-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-id",
+                "value": "0123456789101",
+                "type": "path",
+                "description": "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+              },
+              {
+                "name": "merchant-order-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the merchant"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get order details by ID\n"
+        },
+        {
+          "info": {
+            "name": "Update an order by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sb.moneris.io/onboarding/merchants/:merchant-id/orders/:merchant-order-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "merchant-id",
+                "value": "0123456789101",
+                "type": "path",
+                "description": "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+              },
+              {
+                "name": "merchant-order-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the merchant"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update an order by ID"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Recommended Products",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/onboarding/product-recommendations",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get recommender products to fetch multiple items related to a client\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payment Methods",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List payment methods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/payment-methods",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a paginated list of payment methods."
+        },
+        {
+          "info": {
+            "name": "Create Payment Method",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/payment-methods",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a Payment Method."
+        },
+        {
+          "info": {
+            "name": "Retrieve Payment Method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/payment-methods/:payment-method-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "Payment Method ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a Payment Method by Id"
+        },
+        {
+          "info": {
+            "name": "Update Payment method",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sb.moneris.io/payment-methods/:payment-method-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "Payment Method ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update payment method referenced by its Id. \nCertain details may not be updated if the payment method was used in a transaction.\n"
+        },
+        {
+          "info": {
+            "name": "Delete Payment Method",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sb.moneris.io/payment-methods/:payment-method-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-method-id",
+                "value": "",
+                "type": "path",
+                "description": "Payment Method ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deletes a payment method."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/payments",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a paginated list of payments."
+        },
+        {
+          "info": {
+            "name": "Create Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/payments",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This operation is used to initiate a Payment."
+        },
+        {
+          "info": {
+            "name": "Retrieve Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/payments/:payment-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a payment by its payment Id"
+        },
+        {
+          "info": {
+            "name": "Cancel Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/payments/:payment-id/cancel",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancel a payment. This operation may not be possible if the payment has gone through."
+        },
+        {
+          "info": {
+            "name": "Complete Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/payments/:payment-id/complete",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This will effectively capture a payment that has been authorized."
+        },
+        {
+          "info": {
+            "name": "Increment Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/payments/:payment-id/increment",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "payment-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Increases the locked amount of funds in an existing pre-authorization (Payment with automaticCapture = false) for later settle by a single pre-authorization completion.  There is no limit to the number of Increment Payment API calls on the original estimated authorization and each new Increment Payment increases the hold on the customer's credit card.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Refunds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/refunds",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a paginated list of refund operations."
+        },
+        {
+          "info": {
+            "name": "Create Refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/refunds",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This operation is used to create a Refund. \nFor payment refunds, Payment Id is required while payment method is not required.\nFor independent refunds, no payment Id is required, however payment method is required.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Refund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/refunds/:refund-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "refund-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the refund"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a refund by its Id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Subscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/subscriptions",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a paginated list of subscriptions."
+        },
+        {
+          "info": {
+            "name": "Create Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/subscriptions",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "<p>This operation is used to create a Subscription.</p>\n<h4>\n  <span>Webhooks</span>\n</h4>\n<details>\n  <summary style=\"color: rgba(0, 113, 145, 1);\">Webhook Definition Details</summary>\n  <div class=\"collapsible\">\n    <div class=\"tabs\">\n      <div class=\"tab-label\" style=\"background-color: #051D33; color: #FFFFFF;\">application/json</div>\n      <div class=\"tab-content\" style=\"display: block;\">\n        <type-definition>\n          <h4 class=\"text-truncate flex-grow\">Webhook Request Body</h4>\n      "
+        },
+        {
+          "info": {
+            "name": "Retrieve Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/subscriptions/:subscription-id",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the subscription"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a Subscription details by Id"
+        },
+        {
+          "info": {
+            "name": "Update Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.sb.moneris.io/subscriptions/:subscription-id",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the subscription"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update Subscription\n"
+        },
+        {
+          "info": {
+            "name": "Cancel Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/subscriptions/:subscription-id/cancel",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the subscription"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancel a Subscription."
+        },
+        {
+          "info": {
+            "name": "Extend Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/subscriptions/:subscription-id/extend",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the subscription"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Adds the given number of subscription transactions to the current (remaining) number.\n\nThis can be used if a customer decides to extend a membership/subscription. \nHowever, because this must be a positive number, it cannot be used to decrease the current number of subscription transactions. \nFor that, use Update Subscription.\n"
+        },
+        {
+          "info": {
+            "name": "Pause Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/subscriptions/:subscription-id/pause",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the subscription"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Temporarily pauses subscription billing.\nWhile a transaction is on hold, it is not billed for the subscription amount.                 \nHowever, the number of remaining recurs continues to be decremented during that time.\n"
+        },
+        {
+          "info": {
+            "name": "Resume Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/subscriptions/:subscription-id/resume",
+            "headers": [
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              },
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              }
+            ],
+            "params": [
+              {
+                "name": "subscription-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the subscription"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Resumes a subscription billing.\nWhile a transaction is on hold, it is not billed for the subscription amount.                 \nHowever, the number of remaining recurs continues to be decremented during that time.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Surcharge Lookup",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Surcharge Lookup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/surcharge-lookups",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Performs surcharge lookup and determines if payment method is eligible or not and provides max rate and max amount if eligible."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "3D Secure",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/three-d-secure/authentications",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This operation is used to create an Authentication request. \nThe authentication request is used to start the validation process of the card. \nThe result of this request determines whether 3DS is supported by the card and what type of authentication is required.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/three-d-secure/authentications/:authentication-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "authentication-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the authentication"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve an authentication by its authentication Id"
+        },
+        {
+          "info": {
+            "name": "Authentication Value Lookup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/three-d-secure/authentications/:authentication-id/lookup",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "authentication-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the authentication"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "The point of the 3-D Secure flow is to verify that the true cardholder is a part of the authorization. The challenge flow is used to present a way of authenticating the cardholder using e.g. OTP or a federated identification method."
+        },
+        {
+          "info": {
+            "name": "3DS Card Lookup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/three-d-secure/card-lookups",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "3DS Card Lookup"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Validations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Card Validations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/validations",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "cursor",
+                "value": "d41d8cd98f00b204e9800998ecf8427e",
+                "type": "query",
+                "description": "Pagination cursor to return items located after it."
+              },
+              {
+                "name": "limit",
+                "value": "10",
+                "type": "query",
+                "description": "Maximum number of items to return in the response."
+              },
+              {
+                "name": "created_from",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created after the specified date, defaults to the current date starting from 12 AM."
+              },
+              {
+                "name": "created_to",
+                "value": "2024-05-16T04:00:00Z",
+                "type": "query",
+                "description": "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a paginated list of the card validations the were executed."
+        },
+        {
+          "info": {
+            "name": "Create Card Validation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sb.moneris.io/validations",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Initiate a new Card Validation request."
+        },
+        {
+          "info": {
+            "name": "Retrieve Card Validation.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sb.moneris.io/validations/:validation-id",
+            "headers": [
+              {
+                "name": "Api-Version",
+                "value": "2024-09-17"
+              },
+              {
+                "name": "X-Correlation-Id",
+                "value": "06f1e47b-a1b5-4902-be9c-bccc506127c4"
+              },
+              {
+                "name": "X-Merchant-Id",
+                "value": "0123456789101"
+              }
+            ],
+            "params": [
+              {
+                "name": "validation-id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Validation"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "/oauth2/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a Card Validation by Id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
