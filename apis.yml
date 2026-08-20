@@ -23,6 +23,16 @@ description: >-
   credentials and API keys, with a published Postman workspace.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
+- Financial-Services
+- Payments
+- Payment Processing
+- Card Payments
+- Merchant Services
+- Acquiring
+- Canada
+- Fintech
+- Infrastructure
+tags_raw:
 - Financial Services
 - Payments
 - Payment Processing
@@ -91,6 +101,8 @@ apis:
   humanURL: https://developer.moneris.com/moneris-api/docs/recurring-billing
   baseURL: https://api.moneris.io
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
