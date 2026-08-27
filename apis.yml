@@ -46,159 +46,699 @@ created: '2026-07-23'
 modified: '2026-07-23'
 specificationVersion: '0.23'
 apis:
-- aid: moneris:moneris-payments-api
-  name: Moneris Payments API
-  description: Create, retrieve, list, cancel, complete, and increment card payments
-    (purchase, pre-authorization/completion, incremental and multiple completions)
-    on the Moneris Unified API.
+- aid: moneris:moneris-3d-secure-api
+  name: Moneris 3D Secure API
+  description: Perform 3D Secure authentications against payment methods
   humanURL: https://developer.moneris.com/moneris-api/docs/purchase
   baseURL: https://api.moneris.io
   tags:
-  - Payments
+  - 3D Secure
   properties:
   - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
-  - type: Overlay
-    url: overlays/moneris-unified-api-overlay.yaml
+    url: openapi/moneris-3d-secure-api-openapi.yml
   - type: ToolCrosswalk
     url: mcp/moneris-tool-crosswalk.yml
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/purchase
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getpayments
-- aid: moneris:moneris-payment-methods-api
-  name: Moneris Payment Methods API
-  description: Tokenize and manage stored payment methods (payment tokens) for
-    purchase-with-token and card-on-file flows.
-  humanURL: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
-  baseURL: https://api.moneris.io
-  tags:
-  - Payment Methods
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
-- aid: moneris:moneris-refunds-api
-  name: Moneris Refunds API
-  description: Create, retrieve, and list payment refunds and independent refunds
-    against processed transactions.
-  humanURL: https://developer.moneris.com/moneris-api/reference/getrefunds
-  baseURL: https://api.moneris.io
-  tags:
-  - Refunds
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getrefunds
-- aid: moneris:moneris-subscriptions-api
-  name: Moneris Subscriptions API
-  description: Recurring-billing subscriptions - create, update, pause, resume,
-    extend, and cancel - with recurring-payment webhook events.
-  humanURL: https://developer.moneris.com/moneris-api/docs/recurring-billing
-  baseURL: https://api.moneris.io
-  tags:
-  - Subscription
-  tags_raw:
-  - Subscriptions
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/recurring-billing
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
 - aid: moneris:moneris-customers-api
   name: Moneris Customers API
-  description: Create, retrieve, list, update, and delete customer records used
-    to associate stored payment methods and subscriptions.
-  humanURL: https://developer.moneris.com/moneris-api/reference/getcustomers
+  description: Perform and Manage customers
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
   baseURL: https://api.moneris.io
   tags:
   - Customers
   properties:
   - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
+    url: openapi/moneris-customers-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getcustomers
-- aid: moneris:moneris-3d-secure-api
-  name: Moneris 3-D Secure Authentication API
-  description: 3-D Secure cardholder authentication (browser and requestor-initiated
-    channels), including authentication value lookup for the challenge flow.
-  humanURL: https://developer.moneris.com/moneris-api/docs/3ds-browser
-  baseURL: https://api.moneris.io
-  tags:
-  - 3D Secure
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/3ds-browser
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/createauthentication
-- aid: moneris:moneris-kount-risk-api
-  name: Moneris Kount Risk Inquiry API
-  description: Fraud and risk scoring through Kount - create, list, retrieve, and
-    assert Kount inquiries for transaction risk decisioning.
-  humanURL: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
-  baseURL: https://api.moneris.io
-  tags:
-  - Kount
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
-- aid: moneris:moneris-merchant-onboarding-api
-  name: Moneris Merchant Onboarding API
-  description: Third-party merchant onboarding and updating, terminal & service
-    ordering, order-status tracking, supplies, and product recommendations for
-    partners and ISVs.
-  humanURL: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
-  baseURL: https://api.moneris.io
-  tags:
-  - Merchant Onboarding
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/createmerchant
-- aid: moneris:moneris-multi-currency-pricing-api
-  name: Moneris Multi-Currency Pricing API
-  description: Foreign-currency exchange-rate lookup and rate retrieval to lock a
-    rate for a subsequent Multi-Currency Pricing (MCP) transaction.
-  humanURL: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
-  baseURL: https://api.moneris.io
-  tags:
-  - Multi-Currency Pricing Rate Lookup
-  properties:
-  - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
   - type: Documentation
     url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
 - aid: moneris:moneris-disputes-api
   name: Moneris Disputes API
-  description: Chargeback and dispute handling - accept a dispute, retrieve dispute
-    details, upload response documents, and check image-upload status.
-  humanURL: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+  description: Perform and Manage Disputes
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
   baseURL: https://api.moneris.io
   tags:
   - Disputes
   properties:
   - type: OpenAPI
-    url: openapi/moneris-unified-api-openapi.json
+    url: openapi/moneris-disputes-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-installments-api
+  name: Moneris Installments API
+  description: Perform and Manage Installments
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Installments
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-installments-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-kount-api
+  name: Moneris Kount API
+  description: Perform and Manage Kount risk assessment inquiries
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Kount
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-kount-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-merchant-onboarding-api
+  name: Moneris Merchant Onboarding API
+  description: Manage Merchants onboarding
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Merchant Onboarding
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-merchant-onboarding-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-multi-currency-pricing-rate-lookup-api
+  name: Moneris Multi-Currency Pricing Rate Lookup API
+  description: Retrieve Multi-Currency Pricing Rate Lookups
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Multi-Currency Pricing Rate Lookup
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-multi-currency-pricing-rate-lookup-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-payment-methods-api
+  name: Moneris Payment Methods API
+  description: Create and Manage payment methods
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-payment-methods-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-payments-api
+  name: Moneris Payments API
+  description: Perform and Manage payments
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-payments-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-products-api
+  name: Moneris Products API
+  description: Product recommendations
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-products-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-refunds-api
+  name: Moneris Refunds API
+  description: Perform and Manage payment refunds
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-refunds-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-subscriptions-api
+  name: Moneris Subscriptions API
+  description: Perform and Manage Subscriptions
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-subscriptions-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-surcharge-lookup-api
+  name: Moneris Surcharge Lookup API
+  description: The Surcharge Lookup API from Moneris — 1 operation(s) for surcharge lookup.
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Surcharge Lookup
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-surcharge-lookup-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-terminal-service-orders-api
+  name: Moneris Terminal & Service Orders API
+  description: Manage Moneris Terminal & Service Orders
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Terminal & Service Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-terminal-service-orders-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
+- aid: moneris:moneris-validations-api
+  name: Moneris Validations API
+  description: Perform and Manage card validations
+  humanURL: https://developer.moneris.com/moneris-api/docs/purchase
+  baseURL: https://api.moneris.io
+  tags:
+  - Validations
+  properties:
+  - type: OpenAPI
+    url: openapi/moneris-validations-api-openapi.yml
+  - type: ToolCrosswalk
+    url: mcp/moneris-tool-crosswalk.yml
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpayments
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getpaymentmethods
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getrefunds
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/recurring-billing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getsubscriptions
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/getcustomers
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/3ds-browser
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createauthentication
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createkountinquiry
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/onboarding-and-updating
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/createmerchant
+  - type: Documentation
+    url: https://developer.moneris.com/moneris-api/docs/multi-currency-pricing
+  - type: APIReference
+    url: https://developer.moneris.com/moneris-api/reference/mcprate
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
 common:
+- type: Overlay
+  url: overlays/moneris-unified-api-overlay.yaml
 - type: DomainSecurity
   url: security/moneris-domain-security.yml
 - type: AgenticAccess
