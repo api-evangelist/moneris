@@ -749,6 +749,9 @@ apis:
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
 common:
+- type: CapabilityMap
+  url: capabilities/moneris-capability-edges.yml
+  name: Moneris Business Capability Map
 - type: Overlay
   url: overlays/moneris-unified-api-overlay.yaml
 - type: DomainSecurity

@@ -1,0 +1,97 @@
+slug: moneris
+provider: Moneris
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: Payments
+  spec_file: moneris-payments-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.9
+  evidence: POST /payments  createPayments  Create Payment; POST /payments/{payment-id}/complete  completePayment;
+    incrementalAuthorizationIndicator
+  reason: Core card payment authorisation, capture/completion, cancellation and incremental authorisation
+    — unambiguously payment and card transaction processing. L2 left null because the surface spans initiation,
+    processing and card authorisation.
+- tag: Disputes
+  spec_file: moneris-disputes-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.85
+  evidence: POST /disputes/{case-id}/{case-record-number}/accept  acceptDispute; POST .../uploads  uploadDisputeImage  Upload
+    Images
+  reason: Card dispute/chargeback case handling with evidence upload at a merchant acquirer — explicitly
+    within card transaction processing (chargebacks).
+- tag: Refunds
+  spec_file: moneris-refunds-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.85
+  evidence: 'POST /refunds  createRefund  Create Refund; schemas: createMatchingRefundRequest, refundStatus,
+    refundAmount, paymentId'
+  reason: Processing of refunds against card payments is part of card/payment transaction processing for
+    an acquirer; sub-capability ambiguous between payment processing and card transaction processing.
+- tag: Kount
+  spec_file: moneris-kount-api-openapi.yml
+  capability_id: BC-1400.30
+  capability_id_l1: BC-1400
+  capability_name: Fraud Detection & Investigation Management
+  confidence: 0.83
+  evidence: POST /kount-inquiries  createKountInquiry; schemas kountResult, kountTriggeredRule, evaluateKountResult
+  reason: Kount inquiries with triggered rules and result evaluation are fraud screening/decisioning on
+    payment orders at the processor.
+- tag: 3D Secure
+  spec_file: moneris-3d-secure-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.82
+  evidence: POST /three-d-secure/authentications  createAuthentication; threeDSecureChallengeRequested,
+    threeDSecureAuthenticationValue
+  reason: 3DS cardholder authentication is part of card transaction authorisation and fraud screening
+    at an acquirer/processor.
+- tag: Payment Methods
+  spec_file: moneris-payment-methods-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: 'POST /payment-methods  createPaymentMethod  Create Payment Method; schemas: paymentMethodCard,
+    paymentMethodPermanentToken, createApplePayEncryptedWalletPaymentMethodRequest'
+  reason: Manages stored card credentials/tokens and wallet payment instruments used to make payments
+    — clearly within Payments & Card Management, but the evidence does not pin a single sub-capability
+    (tokenisation vault sits between initiation and card processing).
+- tag: Merchant Onboarding
+  spec_file: moneris-merchant-onboarding-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.72
+  evidence: 'POST /onboarding/merchants  createMerchant  Create Merchant; schemas: signingOfficer, merchantInformation,
+    institutionNumber, businessType'
+  reason: Operations create and maintain merchant records with business, banking and signing-officer details
+    — onboarding of a new acquiring customer, i.e. customer onboarding for a payments provider. Slight
+    ambiguity because merchants are not retail banking customers, hence 0.72.
+- tag: Validations
+  spec_file: moneris-validations-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: 'POST /validations  createValidation  Create Card Validation; schemas: validationVerificationDetails,
+    cardBrand, ecommerceIndicator'
+  reason: Card validation/verification requests against the card networks are a card authorisation-time
+    function within payments and card processing; sub-capability not explicitly named.
