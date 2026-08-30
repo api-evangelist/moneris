@@ -1,0 +1,3583 @@
+openapi: 3.2.0
+info:
+  version: 2.6.1
+  title: Moneris Payments API
+  description: 'Moneris API Platform
+
+
+
+    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height:32px;">](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
+  termsOfService: https://www.moneris.com/en/legal/terms-of-use
+  contact:
+    url: https://api-developer.moneris.com
+    email: UnifiedAPI@moneris.com
+  license:
+    name: Moneris
+    url: https://developer.moneris.com/Agreements/Terms%20of%20Use
+  x-audience: external-public
+servers:
+- url: https://api.sb.moneris.io
+  description: Sandbox server (uses test data)
+  x-internal: false
+- url: https://api.moneris.io
+  description: Production server (uses live data)
+  x-internal: false
+tags:
+- name: Payments
+  description: Perform and Manage payments
+paths:
+  /payments:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/merchantId'
+    post:
+      summary: Create Payment
+      description: This operation is used to initiate a Payment.
+      operationId: createPayments
+      security:
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createPaymentRequest'
+            examples:
+              regularPurchaseWithPaymentMethodId:
+                $ref: '#/components/examples/regularPurchaseWithPaymentMethodId'
+              regularPurchaseWithCardPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithCardPaymentMethod'
+              regularPurchaseWithTemporaryPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithTemporaryPaymentMethod'
+              regularPurchaseWithPermanentPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithPermanentPaymentMethod'
+              regularPurchaseWithApplePayEncryptedPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithApplePayEncryptedPaymentMethod'
+              regularPurchaseWithApplePayDecryptedPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithApplePayDecryptedPaymentMethod'
+              regularPurchaseWithGooglePayEncryptedPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithGooglePayEncryptedPaymentMethod'
+              regularPurchaseWithGooglePayDecryptedPaymentMethod:
+                $ref: '#/components/examples/regularPurchaseWithGooglePayDecryptedPaymentMethod'
+              preAuthorizationWithPaymentMethodId:
+                $ref: '#/components/examples/preAuthorizationWithPaymentMethodId'
+              preAuthorizationWithCardPaymentMethod:
+                $ref: '#/components/examples/preAuthorizationWithCardPaymentMethod'
+              preAuthorizationWithTemporaryToken:
+                $ref: '#/components/examples/preAuthorizationWithTemporaryToken'
+              preAuthorizationWithPermanentToken:
+                $ref: '#/components/examples/preAuthorizationWithPermanentToken'
+      responses:
+        '201':
+          $ref: '#/components/responses/createPaymentSuccessResponse'
+        '400':
+          $ref: '#/components/responses/createPaymentBadRequestResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/createPaymentUnprocessableContentResponse'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+    get:
+      summary: List Payments
+      description: Returns a paginated list of payments.
+      operationId: getPayments
+      security:
+      - OAuth2:
+        - payment.read
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+      parameters:
+      - $ref: '#/components/parameters/pageBeforeCursor'
+      - $ref: '#/components/parameters/pageLimit'
+      - $ref: '#/components/parameters/createdFrom'
+      - $ref: '#/components/parameters/createdTo'
+      responses:
+        '200':
+          $ref: '#/components/responses/listPaymentsResponse'
+        '400':
+          $ref: '#/components/responses/invalidListbadRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /payments/{payment-id}:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/paymentId'
+    - $ref: '#/components/parameters/merchantId'
+    get:
+      summary: Retrieve Payment
+      description: Retrieve a payment by its payment Id
+      operationId: getPayment
+      security:
+      - OAuth2:
+        - payment.read
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+      responses:
+        '200':
+          $ref: '#/components/responses/retrievePaymentSuccessResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /payments/{payment-id}/cancel:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/paymentId'
+    - $ref: '#/components/parameters/merchantId'
+    post:
+      summary: Cancel Payment
+      description: Cancel a payment. This operation may not be possible if the payment has gone through.
+      operationId: cancelPayment
+      security:
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cancelPaymentRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/cancelPaymentSuccessResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/cancelPaymentUnprocessableContentResponse'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /payments/{payment-id}/complete:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/paymentId'
+    - $ref: '#/components/parameters/merchantId'
+    post:
+      summary: Complete Payment
+      description: This will effectively capture a payment that has been authorized.
+      operationId: completePayment
+      security:
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/completionRequest'
+            example:
+              idempotencyKey: 5d8f812e-9969-4885-85bb-d03948eccac2
+              invoiceNumber: 1a2s3d45v6
+              customData:
+                property1: string
+                property2: string
+              amount:
+                amount: 16000
+                currency: CAD
+      responses:
+        '200':
+          $ref: '#/components/responses/completePaymentSuccessResponse'
+        '400':
+          $ref: '#/components/responses/completePaymentBadRequestResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/completePaymentUnprocessableContentResponse'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /payments/{payment-id}/increment:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/paymentId'
+    - $ref: '#/components/parameters/merchantId'
+    post:
+      summary: Increment Payment
+      description: 'Increases the locked amount of funds in an existing pre-authorization (Payment with automaticCapture = false) for later settle by a single pre-authorization completion.  There is no limit to the number of Increment Payment API calls on the original estimated authorization and each new Increment Payment increases the hold on the customer''s credit card.
+
+        '
+      operationId: incrementPayment
+      security:
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/incrementalAuthorizationRequest'
+            example:
+              idempotencyKey: 5d8f812e-9969-4885-85bb-d03948eccac2
+              invoiceNumber: 1a2s3d45v6
+              customData:
+                property1: string
+                property2: string
+              amount:
+                amount: 10000
+                currency: CAD
+              dynamicDescriptor: moneris
+      responses:
+        '200':
+          $ref: '#/components/responses/incrementalAuthorizationSuccessResponse'
+        '400':
+          $ref: '#/components/responses/completePaymentBadRequestResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/completePaymentUnprocessableContentResponse'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+components:
+  schemas:
+    expiryYear:
+      type: integer
+      format: int32
+      description: 'Displays the card expiration year. Accepted format: YYYY'
+      minimum: 2022
+      maximum: 9999
+      example: 2023
+    paymentMethodCard:
+      title: paymentMethodCard
+      description: Credit/Debit/Gift Card payment method details.
+      allOf:
+      - type: object
+        properties:
+          card:
+            $ref: '#/components/schemas/card'
+        required:
+        - card
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      required:
+      - paymentMethodSource
+      - card
+    storeApplePayDecryptedWalletRequest:
+      title: storeApplePayDecryptedWalletRequest
+      allOf:
+      - $ref: '#/components/schemas/applePayDecryptedWallet'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    cardholderName:
+      type: string
+      description: Cardholder name
+      minLength: 1
+      maxLength: 60
+      example: John Doe
+    paymentMethodPermanentToken:
+      title: paymentMethodPermanentToken
+      description: 'A Permanent Token is issued by Moneris to the merchant and represents the card details. This option is used for legacy purposes.
+
+        '
+      allOf:
+      - type: object
+        properties:
+          permanentToken:
+            $ref: '#/components/schemas/token'
+        required:
+        - permanentToken
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      required:
+      - paymentMethodSource
+      - permanentToken
+    refundDetails:
+      description: Refund details if any has occured.
+      type:
+      - object
+      - 'null'
+      properties:
+        refunds:
+          description: List of Refunds associated with this Payment
+          type: array
+          items:
+            $ref: '#/components/schemas/refundReference'
+        refundedAmount:
+          $ref: '#/components/schemas/money'
+      required:
+      - refundedAmount
+    multipleCompletions:
+      description: List of all Multiple Completion transactions.
+      type: array
+      items:
+        $ref: '#/components/schemas/multipleCompletion'
+    companyName:
+      type:
+      - string
+      - 'null'
+      description: Identifies the associated company name
+      minLength: 1
+      maxLength: 50
+      example: SP Ltd
+    threeDSecureAuthenticationValue:
+      type:
+      - string
+      - 'null'
+      description: '**CAVV**: Cardholder Authentication Verification Value
+
+        Provided during a payment request to authenticate the card user.
+
+        '
+      maxLength: 50
+      example: 00000109260000719349
+    cardSecurityCode:
+      type: string
+      pattern: '[0-9]*'
+      description: CVD value located on credit card. The CVD value (supplied by the cardholder) must only be passed to the payment gateway. Under no circumstances may it be stored for subsequent use or displayed as part of the receipt information.
+      minLength: 3
+      maxLength: 4
+      example: '123'
+    completionRequest:
+      title: completionRequest
+      type: object
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        invoiceNumber:
+          $ref: '#/components/schemas/invoiceNumber'
+        customData:
+          $ref: '#/components/schemas/customData'
+        amount:
+          title: completionAmount
+          type:
+          - object
+          - 'null'
+          description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        amountDetails:
+          description: Contains information pertaining to the surcharge amount of a Payment.
+          type:
+          - object
+          - 'null'
+          properties:
+            surchargeAmount:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+        finalCompletion:
+          type: boolean
+          description: Indicates whether this is the last Completion request for a Payment. To indicate that additional Completions will be performed, please pass finalCompletion as false.
+          default: true
+        multiCurrencyPricing:
+          $ref: '#/components/schemas/multiCurrencyPricingTransactionRequest'
+      required:
+      - idempotencyKey
+    incrementalAuthorizationIndicator:
+      type: boolean
+      description: This flag is used for processing the Pre-Authorization transaction as an Incremental Authorization transaction.
+      default: false
+    createPaymentRequest:
+      title: paymentRequest
+      type: object
+      description: Request body, used to initiate a payment
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        invoiceNumber:
+          $ref: '#/components/schemas/invoiceNumber'
+        amount:
+          description: This amount includes the surcharge fee.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        amountDetails:
+          $ref: '#/components/schemas/amountDetails'
+        convenienceFee:
+          $ref: '#/components/schemas/convenienceFee'
+        customerId:
+          description: The unique identifier of the customer.
+          type:
+          - string
+          - 'null'
+          example: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+          minLength: 30
+          maxLength: 30
+        customerReference:
+          type:
+          - string
+          - 'null'
+          description: Unique Identification for the Customer. This can be an identifier generated from a merchant-defined identifier.
+          example: 911677-212
+          minLength: 1
+          maxLength: 50
+        paymentMethod:
+          $ref: '#/components/schemas/storePaymentMethodRequest'
+        ecommerceIndicator:
+          description: Describes the category of e-commerce transaction being processed.
+          type: string
+          enum:
+          - MAIL_TELEPHONE_ORDER_SINGLE
+          - MAIL_TELEPHONE_ORDER_RECURRING
+          - MAIL_TELEPHONE_ORDER_INSTALMENT
+          - MAIL_TELEPHONE_ORDER_UNKNOWN
+          - AUTHENTICATED_ECOMMERCE
+          - NON_AUTHENTICATED_ECOMMERCE
+          - SSL_MERCHANT
+          example: AUTHENTICATED_ECOMMERCE
+          default: SSL_MERCHANT
+        automaticCapture:
+          $ref: '#/components/schemas/automaticCapture'
+        incrementalAuthorization:
+          $ref: '#/components/schemas/incrementalAuthorizationIndicator'
+        customData:
+          description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+            minLength: 1
+            maxLength: 50
+          maxProperties: 10
+        dynamicDescriptor:
+          type:
+          - string
+          - 'null'
+          description: "Merchant defined description sent on a per-transaction basis that will appear on the credit card statement.  \n\nDependent on the card Issuer, the statement will typically show the dynamic descriptor appended to the merchant's existing business name separated by the '/' character.  \n\n**Note**: The combined length of the merchant's business name, forward slash '/' character, and the dynamic descriptor may not exceed 22 characters.\n"
+          minLength: 1
+          maxLength: 20
+          example: moneris
+        threeDSecureData:
+          $ref: '#/components/schemas/threeDSecureData'
+        installmentPlanInformation:
+          $ref: '#/components/schemas/installmentPlanInformation'
+        multiCurrencyPricing:
+          $ref: '#/components/schemas/multiCurrencyPricingTransactionRequest'
+        ipv4:
+          $ref: '#/components/schemas/ipv4'
+        ipv6:
+          $ref: '#/components/schemas/ipv6'
+      required:
+      - idempotencyKey
+      - paymentMethod
+      - amount
+    storePaymentMethodCardRequest:
+      title: storePaymentMethodCardRequest
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodCard'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    cardBrand:
+      type:
+      - string
+      - 'null'
+      description: Displays the card brand name associated with the card type.
+      enum:
+      - MASTERCARD
+      - VISA
+      - AMERICAN_EXPRESS
+      - JCB
+      - DISCOVER
+      - INTERAC
+      - UNIONPAY
+      - GIFT_MONERIS
+      - GIFT_DATACANDY
+      - GIFT_GIVEX
+      - null
+      example: MASTERCARD
+    threeDSecureWithAuthenticationId:
+      title: Three DS Authentication Id
+      type: object
+      properties:
+        threeDSecureAuthenticationId:
+          $ref: '#/components/schemas/resourceId'
+      required:
+      - threeDSecureAuthenticationId
+    cancelPaymentRequest:
+      title: cancelPaymentRequest
+      type: object
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        multipleCompletion:
+          description: Multiple Completion object containing amount, processedAt time, and finalCompletion flag
+          type:
+          - object
+          - 'null'
+          properties:
+            amount:
+              $ref: '#/components/schemas/money'
+            processedAt:
+              $ref: '#/components/schemas/processedAt'
+            finalCompletion:
+              type: boolean
+              description: Indicates whether this is the last Completion request for a Payment. To indicate that additional Completions will be performed, please pass finalCompletion as false.
+          required:
+          - amount
+          - processedAt
+          - finalCompletion
+        customData:
+          $ref: '#/components/schemas/customData'
+        reason:
+          description: 'Reason for canceling the payment.
+
+
+            Note: This is a notational field.
+
+            '
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 100
+          example: Defective product
+      required:
+      - idempotencyKey
+    refundReference:
+      description: Refund reference.
+      type:
+      - object
+      - 'null'
+      properties:
+        refundId:
+          $ref: '#/components/schemas/refundId'
+        href:
+          $ref: '#/components/schemas/refundUri'
+      required:
+      - refundId
+    message:
+      type:
+      - string
+      - 'null'
+      description: "Displays response description returned from issuing institution.\n\n**NOTE**: This message should not be displayed on any cardholder facing materials.  \n\nFor receipt purposes, please refer to the Receipt Requirements\"\n"
+      minLength: 1
+      maxLength: 100
+      example: SUCCESS
+    transactionDateTime:
+      description: Indicates the date and time of the transaction.
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    money:
+      type: object
+      description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 16000
+        currency: CAD
+    paymentMethod:
+      title: paymentMethod
+      description: Payment method response object
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        cardholderInformation:
+          $ref: '#/components/schemas/cardholderInformation'
+        contactDetails:
+          $ref: '#/components/schemas/contactDetails'
+        billingAddress:
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        paymentMethodInformation:
+          $ref: '#/components/schemas/cardPaymentMethodInformation'
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+        modifiedAt:
+          $ref: '#/components/schemas/modifiedAt'
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - paymentMethodId
+      - merchantId
+      - paymentMethodInformation
+      - createdAt
+    first:
+      description: Pagination link pointing to the first page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    card:
+      type: object
+      description: Card details
+      properties:
+        cardNumber:
+          $ref: '#/components/schemas/cardNumber'
+        expiryMonth:
+          $ref: '#/components/schemas/expiryMonth'
+        expiryYear:
+          $ref: '#/components/schemas/expiryYear'
+        cardSecurityCode:
+          $ref: '#/components/schemas/cardSecurityCode'
+      required:
+      - cardNumber
+      - expiryMonth
+      - expiryYear
+      - cardSecurityCode
+    paymentId:
+      type: string
+      description: Unique Identification for the Payment
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    convenienceFeeDetails:
+      description: Contains information about a Convenience Fee transaction.
+      type:
+      - object
+      - 'null'
+      properties:
+        status:
+          description: Indicates the status of the merchant and convenience fee transactions.
+          type:
+          - string
+          - 'null'
+          enum:
+          - COMPLETED_CONVENIENCE_FEE_TRANSACTION
+          - PAYMENT_COMPLETED
+          - COMPLETED_VOID_TRANSACTION
+          - COMPLETED_REFUND_TRANSACTION
+          - COMPLETED_MERCHANT_INDEPENDENT_REFUND_TRANSACTION
+          - COMPLETED_MERCHANT_REFUND_TRANSACTION
+          - COMPLETED_FIRST_VOID_TRANSACTION
+          - PAYMENT_CANCELED
+          example: COMPLETED_SECOND_PURCHASE_TRANSACTION
+        amount:
+          description: The expected Convenience Fee amount.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        rate:
+          description: The Convenience Fee rate that has been defined on the merchant’s profile.
+          type: number
+          format: decimal
+        feeType:
+          description: The type of Convenience Fee that has been defined on the merchant’s profile.
+          type: string
+          enum:
+          - FIXED_AMOUNT
+          - PERCENTAGE
+      required:
+      - amount
+      - rate
+      - feeType
+    installmentIdReference:
+      type: string
+      description: A Visa-generated, alphanumeric, unique, and short human-readable friendly name for Installment Plan.
+      minLength: 10
+      maxLength: 10
+      example: '0000000063'
+    storePaymentMethodIdRequest:
+      title: storePaymentMethodIdRequest
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodWithId'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    resourceId:
+      type: string
+      description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    installmentTermsAndConditionsVersion:
+      type: string
+      description: Installment Plan Terms and Conditions Version. Version of the Terms & Conditions accepted by the consumer. The version is auto-incremented every time an update is made to the Plan by the issuer.
+      minLength: 1
+      maxLength: 2147483647
+      example: '1'
+    token:
+      type: string
+      description: Created when a temporary token is created and returned. This acts as a unique profile identifier, and is a required value for temporary token transactions.
+      minLength: 25
+      maxLength: 28
+      example: ot-HCUeCFtXJfEZSSUqvUJkS0
+    ecommerceIndicator:
+      type: string
+      description: "The ecommerce indicator (ECI) specifies the level of security that was used to obtain the cardholder's payment data. \nIt is sent by the merchant and returned by the issuer.\nWhen returned in the response, it can be different from the value sent in the request in case transaction was downgraded by the issuer.\n"
+      enum:
+      - MAIL_TELEPHONE_ORDER_SINGLE
+      - MAIL_TELEPHONE_ORDER_RECURRING
+      - MAIL_TELEPHONE_ORDER_INSTALMENT
+      - MAIL_TELEPHONE_ORDER_UNKNOWN
+      - AUTHENTICATED_ECOMMERCE
+      - NON_AUTHENTICATED_ECOMMERCE
+      - SSL_MERCHANT
+      example: AUTHENTICATED_ECOMMERCE
+      default: SSL_MERCHANT
+    storeGooglePayEncryptedWalletRequest:
+      title: storeGooglePayEncryptedWalletRequest
+      allOf:
+      - $ref: '#/components/schemas/googlePayEncryptedWallet'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    installmentAcceptanceId:
+      type: string
+      description: Visa-generated identifier for a plan acceptance.
+      minimum: 36
+      maximum: 36
+      example: 56d58423-ea25-64e0-ddf3-1e1133549801
+    automaticCapture:
+      type: boolean
+      description: '- **true**: (Default) will prompt Moneris to capture the payment when it is authorized. This performs a Purchase transaction.
+
+        - **false**: will prompt Moneris to place a hold on the funds when the payment is authorized. This performs a Pre-Authorization transaction.
+
+        '
+      default: true
+    ipv6:
+      type:
+      - string
+      - 'null'
+      format: ipv6
+      description: Internet Protocol version 6 (IPv6).
+      example: 2600:1401:2::8a
+    cardInformation:
+      type: object
+      description: Information about the card being used for the transaction
+      properties:
+        bankIdentificationNumber:
+          type:
+          - string
+          - 'null'
+          description: "**BIN**: Bank Identification Number \n\nConsists of the first six to eight digits of the Primary Account Number (PAN) and identifies the relevant payment network and the specific payment issuing institution.\n"
+          minLength: 6
+          maxLength: 8
+          example: '123456'
+        lastFour:
+          type:
+          - string
+          - 'null'
+          description: Last 4 digits of the card.
+          minLength: 4
+          maxLength: 4
+          example: '1234'
+        expiryMonth:
+          $ref: '#/components/schemas/expiryMonth'
+        expiryYear:
+          $ref: '#/components/schemas/expiryYear'
+        cardBrand:
+          $ref: '#/components/schemas/cardBrand'
+        cardType:
+          type:
+          - string
+          - 'null'
+          description: Specifies the intended card use; i.e. debit or credit.
+          enum:
+          - CREDIT
+          - DEBIT
+          - DOMESTIC_DEBIT
+          - PREPAID_RELOADABLE
+          - PREPAID_NON_RELOADABLE
+          - UNKNOWN
+          - GIFT
+          - LOYALTY
+          - FLEET
+          - CORPORATE
+          example: CREDIT
+        cardFingerprint:
+          $ref: '#/components/schemas/cardFingerprint'
+        issuer:
+          $ref: '#/components/schemas/issuer'
+    credentialOnFileInformation:
+      type: object
+      description: 'Contains fields related to the Credential on File (CoF) '
+      properties:
+        paymentIndicator:
+          $ref: '#/components/schemas/paymentIndicator'
+        paymentInformation:
+          $ref: '#/components/schemas/paymentInformation'
+        issuerId:
+          $ref: '#/components/schemas/issuerId'
+        originalAmount:
+          $ref: '#/components/schemas/originalAmount'
+      required:
+      - paymentIndicator
+      - paymentInformation
+      example:
+        paymentIndicator: CUSTOMER_INITIATED
+        paymentInformation: FIRST
+        issuerId: 123asd
+    googlePayDecryptedWallet:
+      title: googlePayDecryptedWallet
+      description: Google Pay wallet details after decrypting the token.
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      - type: object
+        properties:
+          gatewayMerchantId:
+            type:
+            - string
+            - 'null'
+            description: Gateway unique store id
+            example: cagw123456
+          messageExpiration:
+            type:
+            - string
+            - 'null'
+            format: date-time
+            description: 'Date and time at which the message expires. Integrators should reject any message that''s expired.
+
+              '
+            example: '2024-09-19T00:00:00Z'
+          messageId:
+            type:
+            - string
+            - 'null'
+            description: A unique ID that identifies the message in case it needs to be revoked or located at a later time.
+          walletSource:
+            type: string
+            description: "The type of the payment credential. Supported values are:\n  - CARD\n  - TOKENIZED_CARD\n"
+            enum:
+            - CARD
+            - TOKENIZED_CARD
+          cardBrand:
+            type: string
+            description: Card Network.
+            enum:
+            - MASTERCARD
+            - VISA
+            - AMERICAN_EXPRESS
+            - INTERAC
+          walletIndicator:
+            $ref: '#/components/schemas/walletIndicator'
+          cardDetails:
+            $ref: '#/components/schemas/googlePayDecryptedCardDetails'
+        required:
+        - walletSource
+        - cardBrand
+        - cardDetails
+        - walletIndicator
+      required:
+      - paymentMethodSource
+    walletCryptogram:
+      type: string
+      description: Token cryptogram or encoded Base64 for Interac Wallets.
+      maxLength: 500
+      example: 8YGKgiD0iJic84fBLVj3QuwuclqLp7QvizbKnGRYAMVfVwBobYMBAIQBAIUBAIZTWgpQdgQQKZkZFHGfXySDKRAxXyoCASSfAgYAAAAQAABfIAIgL58ZBgSSSSSSSL9JIoEgAAMj1qj1U9jsORa1qxqAEAHOBAAEAECKALEAAAADEACHCAAAAAAAAAAAkAA=
+    paymentAccountReference:
+      type:
+      - string
+      - 'null'
+      description: 'Used to link Primary Account Number (PAN) based transactions and transactions on associated payment tokens without using the PAN as the linking mechanism.
+
+        '
+      minLength: 1
+      maxLength: 29
+      example: '11112222333344445555666677778'
+    threeDSecureAuthenticationValueResult:
+      type:
+      - string
+      - 'null'
+      description: 'The Cardholder Authentication Verification Value (CAVV), the Account holder Authentication Value (AAV), and the American Express Verification Value (AEVV),  are the values that allows Visa, Mastercard and American Express to validate the integrity of the Visa Secure,  Mastercard Identity Check and American Express SafeKey transaction data.  These values are passed back from the issuer to the merchant after the authentication has taken place.  The merchant then integrates the CAVV/AAV/AEVV value into the authorization request using the Payment request with 3-D Secure transaction data.
+
+        '
+      enum:
+      - AMEX_AEVV_FAILED_ATTEMPT_ISSUER_KEY
+      - AMEX_AEVV_FAILED_ATTEMPT_ISSUER_NOT_PARTICIPATING_NETWORK_KEY
+      - AMEX_AEVV_FAILED_ATTEMPT_PARTICIPATING_NOT_AVAILABLE_NETWORK_KEY
+      - AMEX_AEVV_FAILED_AUTHENTICATION_ISSUER_KEY
+      - AMEX_AEVV_PASSED_ATTEMPT_ISSUER_KEY
+      - AMEX_AEVV_PASSED_ATTEMPT_ISSUER_NOT_PARTICIPATING_NETWORK_KEY
+      - AMEX_AEVV_PASSED_ATTEMPT_PARTICIPATING_NOT_AVAILABLE_NETWORK_KEY
+      - AMEX_AEVV_PASSED_AUTHENTICATION_ISSUER_KEY
+      - AMEX_AEVV_UNCHECKED
+      - VISA_CAVV_NOT_PRESENT_OR_NOT_VERIFIED
+      - MASTERCARD_AUTHENTICATION_ATTEMPTED
+      - MASTERCARD_AUTHENTICATION_FAILED
+      - MASTERCARD_AUTHENTICATION_SUCCESSFUL
+      - VISA_CAVV_AUTHENTICATION_RESULTS_INVALID
+      - VISA_CAVV_FAILED_VALIDATION_ATTEMPTED
+      - VISA_CAVV_FAILED_VALIDATION_AUTHENTICATION
+      - VISA_CAVV_NOT_VALIDATED_ISSUER_NOT_PARTICIPATING
+      - VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+      - VISA_CAVV_PASSED_VALIDATION_AUTHENTICATION
+      - VISA_CAVV_PASSED_VALIDATION_INFO_ONLY
+      - VISA_CAVV_WAS_NOT_VALIDATED_ATTEMPTED
+      - VISA_CAVV_WAS_NOT_VALIDATED_AUTHENTICATION
+      - null
+      example: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+    installmentPlanInformation:
+      type:
+      - object
+      - 'null'
+      description: Installment plan details, if an installment plan is selected
+      properties:
+        planId:
+          $ref: '#/components/schemas/installmentId'
+        planIdReference:
+          $ref: '#/components/schemas/installmentIdReference'
+        planTermsAndConditionsVersion:
+          $ref: '#/components/schemas/installmentTermsAndConditionsVersion'
+      required:
+      - planId
+      - planIdReference
+      - planTermsAndConditionsVersion
+    storeGooglePayDecryptedWalletRequest:
+      title: storeGooglePayDecryptedWalletRequest
+      allOf:
+      - $ref: '#/components/schemas/googlePayDecryptedWallet'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
+    createdAt:
+      description: Time at which the object was created
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    walletEcommerceIndicator:
+      type:
+      - string
+      - 'null'
+      description: ECI Indicator as provided by the Wallet.
+    cardSecurityCodeResult:
+      type:
+      - string
+      - 'null'
+      description: 'Indicates the Card Security Code validation result.
+
+        - **MATCH**
+
+        - **NO_MATCH**
+
+        - **NOT_PROCESSED**
+
+        - **CVD_NOT_PRESENT**
+
+        - **NOT_CVD_PRESENT**
+
+        - **AMEX_JCB_MATCH**
+
+        - **AMEX_JCB_INVALID**
+
+        - **OTHER**"
+
+        '
+      enum:
+      - MATCH
+      - NO_MATCH
+      - NOT_PROCESSED
+      - CVD_NOT_PRESENT
+      - NOT_CVD_PARTICIPANT
+      - AMEX_JCB_MATCH
+      - AMEX_JCB_INVALID
+      - OTHER
+      - null
+      example: MATCH
+    error:
+      description: Error response details.
+      properties:
+        type:
+          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
+
+            '
+          type: string
+          format: uri
+          example: https://api-developer.moneris.com/responsehandling
+        title:
+          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
+
+            '
+          type:
+          - string
+          - 'null'
+          example: INSUFFICIENT_FUNDS
+        status:
+          description: 'it conveys the HTTP status code used for the convenience of the consumer.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 100
+          maximum: 505
+        detail:
+          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: Funds are insufficient to execute the operation.
+        instance:
+          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
+          format: uri-reference
+        category:
+          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
+          enum:
+          - API_ERROR
+          - IDEMPOTENCY_ERROR
+          - INVALID_REQUEST_ERROR
+          - DECLINED_ERROR
+          - UNAUTHORIZED_ERROR
+          - INTERNAL_SERVER_ERROR
+          - null
+          type:
+          - string
+          - 'null'
+          example: DECLINED_ERROR
+        errors:
+          type: array
+          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          items:
+            type: object
+            $ref: '#/components/schemas/parameterError'
+          example:
+          - parameterName: address.postalCode
+            parameterValue: MAP3J8
+            errorMessage: address.Postal code does not match regular expression
+            reasonCode: INVALID_FORMAT
+      title: API Error
+      type: object
+      required:
+      - type
+    googlePayEncryptedWallet:
+      title: googlePayEncryptedWallet
+      description: Apple Pay encrypted wallet details.
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      - type: object
+        properties:
+          cardBrand:
+            type: string
+            description: Card Brand.
+            enum:
+            - MASTERCARD
+            - VISA
+            - AMERICAN_EXPRESS
+            - INTERAC
+            example: INTERAC
+          signature:
+            type: string
+            description: 'Verifies that the message came from Google.  It''s base64-encoded, and created with ECDSA by the intermediate signing key.
+
+              '
+          googlePayProtocolVersion:
+            type: string
+            description: "Identifies the encryption or signing scheme under which the message is created. \nIt allows the protocol to evolve over time, if needed.\nMust be fowarded as provided by Google Pay.\n"
+            example: ECv1
+          signedMessage:
+            type: string
+            description: 'A JSON object serialized as an HTML-safe string that contains the encryptedMessage, ephemeralPublicKey, and tag.  It''s serialized to simplify the signature verification process.
+
+              '
+          walletIndicator:
+            $ref: '#/components/schemas/walletIndicator'
+        required:
+        - cardBrand
+        - signature
+        - googlePayProtocolVersion
+        - signedMessage
+        - walletIndicator
+      required:
+      - paymentMethodSource
+    paymentMethodRequestSource:
+      type: string
+      description: "The source of Payment Method being used. It can be:\n  - The Id of a Payment Method already created.\n  - Permanent Token.\n  - Temporary Token.\n  - Card.\n  - E-Wallet.\n"
+      enum:
+      - PAYMENT_METHOD_ID
+      - CARD
+      - TEMPORARY_TOKEN
+      - PERMANENT_TOKEN
+      - APPLE_PAY_ENCRYPTED
+      - APPLE_PAY_DECRYPTED
+      - GOOGLE_PAY_ENCRYPTED
+      - GOOGLE_PAY_DECRYPTED
+    subTotalAmount:
+      type:
+      - object
+      - 'null'
+      description: "Sub total amount for the transaction. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 2000
+        currency: CAD
+    storePaymentMethodRequest:
+      title: storePaymentMethodRequest
+      description: "Used to collect payment data needed to execute the transaction. \nCan also be used to collect and save customer payment instruments on file. \n"
+      oneOf:
+      - $ref: '#/components/schemas/storePaymentMethodIdRequest'
+      - $ref: '#/components/schemas/storePaymentMethodCardRequest'
+      - $ref: '#/components/schemas/storePaymentMethodTemporaryTokenRequest'
+      - $ref: '#/components/schemas/storePaymentMethodPermanentTokenRequest'
+      - $ref: '#/components/schemas/storeApplePayDecryptedWalletRequest'
+      - $ref: '#/components/schemas/storeApplePayEncryptedWalletRequest'
+      - $ref: '#/components/schemas/storeGooglePayDecryptedWalletRequest'
+      - $ref: '#/components/schemas/storeGooglePayEncryptedWalletRequest'
+      discriminator:
+        propertyName: paymentMethodSource
+        mapping:
+          PAYMENT_METHOD_ID: '#/components/schemas/storePaymentMethodIdRequest'
+          CARD: '#/components/schemas/storePaymentMethodCardRequest'
+          TEMPORARY_TOKEN: '#/components/schemas/storePaymentMethodTemporaryTokenRequest'
+          PERMANENT_TOKEN: '#/components/schemas/storePaymentMethodPermanentTokenRequest'
+          APPLE_PAY_ENCRYPTED: '#/components/schemas/storeApplePayEncryptedWalletRequest'
+          APPLE_PAY_DECRYPTED: '#/components/schemas/storeApplePayDecryptedWalletRequest'
+          GOOGLE_PAY_ENCRYPTED: '#/components/schemas/storeGooglePayEncryptedWalletRequest'
+          GOOGLE_PAY_DECRYPTED: '#/components/schemas/storeGooglePayDecryptedWalletRequest'
+      required:
+      - paymentMethodSource
+    paymentMethodId:
+      type: string
+      description: Unique Identifier of the payment method.
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    multiCurrencyPricingOptIn:
+      type: string
+      description: Indicates if Multi-Currency Pricing is to be used for this transaction.
+      enum:
+      - OPT_IN
+      example: OPT_IN
+    installmentStatus:
+      type: string
+      description: Status of the Installment Plan.
+      enum:
+      - ACCEPTED
+      - NEW
+      - CANCELED
+      example: ACCEPTED
+    payment:
+      title: payment
+      type: object
+      description: Returns a processed payment
+      properties:
+        paymentId:
+          $ref: '#/components/schemas/paymentId'
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        invoiceNumber:
+          $ref: '#/components/schemas/invoiceNumber'
+        transactionDateTime:
+          $ref: '#/components/schemas/transactionDateTime'
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+        modifiedAt:
+          $ref: '#/components/schemas/modifiedAt'
+        amount:
+          description: This amount excludes surcharge, application and convenience fee.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        authorizedAmount:
+          description: This represents the funds that are held by the authorization on the payment method.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        capturableAmount:
+          description: Remaining amount that can still be captured.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        amountDetails:
+          $ref: '#/components/schemas/amountDetails'
+        convenienceFeeDetails:
+          $ref: '#/components/schemas/convenienceFeeDetails'
+        customerId:
+          type:
+          - string
+          - 'null'
+          description: Unique Identification for the Customer
+          example: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+          minLength: 30
+          maxLength: 30
+        customerReference:
+          type:
+          - string
+          - 'null'
+          description: Unique Identification for the Customer. This can be an identifier generated from a merchant-defined identifier.
+          example: 911677-212
+          minLength: 1
+          maxLength: 50
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethod'
+        paymentStatus:
+          $ref: '#/components/schemas/paymentStatus'
+        transactionDetails:
+          $ref: '#/components/schemas/statusDetails'
+        verificationDetails:
+          $ref: '#/components/schemas/verificationDetails'
+        credentialOnFileResponse:
+          $ref: '#/components/schemas/credentialOnFileResponse'
+        multiCurrencyPricingDetails:
+          $ref: '#/components/schemas/multiCurrencyPricingDetails'
+        refundDetails:
+          $ref: '#/components/schemas/refundDetails'
+        subscription:
+          $ref: '#/components/schemas/subscriptionReference'
+        installmentPlanDetails:
+          $ref: '#/components/schemas/installmentPlanDetails'
+        customData:
+          $ref: '#/components/schemas/customData'
+        incrementalAuthorizations:
+          $ref: '#/components/schemas/incrementalAuthorizations'
+        multipleCompletions:
+          $ref: '#/components/schemas/multipleCompletions'
+      required:
+      - paymentId
+      - merchantId
+      - transactionDateTime
+      - createdAt
+      - amount
+      - authorizedAmount
+      - capturableAmount
+      - paymentMethod
+      - paymentStatus
+      - transactionDetails
+      - verificationDetails
+    storePermanentToken:
+      description: "Store this payment method created through this payment for future use. \n- CARDHOLDER_INITIATED: Payment method to be stored and can only re-used with cardholder's consent. Limited to store, pre-authorisation, and card validations.\"\n- MERCHANT_INITIATED: Payment method to be stored and can be reused without the cardholder's consent. For example, subscriptions.\n"
+      type: string
+      default: MERCHANT_INITIATED
+      enum:
+      - CARDHOLDER_INITIATED
+      - MERCHANT_INITIATED
+    multipleCompletion:
+      description: Multiple Completion object containing amount, processedAt time, and finalCompletion flag
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/money'
+        processedAt:
+          $ref: '#/components/schemas/processedAt'
+        finalCompletion:
+          type: boolean
+          description: Indicates whether this is the last Completion request for a Payment. To indicate that additional Completions will be performed, please pass finalCompletion as false.
+      required:
+      - amount
+      - processedAt
+      - finalCompletion
+    subscriptionReference:
+      description: "Subscription reference, if this transaction is related to a subscription. \n"
+      type:
+      - object
+      - 'null'
+      properties:
+        subscriptionId:
+          $ref: '#/components/schemas/subscriptionId'
+        href:
+          title: SubscriptionUri
+          description: Subscription Reference URL
+          type:
+          - string
+          - 'null'
+          format: uri-reference
+          example: /subscriptions/rp0105ARZ3NDEKTSV4RRFFQ69G5FAV
+      required:
+      - subscriptionId
+    ipv4:
+      type:
+      - string
+      - 'null'
+      format: ipv4
+      description: Internet Protocol version 4 (IPv4).
+      example: 104.75.173.179
+    storePaymentMethodTemporaryTokenRequest:
+      title: storePaymentMethodTemporaryTokenRequest
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodTemporaryToken'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    authorizationCode:
+      type:
+      - string
+      - 'null'
+      maxLength: 8
+      pattern: ^[a-zA-Z0-9]*$
+      description: "Contains a value generated by the authorizer for an approved financial transactions. \nThis operates as the authorizing host's transaction identification.\n"
+      example: '11223344'
+    paymentMethodWithId:
+      title: paymentMethodWithId
+      description: Use existing unique payment method identifier.
+      properties:
+        paymentMethodSource:
+          $ref: '#/components/schemas/paymentMethodRequestSource'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+      required:
+      - paymentMethodSource
+      - paymentMethodId
+    storePaymentMethodPermanentTokenRequest:
+      title: storePaymentMethodPermanentTokenRequest
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodPermanentToken'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePermanentToken'
+          credentialOnFileInformation:
+            $ref: '#/components/schemas/credentialOnFileInformation'
+        required:
+        - credentialOnFileInformation
+    storePaymentMethod:
+      description: "Store this payment method created through this payment for future use. \n- DO_NOT_STORE: Payment method will not be stored.\n- CARDHOLDER_INITIATED: Payment method to be stored and can only re-used with cardholder's consent. Limited to store, pre-authorisation, and card validations.\"\n- MERCHANT_INITIATED: Payment method to be stored and can be reused without the cardholder's consent. For example, subscriptions.\n"
+      type: string
+      default: DO_NOT_STORE
+      enum:
+      - DO_NOT_STORE
+      - CARDHOLDER_INITIATED
+      - MERCHANT_INITIATED
+    storeApplePayEncryptedWalletRequest:
+      title: storeApplePayEncryptedWalletRequest
+      allOf:
+      - $ref: '#/components/schemas/applePayEncryptedWallet'
+      - type: object
+        properties:
+          storePaymentMethod:
+            $ref: '#/components/schemas/storePaymentMethod'
+          credentialOnFileInformation:
+            type:
+            - object
+            - 'null'
+            description: 'Contains fields related to the Credential on File (CoF) '
+            properties:
+              paymentIndicator:
+                $ref: '#/components/schemas/paymentIndicator'
+              paymentInformation:
+                $ref: '#/components/schemas/paymentInformation'
+              issuerId:
+                $ref: '#/components/schemas/issuerId'
+              originalAmount:
+                $ref: '#/components/schemas/originalAmount'
+            required:
+            - paymentIndicator
+            - paymentInformation
+            example:
+              paymentIndicator: CUSTOMER_INITIATED
+              paymentInformation: FIRST
+              issuerId: 123asd
+    cardNumber:
+      type: string
+      description: Identifies the customer's credit or debit card number (Primary Account Number).
+      pattern: ^[0-9]{13,19}$
+      example: '4242424242424242'
+    convenienceFee:
+      description: Allows merchants to apply an additional charge to a customer's bill (with their consent) for the convenience of being able to pay for goods and services using an alternative payment channel.
+      type:
+      - object
+      - 'null'
+      properties:
+        amount:
+          $ref: '#/components/schemas/money'
+      required:
+      - amount
+    googlePayDecryptedCardDetails:
+      description: 'The payment credential itself.  The format of this object is determined by the paymentMethod
+
+        '
+      type: object
+      properties:
+        personalAccountNumber:
+          description: The personal account number charged. This string contains only digits.
+          type: string
+          pattern: ^[0-9]{13,19}$
+          example: '4242424242424242'
+        expiryMonth:
+          $ref: '#/components/schemas/expiryMonth'
+        expiryYear:
+          $ref: '#/components/schemas/expiryYear'
+        authenticationMethod:
+          description: 'The authentication method of the card transaction.
+
+            Must be forwarded as provided by Google Pay.
+
+            '
+          type:
+          - string
+          - 'null'
+        cryptogram:
+          type:
+          - string
+          - 'null'
+          description: Token cryptogram or encoded Base64 for Interac Wallets.
+          maxLength: 500
+          example: 8YGKgiD0iJic84fBLVj3QuwuclqLp7QvizbKnGRYAMVfVwBobYMBAIQBAIUBAIZTWgpQdgQQKZkZFHGfXySDKRAxXyoCASSfAgYAAAAQAABfIAIgL58ZBgSSSSSSSL9JIoEgAAMj1qj1U9jsORa1qxqAEAHOBAAEAECKALEAAAADEACHCAAAAAAAAAAAkAA=
+        walletEcommerceIndicator:
+          $ref: '#/components/schemas/walletEcommerceIndicator'
+      required:
+      - personalAccountNumber
+      - expiryMonth
+      - expiryYear
+    cardFingerprint:
+      type:
+      - string
+      - 'null'
+      description: "Unique card identifier. \n\nFingerprinting randomly assigns identfiers for cards that share the same Primary Account Number (PAN) to easily identify when multiple payments methods are attached to the same underlying card, and assists merchants identify individual customers across various channels; i.e.  loyalty programs.\n"
+      maxLength: 255
+      example: 1Q2W3E4r5t6rfwewerwewrrw
+    cardholderInformation:
+      type:
+      - object
+      - 'null'
+      description: Information about the holder of the card.
+      properties:
+        cardholderName:
+          $ref: '#/components/schemas/cardholderName'
+        companyName:
+          $ref: '#/components/schemas/companyName'
+      required:
+      - cardholderName
+    originalAmount:
+      type:
+      - object
+      - 'null'
+      description: "Original amount for the first transaction in the series. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 15000
+        currency: CAD
+    dataType:
+      type: string
+      description: 'Only available to Canada integrations.
+
+
+        Applies to merchants using their own API for transaction payload encryptions and is mandatory for INTERAC® e-Commerce Apple Pay and Google Pay transactions.
+
+        '
+      enum:
+      - THREE_D_SECURE
+      - EMV
+    walletIndicator:
+      type: string
+      description: 'Only available to Canada integrations.
+
+        Applies to merchants using their own API for transaction payload encryptions for Apple Pay and Google Pay transactions.
+
+        **NOTE**: This field is mandatory for wallet transactions and is case senstive."
+
+        '
+      enum:
+      - IN_APPLICATION
+      - IN_BROWSER
+    next:
+      description: Pagination link pointing to the next page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    refundId:
+      type: string
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      description: Unique Identification for the Refund
+      example: ri0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    idempotencyKey:
+      type: string
+      description: "A Unique Identifier that is required for handling idempotent requests. \n\nNote: Moneris encourages the use of UUID Version 4 in APIs as an idempotency key.\"    \n"
+      minLength: 1
+      maxLength: 36
+      example: 6q5w4e7r8t9y
+    incrementalAuthorization:
+      description: Incremental Authorization object containing amount and processedAt time.
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/money'
+        processedAt:
+          $ref: '#/components/schemas/processedAt'
+      required:
+      - amount
+      - processedAt
+    subscriptionId:
+      type: string
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      description: Unique Identification for the Subscription
+      example: si0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    incrementalAuthorizationRequest:
+      title: incrementalAuthorization
+      type: object
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        invoiceNumber:
+          $ref: '#/components/schemas/invoiceNumber'
+        amount:
+          description: This amount excludes surcharge, application and converience fee.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - idempotencyKey
+      - amount
+    credentialOnFileResponse:
+      type:
+      - object
+      - 'null'
+      description: 'Contains fields related to the Credential on File (CoF) '
+      properties:
+        originalAmount:
+          $ref: '#/components/schemas/originalAmount'
+        issuerId:
+          $ref: '#/components/schemas/issuerId'
+    paymentMethodRequestBase:
+      description: 'Payment Method details.
+
+
+        Note: If defined, this will result in the creation of Payment Method as defined in the Payment Method API.
+
+        '
+      type: object
+      properties:
+        cardholderInformation:
+          $ref: '#/components/schemas/cardholderInformation'
+        contactDetails:
+          $ref: '#/components/schemas/contactDetails'
+        billingAddress:
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        paymentMethodSource:
+          $ref: '#/components/schemas/paymentMethodRequestSource'
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - paymentMethodSource
+    amountDetails:
+      description: Contains information pertaining to the subtotal, tip, and surcharge amounts of a Payment
+      type:
+      - object
+      - 'null'
+      properties:
+        subTotalAmount:
+          $ref: '#/components/schemas/subTotalAmount'
+        tipAmount:
+          $ref: '#/components/schemas/tipAmount'
+        surchargeAmount:
+          type:
+          - object
+          - 'null'
+          description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+    verificationDetails:
+      description: Result Codes for CVD, AVS, 3DS
+      type: object
+      properties:
+        addressVerificationServiceResultCode:
+          $ref: '#/components/schemas/addressVerificationServiceResultCode'
+        cardSecurityCodeResultCode:
+          $ref: '#/components/schemas/cardSecurityCodeResult'
+        threeDSecureAuthenticationValueResultCode:
+          $ref: '#/components/schemas/threeDSecureAuthenticationValueResult'
+    threeDSecureData:
+      description: Data related to 3-D Secure
+      type:
+      - object
+      - 'null'
+      oneOf:
+      - $ref: '#/components/schemas/threeDSecureWithAuthenticationId'
+      - $ref: '#/components/schemas/threeDSecureWithAuthenticationData'
+    iso:
+      type: string
+      description: Represents the Moneris response code for the equivalent International Organization for Standardization (ISO) response code.
+      minLength: 2
+      maxLength: 2
+      example: '00'
+    paymentMethodTemporaryToken:
+      title: paymentMethodTemporaryToken
+      description: 'A Temporary Token is issued by Moneris to the merchant and represents the card details. Please review the Hosted Tokenization feature documentation to learn how to issue such a token.
+
+        '
+      allOf:
+      - type: object
+        properties:
+          temporaryToken:
+            $ref: '#/components/schemas/token'
+        required:
+        - paymentMethodSource
+        - temporaryToken
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      required:
+      - paymentMethodSource
+      - temporaryToken
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    expiryMonth:
+      type: integer
+      format: int32
+      description: Card expiration month. Format must be MM
+      minimum: 1
+      maximum: 12
+      example: 1
+    applePayDecryptedWallet:
+      title: applePayDecryptedWallet
+      description: Apple Pay wallet details after decrypting the token.
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      - type: object
+        properties:
+          applicationPrimaryAccountNumber:
+            description: The unique identifier for the primary account number for the payment card.
+            type: string
+            pattern: ^[0-9]{13,19}$
+            example: '4242424242424242'
+          expiryMonth:
+            $ref: '#/components/schemas/expiryMonth'
+          expiryYear:
+            $ref: '#/components/schemas/expiryYear'
+          deviceManufacturerIdentifier:
+            $ref: '#/components/schemas/deviceManufacturerIdentifier'
+          dataType:
+            $ref: '#/components/schemas/dataType'
+          cryptogram:
+            $ref: '#/components/schemas/walletCryptogram'
+          cardBrand:
+            type: string
+            description: Card Brand.
+            enum:
+            - MASTERCARD
+            - VISA
+            - AMERICAN_EXPRESS
+            - INTERAC
+            - DISCOVER
+          walletEcommerceIndicator:
+            $ref: '#/components/schemas/walletEcommerceIndicator'
+          walletIndicator:
+            $ref: '#/components/schemas/walletIndicator'
+        required:
+        - applicationPrimaryAccountNumber
+        - expiryMonth
+        - expiryYear
+        - dataType
+        - cryptogram
+        - cardBrand
+        - walletIndicator
+      required:
+      - paymentMethodSource
+    statusDetails:
+      type: object
+      description: Additional details about the transaction outcome.
+      properties:
+        transactionUniqueId:
+          type:
+          - string
+          - 'null'
+          description: Realtime transaction identifier from the host.
+        isoResponseCode:
+          $ref: '#/components/schemas/iso'
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        authorizationCode:
+          $ref: '#/components/schemas/authorizationCode'
+        message:
+          $ref: '#/components/schemas/message'
+        ecommerceIndicator:
+          $ref: '#/components/schemas/ecommerceIndicator'
+      required:
+      - isoResponseCode
+      - responseCode
+      - ecommerceIndicator
+    currency:
+      type: string
+      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
+      minLength: 3
+      maxLength: 4
+      example: CAD
+      format: iso-4217
+    paymentList:
+      title: paymentList
+      type: object
+      description: Response body, returns a paginated list of payments
+      properties:
+        data:
+          description: Payments list.
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/payment'
+        self:
+          $ref: '#/components/schemas/self'
+        first:
+          $ref: '#/components/schemas/first'
+        last:
+          $ref: '#/components/schemas/last'
+        next:
+          $ref: '#/components/schemas/next'
+        previous:
+          $ref: '#/components/schemas/previous'
+      required:
+      - data
+    paymentInformation:
+      type: string
+      description: Describes whether the transaction is the first or subsequent in the series
+      enum:
+      - FIRST
+      - SUBSEQUENT
+      example: FIRST
+    responseCode:
+      type: string
+      description: '"Details Transaction Response Codes:
+
+        - **< 50**: Transaction approved
+
+        - **> 50**: Transaction declined
+
+        NULL: Transaction not sent for authorization
+
+        For a complete list of definitions, refer to the Response Codes Table"
+
+        '
+      minLength: 3
+      maxLength: 3
+      example: '001'
+    issuerId:
+      type:
+      - string
+      - 'null'
+      description: "Displays a unique identifier for the card holder's stored credentials. \n\nThis information is returned from the card brand when processing a Credential on File transaction.\n"
+      minLength: 1
+      maxLength: 15
+      example: A
+    applePayEncryptedWallet:
+      title: applePayEncryptedWallet
+      description: Apple Pay encrypted wallet details.
+      allOf:
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      - type: object
+        properties:
+          displayName:
+            type: string
+            description: Display Name
+            example: MasterCard 4079
+          cardBrand:
+            type: string
+            description: Card Brand.
+            enum:
+            - MASTERCARD
+            - VISA
+            - AMERICAN_EXPRESS
+            - INTERAC
+            - DISCOVER
+            example: MASTERCARD
+          applePayVersion:
+            type: string
+            description: "Version information about the payment token.\n  - EC_V1: For ECC-encrypted data\n  - RSA_V1: For RSA-encrypted data\n"
+            enum:
+            - EC_V1
+            - RSA_V1
+            example: EC_V1
+          data:
+            type: string
+            description: 'Encrypted payment data. Base64 encoded as a string.
+
+              '
+            format: byte
+            example: MTIzNDU2Njc4OQ==
+          signature:
+            type: string
+            description: 'Signature of the payment and header data, Base64 encoded as a string. The signature includes the signing certificate, its intermediate CA certificate, and information about the signing algorithm. Can be a detached PKCS #7 signature, Base64 encoded as a string
+
+              '
+          publicKeyHash:
+            type: string
+            description: 'Hash of the X.509 encoded public key bytes of the merchant’s certificate. Can be either a base64 encoded or SHA-256 Hash string.
+
+              '
+          ephemeralPublicKey:
+            type: string
+            description: 'Ephemeral public key bytes. Only for RSA_v1. Can be either a base64 encoded string or X.509 bytes.
+
+              '
+            format: byte
+          applePayTransactionId:
+            type: string
+            description: The Apple Pay unique identifier for a transaction such as an in-app purchase, restored in-app purchase, or subscription renewal.
+          walletIndicator:
+            $ref: '#/components/schemas/walletIndicator'
+        required:
+        - displayName
+        - cardBrand
+        - applePayVersion
+        - data
+        - signature
+        - publicKeyHash
+        - ephemeralPublicKey
+        - applePayTransactionId
+        - walletIndicator
+      required:
+      - paymentMethodSource
+    installmentPlanDetails:
+      type:
+      - object
+      - 'null'
+      description: Installment plan application results.
+      properties:
+        planId:
+          $ref: '#/components/schemas/installmentId'
+        planIdReference:
+          $ref: '#/components/schemas/installmentIdReference'
+        planTermsAndConditionsVersion:
+          $ref: '#/components/schemas/installmentTermsAndConditionsVersion'
+        planAcceptanceId:
+          $ref: '#/components/schemas/installmentAcceptanceId'
+        planStatus:
+          $ref: '#/components/schemas/installmentStatus'
+        planProcessingResponseMessage:
+          type:
+          - string
+          - 'null'
+          description: Installment plan processing response
+          minLength: 2
+          maxLength: 50
+      required:
+      - planId
+      - planIdReference
+      - planTermsAndConditionsVersion
+      - planAcceptanceId
+      - planStatus
+    modifiedAt:
+      description: Time at which the object was modified
+      type:
+      - string
+      - 'null'
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    dateTime:
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+      description: Date & Time
+    threeDSecureServerTransactionId:
+      type: string
+      description: "Indicates information required when sending a version 3-D Secure 2.0+ transaction. \n\nThis data is obtained from a CAVV Lookup Request or MPI 3DS Authentication Request transaction.\n"
+      format: uuid
+      example: ad9b0eda-bf9b-4288-b188-9467993603e1
+    customData:
+      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+      type:
+      - object
+      - 'null'
+      additionalProperties:
+        type: string
+        minLength: 1
+        maxLength: 50
+      maxProperties: 10
+    self:
+      description: Pagination link pointing to the current page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    deviceManufacturerIdentifier:
+      type:
+      - string
+      - 'null'
+      description: Hex-encoded device manufacturer identifier
+    orderId:
+      type:
+      - string
+      - 'null'
+      description: 'Indicates the merchant-defined transaction identifer or order ID. Identifiers are unique for every Purchase, Pre-Authorization and Independent Refund transaction
+
+
+        **Note**: No two transactions of these types may have the same order ID. Field only accepts alphanumerical characters, dashes and underscores.
+
+        '
+      minLength: 1
+      maxLength: 50
+      example: 1q2w3e4r5t6t78
+      pattern: ^[a-zA-Z0-9-_]+$
+    incrementalAuthorizations:
+      description: List of all previous incremental authorizations.
+      type: array
+      items:
+        $ref: '#/components/schemas/incrementalAuthorization'
+    paymentIndicator:
+      type: string
+      description: 'Indicates the current or intended use of the credentials
+
+        - **UNSCHEDULED_CREDENTIAL_ON_FILE**: unscheduled Credential on File (first transactions only)
+
+        - **RECURRING**: recurring transaction
+
+        - **MERCHANT_INITIATED**: unscheduled merchant-initiated transaction
+
+        - **VARIABLE_RECURRING**: recurring variable payment transaction
+
+        - **CUSTOMER_INITIATED**: unscheduled customer-initiated transaction
+
+        '
+      enum:
+      - UNSCHEDULED_CREDENTIAL_ON_FILE
+      - RECURRING
+      - MERCHANT_INITIATED
+      - VARIABLE_RECURRING
+      - CUSTOMER_INITIATED
+      example: UNSCHEDULED_CREDENTIAL_ON_FILE
+    installmentId:
+      type: string
+      description: Visa-generated identifier for an Installment plan.
+      minLength: 36
+      maxLength: 36
+      example: 130d93f9-8a5d-a78c-4741-14905057ce01
+    refundUri:
+      title: Refund URI
+      description: Refund Reference URL
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+      example: /refunds/ri0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    threeDSecureVersion:
+      type: string
+      description: Required when sending a 3-D Secure version 2.0+ transaction. If no value is provided, default to V1.
+      maxLength: 10
+      example: '2.2'
+    addressVerificationServiceResultCode:
+      title: AVS Result Description
+      type:
+      - string
+      - 'null'
+      description: "Indicates the address verification result. \n"
+      enum:
+      - FULL_MATCH
+      - PARTIAL_MATCH
+      - NO_MATCH
+      - UNAVAILABLE
+      - null
+      example: FULL_MATCH
+    contactDetails:
+      type:
+      - object
+      - 'null'
+      description: Contact details
+      properties:
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          pattern: ^\+[1-9]\d{1,14}$
+          minLength: 3
+          maxLength: 16
+          example: '+18663197450'
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+          description: 'Contains the customer''s email address.
+
+
+            For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+            '
+          minLength: 1
+          maxLength: 320
+          example: moneris@moneris.com
+      example:
+        phoneNumber: '+18663197450'
+        email: moneris@moneris.com
+    last:
+      description: Pagination link pointing to the last page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    paymentStatus:
+      type: string
+      description: Payment Status description.
+      enum:
+      - CANCELED
+      - DECLINED
+      - DECLINED_RETRY
+      - AUTHORIZED
+      - PROCESSING
+      - SUCCEEDED
+      - INCREMENTED
+      - PARTIALLY_COMPLETED
+      example: SUCCEEDED
+    cardPaymentMethodInformation:
+      title: Card Payment Method Information
+      description: Details about the card used in the payment method.
+      type: object
+      properties:
+        paymentMethodType:
+          type: string
+          description: "The type of Payment Method being used. It can be:\n  - Card.\n"
+          enum:
+          - CARD
+        paymentMethodSource:
+          type: string
+          description: "The source of Payment Method being used. It can be:\n  - The Id of a Payment Method already created.\n  - Permanent Token.\n  - Temporary Token.\n  - Card.\n  - E-Wallet.\n"
+          enum:
+          - CARD
+          - TEMPORARY_TOKEN
+          - PERMANENT_TOKEN
+          - APPLE_PAY_ENCRYPTED
+          - APPLE_PAY_DECRYPTED
+          - GOOGLE_PAY_ENCRYPTED
+          - GOOGLE_PAY_DECRYPTED
+          example: TEMPORARY_TOKEN
+        cardInformation:
+          $ref: '#/components/schemas/cardInformation'
+        paymentAccountReference:
+          $ref: '#/components/schemas/paymentAccountReference'
+        storePaymentMethod:
+          $ref: '#/components/schemas/storePaymentMethod'
+      required:
+      - paymentMethodType
+      - paymentMethodSource
+      - cardInformation
+      - storePaymentMethod
+    multiCurrencyPricingDetails:
+      type:
+      - object
+      - 'null'
+      description: Exchange rate for use in a subsequent MCP financial transaction
+      properties:
+        cardholderAmount:
+          $ref: '#/components/schemas/money'
+        merchantSettlementAmount:
+          description: The amount that will be paid to the merchant, in settlement currency
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        multiCurrencyPricingExchangeRate:
+          description: The foreign exchange rate (foreign currency to CAD) that will be used for the transaction
+          type: number
+          format: decimal
+          example: 1.2346
+      required:
+      - cardholderAmount
+      - merchantSettlementAmount
+      - multiCurrencyPricingExchangeRate
+      example:
+        cardholderAmount:
+          currency: USD
+          amount: 30000
+        multiCurrencyPricingRate: 1.2345
+    multiCurrencyPricingTransactionRequest:
+      description: Multi-Currency Pricing (MCP) Object
+      title: multiCurrencyPricingDetails
+      type:
+      - object
+      - 'null'
+      properties:
+        multiCurrencyPricingOptIn:
+          $ref: '#/components/schemas/multiCurrencyPricingOptIn'
+        multiCurrencyPricingRateLookupId:
+          type:
+          - string
+          - 'null'
+          description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
+          pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+          minLength: 30
+          maxLength: 30
+          example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+      required:
+      - multiCurrencyPricingOptIn
+    previous:
+      description: Pagination link pointing to the previous page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    processedAt:
+      description: Time at which the object was processed
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    issuer:
+      type:
+      - string
+      - 'null'
+      description: Card issuer.
+      minLength: 1
+      maxLength: 100
+      example: RBC
+    invoiceNumber:
+      type:
+      - string
+      - 'null'
+      description: 'Submits a unique value to identify a transaction that is logged by Moneris Solutions.
+
+        '
+      minLength: 1
+      maxLength: 17
+      example: 1a2s3d45v6
+    merchantId:
+      type: string
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
+    tipAmount:
+      type:
+      - object
+      - 'null'
+      description: "Total tip amount for the transaction. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 1200
+        currency: CAD
+    amount:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999999
+      example: 10000
+      description: Amount
+    threeDSecureWithAuthenticationData:
+      type: object
+      title: Three DS Authentication Data
+      properties:
+        threeDSecureAuthenticationValue:
+          $ref: '#/components/schemas/threeDSecureAuthenticationValue'
+        threeDSecureVersion:
+          $ref: '#/components/schemas/threeDSecureVersion'
+        threeDSecureServerTransactionId:
+          $ref: '#/components/schemas/threeDSecureServerTransactionId'
+        threeDSecureDirectoryServerTransactionId:
+          $ref: '#/components/schemas/threeDSecureDirectoryServerTransactionId'
+      required:
+      - threeDSecureAuthenticationValue
+      - threeDSecureVersion
+      - threeDSecureServerTransactionId
+      - threeDSecureDirectoryServerTransactionId
+    threeDSecureDirectoryServerTransactionId:
+      type: string
+      description: Universally unique transaction identifier assigned by the 3DS Directory Server (DS) to identify a single transaction.
+      format: uuid
+      example: ad9b0eda-bf9b-4288-b188-9467993603e1
+  responses:
+    invalidListbadRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/InvalidListRequestErrorResponse'
+    completePaymentSuccessResponse:
+      description: Payment completed successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/payment'
+          example:
+            paymentId: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            merchantId: 0123456789101
+            orderId: 1q2w3e4r5t6t78
+            invoiceNumber: 1a2s3d45v6
+            transactionDateTime: '2019-07-30T06:43:40.252Z'
+            createdAt: '2019-07-30T06:43:40.252Z'
+            modifiedAt: '2019-07-30T06:43:40.252Z'
+            amount:
+              amount: 16000
+              currency: CAD
+            authorizedAmount:
+              amount: 16000
+              currency: CAD
+            capturableAmount:
+              amount: 0
+              currency: CAD
+            amountDetails: null
+            customerId: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            paymentMethod:
+              paymentMethodId: pm0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              merchantId: 0123456789101
+              cardholderInformation: null
+              contactDetails: null
+              billingAddress: null
+              paymentMethodInformation:
+                paymentMethodType: CARD
+                paymentMethodSource: CARD
+                cardInformation:
+                  bankIdentificationNumber: '123456'
+                  lastFour: '1234'
+                  expiryMonth: 1
+                  expiryYear: 2028
+                  cardBrand: MASTERCARD
+                  cardType: CREDIT
+                  cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                  issuer: RBC
+                paymentAccountReference: '11112222333344445555666677778'
+                storePaymentMethod: DO_NOT_STORE
+              createdAt: '2019-07-30T06:43:40.252Z'
+              modifiedAt: null
+              customData:
+                property1: string
+                property2: string
+            paymentStatus: SUCCEEDED
+            transactionDetails:
+              transactionUniqueId: 938c2cc0dcc05f2b68c4287040cfcf71
+              isoResponseCode: '00'
+              responseCode: '000'
+              message: approved
+              ecommerceIndicator: AUTHENTICATED_ECOMMERCE
+            verificationDetails:
+              addressVerificationServiceResultCode: FULL_MATCH
+              cardSecurityCodeResultCode: MATCH
+              threeDSecureAuthenticationValueResultCode: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+            credentialOnFileResponse: null
+            refundDetails: null
+            customData: null
+    cancelPaymentSuccessResponse:
+      description: Payment canceled successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/payment'
+          example:
+            paymentId: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            merchantId: 0123456789101
+            orderId: 1q2w3e4r5t6t78
+            invoiceNumber: 1a2s3d45v6
+            transactionDateTime: '2019-07-30T06:43:40.252Z'
+            createdAt: '2019-07-30T06:43:40.252Z'
+            modifiedAt: '2019-07-30T06:43:40.252Z'
+            amount:
+              amount: 16000
+              currency: CAD
+            authorizedAmount:
+              amount: 16000
+              currency: CAD
+            capturableAmount:
+              amount: 0
+              currency: CAD
+            amountDetails: null
+            customerId: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            paymentMethod:
+              paymentMethodId: pm0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              merchantId: 0123456789101
+              cardholderInformation: null
+              contactDetails: null
+              billingAddress: null
+              paymentMethodInformation:
+                paymentMethodType: CARD
+                paymentMethodSource: CARD
+                cardInformation:
+                  bankIdentificationNumber: '123456'
+                  lastFour: '1234'
+                  expiryMonth: 1
+                  expiryYear: 2028
+                  cardBrand: MASTERCARD
+                  cardType: CREDIT
+                  cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                  issuer: RBC
+                paymentAccountReference: '11112222333344445555666677778'
+                storePaymentMethod: DO_NOT_STORE
+              createdAt: '2019-07-30T06:43:40.252Z'
+              modifiedAt: null
+              customData:
+                property1: string
+                property2: string
+            paymentStatus: CANCELED
+            transactionDetails:
+              transactionUniqueId: 938c2cc0dcc05f2b68c4287040cfcf71
+              isoResponseCode: '00'
+              responseCode: '000'
+              message: approved
+              ecommerceIndicator: AUTHENTICATED_ECOMMERCE
+            verificationDetails:
+              addressVerificationServiceResultCode: FULL_MATCH
+              cardSecurityCodeResultCode: MATCH
+              threeDSecureAuthenticationValueResultCode: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+            credentialOnFileResponse: null
+            refundDetails: null
+            customData:
+              property1: string
+              property2: string
+    forbidden:
+      description: Forbidden. The user does not have permission to access the requested resource.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="insufficient_scope"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: FORBIDDEN_REQUEST
+            status: 403
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    completePaymentBadRequestResponse:
+      description: Failed to complete purchase
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            declined:
+              $ref: '#/components/examples/DeclineErrorResponse'
+            invalid_request:
+              $ref: '#/components/examples/InvalidPurchaseErrorResponse'
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
+    completePaymentUnprocessableContentResponse:
+      description: Failed Payment operation result response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            declined:
+              $ref: '#/components/examples/DeclineErrorResponse'
+    conflict:
+      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
+    listPaymentsResponse:
+      description: List of all payments
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/paymentList'
+          example:
+            data:
+            - paymentId: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              merchantId: 0123456789101
+              orderId: 1q2w3e4r5t6t78
+              invoiceNumber: 1a2s3d45v6
+              transactionDateTime: '2019-07-30T06:43:40.252Z'
+              createdAt: '2019-07-30T06:43:40.252Z'
+              modifiedAt: '2019-07-30T06:43:40.252Z'
+              amount:
+                amount: 16000
+                currency: CAD
+              authorizedAmount:
+                amount: 16000
+                currency: CAD
+              capturableAmount:
+                amount: 0
+                currency: CAD
+              amountDetails: null
+              customerId: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              paymentMethod:
+                paymentMethodId: pm0105ARZ3NDEKTSV4RRFFQ69G5FAV
+                merchantId: 0123456789101
+                cardholderInformation: null
+                contactDetails: null
+                billingAddress: null
+                paymentMethodInformation:
+                  paymentMethodType: CARD
+                  paymentMethodSource: CARD
+                  cardInformation:
+                    bankIdentificationNumber: '123456'
+                    lastFour: '1234'
+                    expiryMonth: 1
+                    expiryYear: 2028
+                    cardBrand: MASTERCARD
+                    cardType: CREDIT
+                    cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                    issuer: RBC
+                  paymentAccountReference: '11112222333344445555666677778'
+                  storePaymentMethod: DO_NOT_STORE
+                createdAt: '2019-07-30T06:43:40.252Z'
+                modifiedAt: null
+                customData:
+                  property1: string
+                  property2: string
+              paymentStatus: SUCCEEDED
+              transactionDetails:
+                transactionUniqueId: 938c2cc0dcc05f2b68c4287040cfcf71
+                isoResponseCode: '00'
+                responseCode: '000'
+                message: approved
+                ecommerceIndicator: AUTHENTICATED_ECOMMERCE
+              verificationDetails:
+                addressVerificationServiceResultCode: FULL_MATCH
+                cardSecurityCodeResultCode: MATCH
+                threeDSecureAuthenticationValueResultCode: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+              credentialOnFileResponse: null
+              refundDetails: null
+              customData:
+                property1: string
+                property2: string
+            - paymentId: pi0105ARZ3NDEKTSV4RRFFQ69G5FAZ
+              merchantId: 0123456789101
+              orderId: 1q2w3e4r5t6t78
+              invoiceNumber: 1a2s3d45v6
+              transactionDateTime: '2019-07-30T06:43:40.252Z'
+              createdAt: '2019-07-30T06:43:40.252Z'
+              modifiedAt: '2019-07-30T06:43:40.252Z'
+              amount:
+                amount: 16000
+                currency: CAD
+              authorizedAmount:
+                amount: 16000
+                currency: CAD
+              capturableAmount:
+                amount: 0
+                currency: CAD
+              amountDetails: null
+              customerId: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              paymentMethod:
+                paymentMethodId: pm0105ARZ3NDEKTSV4RRFFQ69G5FAV
+                merchantId: 0123456789101
+                cardholderInformation: null
+                contactDetails: null
+                billingAddress: null
+                paymentMethodInformation:
+                  paymentMethodType: CARD
+                  paymentMethodSource: CARD
+                  cardInformation:
+                    bankIdentificationNumber: '123456'
+                    lastFour: '1234'
+                    expiryMonth: 1
+                    expiryYear: 2028
+                    cardBrand: MASTERCARD
+                    cardType: CREDIT
+                    cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                    issuer: RBC
+                  paymentAccountReference: '11112222333344445555666677778'
+                  storePaymentMethod: DO_NOT_STORE
+                createdAt: '2019-07-30T06:43:40.252Z'
+                modifiedAt: null
+                customData:
+                  property1: string
+                  property2: string
+              paymentStatus: CANCELED
+              transactionDetails:
+                transactionUniqueId: 938c2cc0dcc05f2b68c4287040cfcf71
+                isoResponseCode: '00'
+                responseCode: '000'
+                message: approved
+                ecommerceIndicator: AUTHENTICATED_ECOMMERCE
+              verificationDetails:
+                addressVerificationServiceResultCode: FULL_MATCH
+                cardSecurityCodeResultCode: MATCH
+                threeDSecureAuthenticationValueResultCode: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+              credentialOnFileResponse: null
+              refundDetails: null
+              customData:
+                property1: string
+                property2: string
+            - paymentId: pi0105ARZ3NDEKTSV4RRFFQ69G5FAX
+              merchantId: 0123456789101
+              orderId: 1q2w3e4r5t6t78
+              invoiceNumber: 1a2s3d45v6
+              transactionDateTime: '2019-07-30T06:43:40.252Z'
+              createdAt: '2019-07-30T06:43:40.252Z'
+              modifiedAt: '2019-07-30T06:43:40.252Z'
+              amount:
+                amount: 16000
+                currency: CAD
+              authorizedAmount:
+                amount: 0
+                currency: CAD
+              capturableAmount:
+                amount: 0
+                currency: CAD
+              amountDetails: null
+              customerId: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              paymentMethod:
+                paymentMethodId: pm0105ARZ3NDEKTSV4RRFFQ69G5FAV
+                merchantId: 0123456789101
+                cardholderInformation: null
+                contactDetails: null
+                billingAddress: null
+                paymentMethodInformation:
+                  paymentMethodType: CARD
+                  paymentMethodSource: CARD
+                  cardInformation:
+                    bankIdentificationNumber: '123456'
+                    lastFour: '1234'
+                    expiryMonth: 1
+                    expiryYear: 2028
+                    cardBrand: MASTERCARD
+                    cardType: CREDIT
+                    cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                    issuer: RBC
+                  paymentAccountReference: '11112222333344445555666677778'
+                  storePaymentMethod: DO_NOT_STORE
+                createdAt: '2019-07-30T06:43:40.252Z'
+                modifiedAt: null
+                customData:
+                  property1: string
+                  property2: string
+              paymentStatus: DECLINED
+              transactionDetails:
+                transactionUniqueId: 938c2cc0dcc05f2b68c4287040cfcf71
+                isoResponseCode: '43'
+                responseCode: '421'
+                message: Stolen card, pick up.
+                ecommerceIndicator: AUTHENTICATED_ECOMMERCE
+              verificationDetails:
+                addressVerificationServiceResultCode: FULL_MATCH
+                cardSecurityCodeResultCode: MATCH
+                threeDSecureAuthenticationValueResultCode: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+              credentialOnFileResponse: null
+              refundDetails: null
+              customData:
+                property1: string
+                property2: string
+            self: /payments?cursor=d41d8cd98f00b&limit=50
+            first: /payments?cursor=d41d8cd98f00b&limit=50
+            last: /payments?cursor=d41d8cd98f00b&limit=50
+            next: null
+            previous: null
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: UNAUTHORIZED_REQUEST
+            status: 401
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    retrievePaymentSuccessResponse:
+      description: The payment corresponding to the provided `payment-id`
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/payment'
+          examples:
+            succeeded:
+              $ref: '#/components/examples/PurchaseCompletedResponse'
+            authorized:
+              $ref: '#/components/examples/PreauthorizationCompletedResponse'
+            declined:
+              $ref: '#/components/examples/PurchaseDeclinedResponse'
+            declined_retry:
+              $ref: '#/components/examples/PurchaseDeclinedRetryResponse'
+            canceled:
+              $ref: '#/components/examples/PurchaseCanceledResponse'
+    incrementalAuthorizationSuccessResponse:
+      description: Incremental Authorization successfully created. Authorized Payment amount incremented successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/payment'
+          example:
+            paymentId: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            merchantId: 0123456789101
+            orderId: 1q2w3e4r5t6t78
+            invoiceNumber: 1a2s3d45v6
+            transactionDateTime: '2019-07-30T06:43:40.252Z'
+            createdAt: '2019-07-30T06:43:40.252Z'
+            modifiedAt: '2019-07-30T06:43:40.252Z'
+            amount:
+              amount: 20000
+              currency: CAD
+            authorizedAmount:
+              amount: 36000
+              currency: CAD
+            capturableAmount:
+              amount: 0
+              currency: CAD
+            amountDetails: null
+            customerId: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            paymentMethod:
+              paymentMethodId: pm0105ARZ3NDEKTSV4RRFFQ69G5FAV
+              merchantId: 0123456789101
+              cardholderInformation: null
+              contactDetails: null
+              billingAddress: null
+              paymentMethodInformation:
+                paymentMethodType: CARD
+                paymentMethodSource: CARD
+                cardInformation:
+                  bankIdentificationNumber: '123456'
+                  lastFour: '1234'
+                  expiryMonth: 1
+                  expiryYear: 2028
+                  cardBrand: MASTERCARD
+                  cardType: CREDIT
+                  cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                  issuer: RBC
+                paymentAccountReference: '11112222333344445555666677778'
+                storePaymentMethod: DO_NOT_STORE
+              createdAt: '2019-07-30T06:43:40.252Z'
+              modifiedAt: null
+              customData:
+                property1: string
+                property2: string
+            paymentStatus: INCREMENTED
+            transactionDetails:
+              transactionUniqueId: 938c2cc0dcc05f2b68c4287040cfcf71
+              isoResponseCode: '00'
+              responseCode: '000'
+              message: approved
+              ecommerceIndicator: AUTHENTICATED_ECOMMERCE
+            verificationDetails:
+              addressVerificationServiceResultCode: FULL_MATCH
+              cardSecurityCodeResultCode: MATCH
+              threeDSecureAuthenticationValueResultCode: VISA_CAVV_PASSED_VALIDATION_ATTEMPTED
+            credentialOnFileResponse: null
+            refundDetails: null
+            customData:
+              property1: string
+              property2: string
+            incrementalAuthorizations:
+            - amount:
+                amount: 10000
+                currency: CAD
+              createdAt: '2025-07-30T06:43:40.252Z'
+            - amount:
+                amount: 20000
+                currency: CAD
+              createdAt: '2025-08-30T06:43:40.252Z'
+    createPaymentUnprocessableContentResponse:
+      description: Failed Payment operation result response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            declined:
+              $ref: '#/components/examples/DeclineErrorResponse'
+    createPaymentSuccessResponse:
+      description: Payment operation created successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/payment'
+          examples:
+            PurchaseCompleted:
+              $ref: '#/components/examples/PurchaseCompletedResponse'
+            PreauthorizationCompletedResponse:
+              $ref: '#/components/examples/PreauthorizationCompletedResponse'
+    cancelPaymentUnprocessableContentResponse:
+      description: Failed to cancel Payment operation result response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            declined:
+              $ref: '#/components/examples/DeclineErrorResponse'
+            invalid_request:
+              $ref: '#/components/examples/InvalidPurchaseErrorResponse'
+    notFound:
+      description: Not Found.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: NOT_FOUND
+            status: 404
+            detail: null
+            instance: /payments/pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            category: INVALID_REQUEST_ERROR
+            errors: []
+    internalServer:
+      description: Unexpected error.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    createPaymentBadRequestResponse:
+      description: Failed Payment operation result response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            invalid_request:
+              $ref: '#/components/examples/InvalidRequestErrorResponse'
+  parameters:
+    paymentId:
+      in: path
+      name: payment-id
+      description: The unique identifier of the payment
+      required: true
+      schema:
+        $ref: '#/components/schemas/resourceId'
+    pageBeforeCursor:
+      in: query
+      name: cursor
+      description: Pagination cursor to return items located after it.
+      required: false
+      example: d41d8cd98f00b204e9800998ecf8427e
+      schema:
+        type: string
+        example: d41d8cd98f00b204e9800998ecf8427e
+    merchantId:
+      in: header
+      name: X-Merchant-Id
+      example: 0123456789101
+      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      required: true
+      schema:
+        $ref: '#/components/schemas/merchantId'
+    pageLimit:
+      in: query
+      name: limit
+      description: Maximum number of items to return in the response.
+      example: 10
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 20
+        example: 10
+    createdFrom:
+      name: created_from
+      in: query
+      description: Returns items created after the specified date, defaults to the current date starting from 12 AM.
+      required: false
+      example: '2024-05-16T04:00:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    apiVersion:
+      in: header
+      name: Api-Version
+      required: true
+      example: '2024-09-17'
+      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
+      schema:
+        $ref: '#/components/schemas/apiVersion'
+    correlationId:
+      in: header
+      name: X-Correlation-Id
+      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
+      required: false
+      schema:
+        type: string
+        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+    createdTo:
+      name: created_to
+      in: query
+      description: "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+      required: false
+      example: '2024-05-16T04:00:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: 'An API key is a token that a client provides when making API calls.
+
+
+        API keys are supposed to be a secret that only the client and server know about.
+
+        '
+    OAuth2:
+      type: oauth2
+      description: 'OAuth 2.0 is an authorization protocol that gives an API client limited access to user data on a web server.
+
+
+        OAuth relies on authentication scenarios, that allows the resource owner (user) to share the protected content from the server, hosting the resource, without sharing their credentials. For that purpose, an OAuth 2.0 server issues access tokens that the client applications can use to access protected resources on behalf of the resource owner.
+
+
+        Moneris recommends the use of OAuth 2.0 as it provides fine grained authorization levels.
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            payment.read: Grants read access to payment related APIs
+            payment.write: Grants read & write access to payment related APIs
+            refund.read: Grants read access to refunds
+            refund.write: Grants read & write access to refunds
+            customer.read: Grants read access to customer data
+            customer.write: Grants read & write access to customer data
+            kount.read: Grants read access to Kount inquiries
+            kount.write: Grants read & write access to Kount inquiries
+            onboarding.merchant.read: Grants read access to merchant onboarding related APIs
+            onboarding.merchant.write: Grants read & write access to merchant onboarding related APIs
+            onboarding.order.read: Grants read access to onboarding orders related APIs
+            onboarding.order.write: Grants read & write access to onboarding orders related APIs
+            dispute.read: Grants read access to disputes
+            dispute.write: Grants read & write access to disputes

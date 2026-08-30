@@ -1,0 +1,1858 @@
+openapi: 3.2.0
+info:
+  version: 2.6.1
+  title: Moneris Kount API
+  description: 'Moneris API Platform
+
+
+
+    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height:32px;">](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
+  termsOfService: https://www.moneris.com/en/legal/terms-of-use
+  contact:
+    url: https://api-developer.moneris.com
+    email: UnifiedAPI@moneris.com
+  license:
+    name: Moneris
+    url: https://developer.moneris.com/Agreements/Terms%20of%20Use
+  x-audience: external-public
+servers:
+- url: https://api.sb.moneris.io
+  description: Sandbox server (uses test data)
+  x-internal: false
+- url: https://api.moneris.io
+  description: Production server (uses live data)
+  x-internal: false
+tags:
+- name: Kount
+  description: Perform and Manage Kount risk assessment inquiries
+paths:
+  /kount-inquiries:
+    parameters:
+    - $ref: '#/components/parameters/merchantId'
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    post:
+      summary: Create Kount Inquiry
+      operationId: createKountInquiry
+      security:
+      - OAuth2:
+        - kount.write
+      - ApiKeyAuth: []
+      tags:
+      - Kount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/kountInquiryRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/createKountInquirySuccessResponse'
+        '202':
+          $ref: '#/components/responses/createKountInquiryAcceptedResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/unprocessableContent'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+    get:
+      summary: List Kount Inquiries
+      operationId: getKountInquiries
+      security:
+      - OAuth2:
+        - kount.read
+      - ApiKeyAuth: []
+      tags:
+      - Kount
+      parameters:
+      - $ref: '#/components/parameters/pageBeforeCursor'
+      - $ref: '#/components/parameters/pageLimit'
+      - $ref: '#/components/parameters/createdFrom'
+      - $ref: '#/components/parameters/createdTo'
+      responses:
+        '200':
+          $ref: '#/components/responses/listKountInquiriesSuccessResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /kount-inquiries/{kount-inquiry-id}:
+    parameters:
+    - $ref: '#/components/parameters/merchantId'
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/kountInquiryId'
+    get:
+      summary: Get Kount Inquiry by Id
+      operationId: getKountInquiryById
+      security:
+      - OAuth2:
+        - kount.read
+      - ApiKeyAuth: []
+      tags:
+      - Kount
+      responses:
+        '200':
+          $ref: '#/components/responses/retrieveKountInquiryResponse'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /kount-inquiries/{kount-inquiry-id}/assert:
+    parameters:
+    - $ref: '#/components/parameters/merchantId'
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/kountInquiryId'
+    post:
+      summary: Kount Inquiry Assert
+      operationId: kountInquiryAssert
+      security:
+      - OAuth2:
+        - kount.write
+      - ApiKeyAuth: []
+      tags:
+      - Kount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/kountAssertRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/assertKountInquirySuccessResponse'
+        '202':
+          $ref: '#/components/responses/assertKountInquiryAcceptedResponse'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/unprocessableContent'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+components:
+  schemas:
+    gender:
+      type:
+      - string
+      - 'null'
+      description: An individual's gender
+      enum:
+      - MALE
+      - FEMALE
+      - null
+    kountPaymentDetails:
+      title: kountPaymentDetails
+      description: Payment Data
+      oneOf:
+      - $ref: '#/components/schemas/kountPaymentId'
+      - $ref: '#/components/schemas/kountValidationId'
+      - $ref: '#/components/schemas/kountPaymentData'
+    kountResult:
+      description: Auto-decision response
+      type: string
+      enum:
+      - APPROVED
+      - DECLINED
+      - UNDER_REVIEW
+    currency:
+      type: string
+      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
+      minLength: 3
+      maxLength: 4
+      example: CAD
+      format: iso-4217
+    sessionId:
+      description: Unique Session ID; must be unique over a 30-day span
+      type: string
+      maxLength: 32
+      example: xjudq804i1049jkjakdad
+    kountRefundStatus:
+      description: Refund/Chargeback status. R - Refund, C - Chargeback
+      type:
+      - string
+      - 'null'
+      enum:
+      - REFUND
+      - CHARGEBACK
+      - null
+    kountInfo:
+      description: Object of Kount response parameters
+      type: object
+      properties:
+        browser:
+          description: Web Browser
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+          example: Google Chrome
+        cardBrand:
+          type:
+          - string
+          - 'null'
+          description: Displays the card brand name associated with the card type.
+          enum:
+          - MASTERCARD
+          - VISA
+          - AMERICAN_EXPRESS
+          - JCB
+          - DISCOVER
+          - INTERAC
+          - UNIONPAY
+          - GIFT_MONERIS
+          - GIFT_DATACANDY
+          - GIFT_GIVEX
+          - null
+          example: MASTERCARD
+        associatedCardCount:
+          description: Total number of credit cards associated to persona as seen by Kount
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 3
+        cookiesEnabled:
+          description: A flag to indicate if device placing order has cookies enabled or not
+          type:
+          - boolean
+          - 'null'
+          example: true
+        countersTriggered:
+          type: array
+          description: Counters triggered during rules evaluation
+          items:
+            $ref: '#/components/schemas/kountTriggeredCounter'
+        country:
+          description: Two-character ISO country code associated with the physical device
+          type:
+          - string
+          - 'null'
+          minLength: 2
+          maxLength: 2
+          example: CA
+          format: iso-3166
+        deviceFirstSeenAt:
+          description: Date device first seen
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2019-07-30'
+        deviceLayers:
+          description: 5 device layers that comprise the device's fingerprint, representing OS, browser, Javascript, cookies and Flash settings
+          type:
+          - string
+          - 'null'
+          maxLength: 55
+          minLength: 55
+        deviceCount:
+          description: Total number of unique devices associated to persona as seen by Kount
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 2
+        deviceScreenResolution:
+          description: Device Screen Resolution
+          type:
+          - string
+          - 'null'
+          maxLength: 10
+          example: 1920x1080
+        emailCount:
+          description: Total number of unique email addresses associated to persona as seen by Kount
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 3
+        errorCount:
+          description: Number of errors the Kount request generated
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 3
+        errorCode:
+          description: Error Code displayed in Risk Inquiry Service response
+          type:
+          - string
+          - 'null'
+          maxLength: 4
+          example: '1080'
+        kountFingerprint:
+          description: The unique fingerprint of the device placing the order
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+          example: 123456789h123456789p123456789g12
+        flashEnabled:
+          description: A flag to indicate if the device placing the order has Flash enabled
+          type:
+          - boolean
+          - 'null'
+          example: true
+        riskiestAssociatedCountry:
+          description: 'Persona related country with highest probability of fraud
+
+            Refers to Kount''s GEOX field.
+
+            '
+          type:
+          - string
+          - 'null'
+          minLength: 2
+          maxLength: 2
+          example: CA
+          format: iso-3166
+        userDefinedHomeCountry:
+          description: 'User home country the device owner has set in the device''s control panel
+
+            Refers to Kount''s HTTP_COUNTRY
+
+            '
+          type:
+          - string
+          - 'null'
+          minLength: 2
+          maxLength: 2
+          example: CA
+          format: iso-3166
+        proxyAddress:
+          description: IP address of proxy
+          type:
+          - string
+          - 'null'
+          format: ipv4
+          example: 104.75.173.179
+        javascriptEnabled:
+          description: A flag to indicate if the device placing order has JavaScript enabled
+          type:
+          - boolean
+          - 'null'
+          example: true
+        deviceDataCollectedByDataCollector:
+          description: Flag indicating whether or not device data was collected by the Data Collector process
+          type:
+          - boolean
+          - 'null'
+          example: true
+        knowYourCustomerFlag:
+          description: Know Your Customer Flag
+          type:
+          - boolean
+          - 'null'
+          example: true
+        deviceLanguage:
+          description: The two-character ISO language the device owner has set in the device control panel
+          type:
+          - string
+          - 'null'
+          format: iso-639
+          minLength: 2
+          maxLength: 2
+          example: en
+        localTime:
+          description: The local time the device owner has set in the device control panel
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2019-07-30T06:43:40.252Z'
+        isMobileDevice:
+          description: Flag to indicate if the device placing the order is a mobile device
+          type:
+          - boolean
+          - 'null'
+          example: true
+        usesMobileForwarder:
+          description: If device is mobile, is it using a forwarder to process the carriers service
+          type:
+          - boolean
+          - 'null'
+          example: true
+        mobileType:
+          description: Type of mobile device, e.g., iPhone, Android, Blackberry, iPad, etc.
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+          example: iPhone
+        kountNetwork:
+          description: 'Riskiest network type associated with persona within last 14 days:'
+          type:
+          - string
+          - 'null'
+          enum:
+          - ANONYMOUS
+          - HIGH_SCHOOL
+          - LIBRARY
+          - NORMAL
+          - OPEN_PROXY
+          - PRISON
+          - SATELLITE
+          - null
+        mode:
+          description: "Specifies the Risk Inquiry Service post mode type\n\nRisk Inquiry Service Modes\n\nModes are used to specify what type of data is being submitted to Kount.\nNote that ALL FIELD NAMES for a RIS call must be UPPERCASE. They cannot be other case combinations\nsuch as sess, Merc, mOdE. However, the values for fields can be mixed case, such as\nSESS=UpperMixedCaseSessID95628.\n- QUERY = Mode Q\n  Initial queries directed from the merchant to Kount that do not originate from a call center\n  environment.\n- UPDATE = Mode U\n  Update call to Kount, does not cause a reevaluation of the transaction but will update what is displayed\n  in the Agent Web Console. This update call does not count towards the number of RIS transactions\n  purchased. Only certain fields can be updated with MODE=U calls. The PTYP field can only be updated if\n  the initial post to Kount was PTYP=NONE\n"
+          type:
+          - string
+          - 'null'
+          enum:
+          - QUERY
+          - UPDATE
+          - null
+        operatingSystem:
+          description: Operating system of the device
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+          example: macOS
+        pcRemoteEnabled:
+          description: Flag indicating whether the device is enabled to use PC remote software
+          type:
+          - boolean
+          - 'null'
+          example: true
+        proxyEnabled:
+          description: Flag indicating whether or not a proxy server is detected
+          type:
+          - boolean
+          - 'null'
+          example: true
+        piercedAddress:
+          $ref: '#/components/schemas/kountPiercedAddress'
+        reasonCode:
+          description: Reason code associated with rule action
+          type:
+          - string
+          - 'null'
+          maxLength: 16
+          example: Invalid Data
+        region:
+          description: Region associated to device location
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+          example: CA
+        riskiestAssociatedRegion:
+          description: "Indicates the riskiest geographical location associated with the Persona. \nRefers to Kount's GEOX.\n"
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+          example: CA
+        rulesTriggered:
+          type: array
+          description: Rules triggered by post to Kount
+          items:
+            $ref: '#/components/schemas/kountTriggeredRule'
+        sessionId:
+          description: Unique Session ID; must be unique over a 30-day span
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+          example: xjudq804i1049jkjakdad
+        websiteId:
+          description: Website identifier of where order originated
+          type:
+          - string
+          - 'null'
+          maxLength: 8
+          example: DEFAULT
+        timezone:
+          description: The time zone of the device; In the ISO format of +|–hh:mm
+          type:
+          - string
+          - 'null'
+          maxLength: 6
+          example: -04:00
+        deviceUserAgent:
+          type:
+          - string
+          - 'null'
+          description: 'Exact content of the HTTP user-agent header.
+
+            Note, when total length exceeds 2048 characters, truncate the excess portion.
+
+            '
+          maxLength: 2048
+          example: Mozilla/5.0 (Linux; {Android Version}; {Build Tag etc.})
+        velocity:
+          description: Quantity of orders seen from persona within last 14 days
+          type:
+          - integer
+          - 'null'
+          format: int64
+          example: 8
+        maximumVelocity:
+          description: Quantity of orders from persona within the most active 6 hour window in last 14 days; payment_response field must be equal to ‘A’
+          type:
+          - integer
+          - 'null'
+          format: int64
+          example: 8
+        kountVersion:
+          description: Specifies version of Kount system being used
+          type:
+          - string
+          - 'null'
+          maxLength: 4
+          example: '1.0'
+        deviceVoiceActivated:
+          description: If it is a mobile device, flag indicating whether the device is voice activated
+          type:
+          - boolean
+          - 'null'
+          example: true
+        warningCount:
+          description: Number of warnings the Kount Inquiry Service has generated
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 8
+        warningCode:
+          description: Warning code displayed in the Risk Inquiry Service response
+          type:
+          - string
+          - 'null'
+          maxLength: 4
+          example: '180'
+        warningDetail:
+          description: Warning details
+          type:
+          - string
+          - 'null'
+    kountProductItem:
+      type: object
+      description: Item part of the transaction
+      properties:
+        itemId:
+          $ref: '#/components/schemas/itemId'
+        itemType:
+          $ref: '#/components/schemas/itemType'
+        itemQuantity:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: Quantity invoiced for this line item.
+          minimum: 0
+          maximum: 999999999
+          example: 82
+        itemName:
+          type:
+          - string
+          - 'null'
+          description: Item Name
+          minLength: 1
+          maxLength: 50
+          example: Canned Food
+        itemAmount:
+          title: kountProductItemamount
+          type:
+          - object
+          - 'null'
+          description: Contains the individual item amount that is normally calculated as price multiplied by quantity. The value must be in cents. Therefore $10.59 must be sent as 1059
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 15000
+            currency: CAD
+      required:
+      - itemId
+      - itemType
+    itemId:
+      type: string
+      maxLength: 255
+      description: Item unique identifier.
+      example: e2ab873e-b295-11e9-9c02
+    kountInquiry:
+      title: kountInquiry
+      allOf:
+      - type: object
+        properties:
+          kountInquiryId:
+            $ref: '#/components/schemas/resourceId'
+          orderId:
+            $ref: '#/components/schemas/orderId'
+          kountResult:
+            $ref: '#/components/schemas/kountResult'
+          fraudScore:
+            $ref: '#/components/schemas/fraudScore'
+          kountTransactionId:
+            $ref: '#/components/schemas/kountTransactionId'
+        required:
+        - kountInquiryId
+        - kountResult
+        - kountTransactionId
+      - $ref: '#/components/schemas/kountInfo'
+      required:
+      - orderId
+      - kountTransactionId
+      - kountResult
+    kountInquiryList:
+      title: kountInquiryList
+      type: object
+      properties:
+        data:
+          description: Kount Inquiries list.
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/kountInquiry'
+        self:
+          $ref: '#/components/schemas/self'
+        first:
+          $ref: '#/components/schemas/first'
+        last:
+          $ref: '#/components/schemas/last'
+        next:
+          $ref: '#/components/schemas/next'
+        previous:
+          $ref: '#/components/schemas/previous'
+      required:
+      - data
+    dateTime:
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+      description: Date & Time
+    evaluateKountResult:
+      description: full re-evaluation will be performed with Kount. Default to false.
+      type: boolean
+      default: false
+      example: false
+    kountPaymentId:
+      title: Kount Payment Id
+      type: object
+      description: Payment Id
+      properties:
+        paymentId:
+          $ref: '#/components/schemas/paymentId'
+      required:
+      - paymentId
+    customData:
+      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+      type:
+      - object
+      - 'null'
+      additionalProperties:
+        type: string
+        minLength: 1
+        maxLength: 50
+      maxProperties: 10
+    self:
+      description: Pagination link pointing to the current page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    orderId:
+      type:
+      - string
+      - 'null'
+      description: 'Indicates the merchant-defined transaction identifer or order ID. Identifiers are unique for every Purchase, Pre-Authorization and Independent Refund transaction
+
+
+        **Note**: No two transactions of these types may have the same order ID. Field only accepts alphanumerical characters, dashes and underscores.
+
+        '
+      minLength: 1
+      maxLength: 50
+      example: 1q2w3e4r5t6t78
+      pattern: ^[a-zA-Z0-9-_]+$
+    kountTriggeredRule:
+      type: object
+      description: Kount rule that was triggered
+      properties:
+        id:
+          description: Rule ID associated with merchant-created rules
+          type: integer
+          format: int64
+          example: 8
+        description:
+          description: Rule descriptions associated with the Id
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+          example: Rule description example
+    email:
+      type: string
+      format: email
+      description: 'Contains the customer''s email address.
+
+
+        For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+        '
+      minLength: 1
+      maxLength: 320
+      example: moneris@moneris.com
+    financialOrderId:
+      description: Unique identifier for transactions at Kount
+      type:
+      - string
+      - 'null'
+      maxLength: 32
+      example: nqa-finorderid-1
+    automaticNumberId:
+      description: 'Automatic Number Identification (ANI) submitted with order If the ANI cannot be determined, merchant must pass 0123456789 as the ANID NOTE: This field is only valid for phone-to-web requests where customer service agents navigate to a separate order entry page that does not collect iframe data Risk Inquiry Service submissions'
+      type:
+      - string
+      - 'null'
+      maxLength: 32
+      example: 0123456789
+    fraudScore:
+      description: Final risk score returned from Kount system
+      type:
+      - integer
+      - 'null'
+      format: int32
+      maxLength: 3
+      example: 99
+    kountTransactionId:
+      description: Kount Transaction ID
+      type: string
+      maxLength: 12
+      example: '123456789012'
+    itemType:
+      type: string
+      description: High level description of an item
+      maxLength: 255
+      example: Phone
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
+    fullName:
+      type:
+      - string
+      - 'null'
+      description: Customers full name
+      minLength: 1
+      maxLength: 64
+      example: John Doe
+    kountValidationId:
+      title: Kount Validation Id
+      type: object
+      description: Validation Id
+      properties:
+        validationId:
+          $ref: '#/components/schemas/resourceId'
+        amount:
+          $ref: '#/components/schemas/money'
+      required:
+      - validationId
+      - amount
+    paymentToken:
+      description: 'Payment token submitted by merchant for order (credit card, payer ID, routing/transit, MICR, and account number).
+
+
+        If paymentType is set to NONE then the paymentToken value should be left empty (NULL).
+
+
+        If the credit card information is not available and Moneris Tokenization is used to process payment set paymentType = CARD and send the token in the paymentToken field.
+
+        '
+      type: string
+      maxLength: 32
+      example: '4242424242424242'
+    next:
+      description: Pagination link pointing to the next page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    idempotencyKey:
+      type: string
+      description: "A Unique Identifier that is required for handling idempotent requests. \n\nNote: Moneris encourages the use of UUID Version 4 in APIs as an idempotency key.\"    \n"
+      minLength: 1
+      maxLength: 36
+      example: 6q5w4e7r8t9y
+    kountPaymentData:
+      title: Kount Payment Data
+      description: Payment Data
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/money'
+        customerId:
+          type:
+          - string
+          - 'null'
+          description: Unique Identification for the Customer
+          example: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+          minLength: 30
+          maxLength: 30
+        customerReference:
+          type:
+          - string
+          - 'null'
+          description: Unique Identification for the Customer. This can be an identifier generated from a merchant-defined identifier.
+          example: 911677-212
+          minLength: 1
+          maxLength: 50
+        lastFour:
+          type:
+          - string
+          - 'null'
+          description: Last 4 digits of the card.
+          minLength: 4
+          maxLength: 4
+          example: '1234'
+        paymentToken:
+          $ref: '#/components/schemas/paymentToken'
+        paymentType:
+          $ref: '#/components/schemas/paymentType'
+      required:
+      - paymentToken
+      - paymentType
+      - amount
+    error:
+      description: Error response details.
+      properties:
+        type:
+          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
+
+            '
+          type: string
+          format: uri
+          example: https://api-developer.moneris.com/responsehandling
+        title:
+          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
+
+            '
+          type:
+          - string
+          - 'null'
+          example: INSUFFICIENT_FUNDS
+        status:
+          description: 'it conveys the HTTP status code used for the convenience of the consumer.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 100
+          maximum: 505
+        detail:
+          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: Funds are insufficient to execute the operation.
+        instance:
+          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
+          format: uri-reference
+        category:
+          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
+          enum:
+          - API_ERROR
+          - IDEMPOTENCY_ERROR
+          - INVALID_REQUEST_ERROR
+          - DECLINED_ERROR
+          - UNAUTHORIZED_ERROR
+          - INTERNAL_SERVER_ERROR
+          - null
+          type:
+          - string
+          - 'null'
+          example: DECLINED_ERROR
+        errors:
+          type: array
+          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          items:
+            type: object
+            $ref: '#/components/schemas/parameterError'
+          example:
+          - parameterName: address.postalCode
+            parameterValue: MAP3J8
+            errorMessage: address.Postal code does not match regular expression
+            reasonCode: INVALID_FORMAT
+      title: API Error
+      type: object
+      required:
+      - type
+    shippingType:
+      description: Shipping type. The following nomenclature is expected for shipping types to be passed to Kount. NOTE:These three attributes can be used to pass custom attribute data if you want to correlate some data with the returned response
+      type:
+      - string
+      - 'null'
+      enum:
+      - SAME_DAY
+      - NEXT_DAY
+      - SECOND_DAY
+      - STANDARD
+      - null
+    kountAccountId:
+      description: 6 digit  local identifier used by the merchant to identify the kount inquiry request
+      type: string
+      minLength: 6
+      maxLength: 6
+      example: '760000'
+    last:
+      description: Pagination link pointing to the last page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    money:
+      type: object
+      description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 16000
+        currency: CAD
+    kountAssertRequest:
+      title: kountAssertRequest
+      type: object
+      properties:
+        kountAccountId:
+          $ref: '#/components/schemas/kountAccountId'
+        kountApiKey:
+          $ref: '#/components/schemas/kountApiKey'
+        paymentDetails:
+          title: kountAssertPaymentDetails
+          description: Kount Assert Payment Data
+          oneOf:
+          - $ref: '#/components/schemas/kountPaymentId'
+          - type: object
+            properties:
+              validationId:
+                $ref: '#/components/schemas/resourceId'
+            required:
+            - validationId
+          - type: object
+            title: Kount Assert Payment Data
+            description: Kount Assert Payment Data
+            properties:
+              lastFour:
+                type:
+                - string
+                - 'null'
+                description: Last 4 digits of the card.
+                minLength: 4
+                maxLength: 4
+                example: '1234'
+              paymentToken:
+                description: 'Payment token submitted by merchant for order (credit card, payer ID, routing/transit, MICR, and account number).
+
+
+                  If paymentType is set to NONE then the paymentToken value should be left empty (NULL).
+
+
+                  If the credit card information is not available and Moneris Tokenization is used to process payment set paymentType = CARD and send the token in the paymentToken field.
+
+                  '
+                type:
+                - string
+                - 'null'
+                maxLength: 32
+                example: '4242424242424242'
+              paymentType:
+                $ref: '#/components/schemas/paymentType'
+            required:
+            - paymentType
+        financialOrderId:
+          description: Unique identifier for transactions at Kount
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+          example: nqa-finorderid-1
+        refundStatus:
+          $ref: '#/components/schemas/kountRefundStatus'
+        evaluateKountResult:
+          $ref: '#/components/schemas/evaluateKountResult'
+      required:
+      - kountAccountId
+      - kountApiKey
+    kountInquiryRequest:
+      title: kountInquiryRequest
+      type: object
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        orderId:
+          $ref: '#/components/schemas/orderId'
+        kountAccountId:
+          $ref: '#/components/schemas/kountAccountId'
+        kountApiKey:
+          $ref: '#/components/schemas/kountApiKey'
+        originatedFromCallCenter:
+          $ref: '#/components/schemas/originatedFromCallCenter'
+        sessionId:
+          $ref: '#/components/schemas/sessionId'
+        websiteId:
+          $ref: '#/components/schemas/websiteId'
+        paymentDetails:
+          $ref: '#/components/schemas/kountPaymentDetails'
+        email:
+          $ref: '#/components/schemas/email'
+        products:
+          type: array
+          description: List of product items part of the transaction
+          items:
+            $ref: '#/components/schemas/kountProductItem'
+        automaticNumberId:
+          $ref: '#/components/schemas/automaticNumberId'
+        billingAddress:
+          title: kountBillingAddress
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        shippingAddress:
+          title: kountShippingAddress
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        dateOfBirth:
+          description: Date of Birth.
+          type:
+          - string
+          - 'null'
+          format: date
+          example: '2019-07-30'
+        timestamp:
+          description: This is timestamp associated with the creation of a user in Kount service.
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2019-07-30T06:43:40.252Z'
+        gender:
+          $ref: '#/components/schemas/gender'
+        customerName:
+          $ref: '#/components/schemas/fullName'
+        financialOrderId:
+          $ref: '#/components/schemas/financialOrderId'
+        shippingType:
+          $ref: '#/components/schemas/shippingType'
+        ipv4:
+          type: string
+          format: ipv4
+          description: Internet Protocol version 4 (IPv4).
+          example: 104.75.173.179
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - idempotencyKey
+      - kountAccountId
+      - kountApiKey
+      - paymentDetails
+      - originatedFromCallCenter
+      - sessionId
+      - websiteId
+      - ipv4
+      - email
+      - products
+    websiteId:
+      description: Website identifier of where order originated
+      type: string
+      maxLength: 8
+      example: DEFAULT
+    first:
+      description: Pagination link pointing to the first page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    originatedFromCallCenter:
+      description: "Refers to Kount's Call center indicator. \n\nFlag indicating whether risk inquiry request originates from a call center environment If the customer service agents navigate to a separate order entry page that does not collect iframe data: When sending the kount_inquiry request, set call_center_ind to Y If the customer service agents navigate to the same order entry page as the customer: When sending the kount_inquiry request, set call_center_ind to N If Risk Inquiry Service call does not originate from a call center environment, set call_center_ind to N\n\nTrue for YES, False fo NO\n"
+      type: boolean
+    kountTriggeredCounter:
+      type: object
+      description: Kount Counter that was triggered
+      properties:
+        name:
+          type: string
+          description: Counter Name
+          maxLength: 64
+        value:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: The sum of the number of times a counter was triggered.
+      required:
+      - name
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    previous:
+      description: Pagination link pointing to the previous page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    paymentType:
+      description: "Payment Type submitted by merchant. \n\nIf the credit card information is not available and Moneris Tokenization is used to process payment set paymentType = CARD and send the token in the paymentToken field.\n"
+      type: string
+      enum:
+      - APPLE_PAY
+      - CARD
+      - PAYPAL
+      - CHECK
+      - NONE
+      - GREEN_DOT_MONEY_PACK
+      - BILL_ME_LATER
+      - GIFT_CARD
+      - BPAY
+      - NETELLER
+      - GIROPAY
+      - ELV
+      - MERCADE_PAGO
+      - SINGLE_EURO_PAYMENT_AREA
+      - INTERAC
+      - CARTE_BLEUE
+      - POLI
+      - SKRILL_MONEY_BOOKERS
+      - SOFORT
+    merchantId:
+      type: string
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
+    paymentId:
+      type: string
+      description: Unique Identification for the Payment
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    resourceId:
+      type: string
+      description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    amount:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999999
+      example: 10000
+      description: Amount
+    kountPiercedAddress:
+      type:
+      - object
+      - 'null'
+      description: Pierced IP Address details.
+      properties:
+        latitude:
+          description: Latitude of pierced IP address
+          type:
+          - number
+          - 'null'
+          format: double
+          example: -90.1922
+        longitude:
+          description: Longitude of pierced IP address
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 38.6312
+        city:
+          type:
+          - string
+          - 'null'
+          description: 'Identifies the city.
+
+            '
+          minLength: 1
+          maxLength: 50
+          example: Toronto
+        region:
+          description: State/Region of pierced IP address
+          type:
+          - string
+          - 'null'
+          example: Ontario
+          maxLength: 255
+        owner:
+          description: Owner of pierced IP address or address block
+          type:
+          - string
+          - 'null'
+          maxLength: 64
+        country:
+          type:
+          - string
+          - 'null'
+          description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+          minLength: 2
+          maxLength: 2
+          example: CA
+          format: iso-3166
+    kountApiKey:
+      description: The API key for the associated with the Kount Merchant ID
+      type: string
+      maxLength: 256
+      example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI3NjAwMDAiLCJhdWQiOiJLb3VudC4xIiwiaWF0IjoxNTU4MDQwODQ5LCJzY3AiOnsia2EiOm51bGwsImtjIjpmYWxzZSwiYXBpIjp0cnVlLCJyaXMiOnRydWV9fQ.y3_2yzd11-Y_F6_xzVsXI-NO1a7P6ldMjDnKzl5yBko
+  responses:
+    assertKountInquiryAcceptedResponse:
+      description: Kount Inquiry updated and is under review.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/kountInquiry'
+    conflict:
+      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
+    createKountInquirySuccessResponse:
+      description: Kount Inquiry was successfully approved.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/kountInquiry'
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: UNAUTHORIZED_REQUEST
+            status: 401
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    forbidden:
+      description: Forbidden. The user does not have permission to access the requested resource.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="insufficient_scope"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: FORBIDDEN_REQUEST
+            status: 403
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    createKountInquiryAcceptedResponse:
+      description: Kount Inquiry accepted and is under review.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/kountInquiry'
+    notFound:
+      description: Not Found.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: NOT_FOUND
+            status: 404
+            detail: null
+            instance: /payments/pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            category: INVALID_REQUEST_ERROR
+            errors: []
+    retrieveKountInquiryResponse:
+      description: Retrieve Kount Inquiry response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/kountInquiry'
+    listKountInquiriesSuccessResponse:
+      description: Kount Inquiry operation result response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/kountInquiryList'
+    internalServer:
+      description: Unexpected error.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    assertKountInquirySuccessResponse:
+      description: Kount Assert operation result response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/kountInquiry'
+    unprocessableContent:
+      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+  parameters:
+    kountInquiryId:
+      in: path
+      name: kount-inquiry-id
+      description: The unique identifier of the Kount Transaction.
+      required: true
+      schema:
+        $ref: '#/components/schemas/resourceId'
+    pageLimit:
+      in: query
+      name: limit
+      description: Maximum number of items to return in the response.
+      example: 10
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 20
+        example: 10
+    createdFrom:
+      name: created_from
+      in: query
+      description: Returns items created after the specified date, defaults to the current date starting from 12 AM.
+      required: false
+      example: '2024-05-16T04:00:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    pageBeforeCursor:
+      in: query
+      name: cursor
+      description: Pagination cursor to return items located after it.
+      required: false
+      example: d41d8cd98f00b204e9800998ecf8427e
+      schema:
+        type: string
+        example: d41d8cd98f00b204e9800998ecf8427e
+    apiVersion:
+      in: header
+      name: Api-Version
+      required: true
+      example: '2024-09-17'
+      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
+      schema:
+        $ref: '#/components/schemas/apiVersion'
+    correlationId:
+      in: header
+      name: X-Correlation-Id
+      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
+      required: false
+      schema:
+        type: string
+        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+    merchantId:
+      in: header
+      name: X-Merchant-Id
+      example: 0123456789101
+      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      required: true
+      schema:
+        $ref: '#/components/schemas/merchantId'
+    createdTo:
+      name: created_to
+      in: query
+      description: "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+      required: false
+      example: '2024-05-16T04:00:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: 'An API key is a token that a client provides when making API calls.
+
+
+        API keys are supposed to be a secret that only the client and server know about.
+
+        '
+    OAuth2:
+      type: oauth2
+      description: 'OAuth 2.0 is an authorization protocol that gives an API client limited access to user data on a web server.
+
+
+        OAuth relies on authentication scenarios, that allows the resource owner (user) to share the protected content from the server, hosting the resource, without sharing their credentials. For that purpose, an OAuth 2.0 server issues access tokens that the client applications can use to access protected resources on behalf of the resource owner.
+
+
+        Moneris recommends the use of OAuth 2.0 as it provides fine grained authorization levels.
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            payment.read: Grants read access to payment related APIs
+            payment.write: Grants read & write access to payment related APIs
+            refund.read: Grants read access to refunds
+            refund.write: Grants read & write access to refunds
+            customer.read: Grants read access to customer data
+            customer.write: Grants read & write access to customer data
+            kount.read: Grants read access to Kount inquiries
+            kount.write: Grants read & write access to Kount inquiries
+            onboarding.merchant.read: Grants read access to merchant onboarding related APIs
+            onboarding.merchant.write: Grants read & write access to merchant onboarding related APIs
+            onboarding.order.read: Grants read access to onboarding orders related APIs
+            onboarding.order.write: Grants read & write access to onboarding orders related APIs
+            dispute.read: Grants read access to disputes
+            dispute.write: Grants read & write access to disputes

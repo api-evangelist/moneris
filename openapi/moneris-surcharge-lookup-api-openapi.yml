@@ -1,0 +1,1164 @@
+openapi: 3.2.0
+info:
+  version: 2.6.1
+  title: Moneris Surcharge Lookup API
+  description: 'Moneris API Platform
+
+
+
+    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height:32px;">](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
+  termsOfService: https://www.moneris.com/en/legal/terms-of-use
+  contact:
+    url: https://api-developer.moneris.com
+    email: UnifiedAPI@moneris.com
+  license:
+    name: Moneris
+    url: https://developer.moneris.com/Agreements/Terms%20of%20Use
+  x-audience: external-public
+servers:
+- url: https://api.sb.moneris.io
+  description: Sandbox server (uses test data)
+  x-internal: false
+- url: https://api.moneris.io
+  description: Production server (uses live data)
+  x-internal: false
+tags:
+- name: Surcharge Lookup
+paths:
+  /surcharge-lookups:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/merchantId'
+    post:
+      summary: Surcharge Lookup
+      description: Performs surcharge lookup and determines if payment method is eligible or not and provides max rate and max amount if eligible.
+      operationId: surchargeLookUp
+      security:
+      - OAuth2:
+        - payment.write
+      - ApiKeyAuth: []
+      tags:
+      - Surcharge Lookup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SurchargeEligibilityRequest'
+            example:
+              idempotencyKey: 5d8f812e-9969-4885-85bb-d03948eccac1
+              amount:
+                amount: 16000
+                currency: CAD
+              paymentMethod:
+                paymentMethodSource: CARD
+                card:
+                  cardNumber: '4444111122223333'
+                  expiryMonth: 1
+                  expiryYear: 2025
+                  cardSecurityCode: '123'
+      responses:
+        '200':
+          $ref: '#/components/responses/SurchargeEligibilitySuccessfulResponse'
+        '400':
+          $ref: '#/components/responses/invalidListbadRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/unprocessableContent'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+components:
+  schemas:
+    expiryYear:
+      type: integer
+      format: int32
+      description: 'Displays the card expiration year. Accepted format: YYYY'
+      minimum: 2022
+      maximum: 9999
+      example: 2023
+    currency:
+      type: string
+      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
+      minLength: 3
+      maxLength: 4
+      example: CAD
+      format: iso-4217
+    paymentMethodCard:
+      title: paymentMethodCard
+      description: Credit/Debit/Gift Card payment method details.
+      allOf:
+      - type: object
+        properties:
+          card:
+            $ref: '#/components/schemas/card'
+        required:
+        - card
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      required:
+      - paymentMethodSource
+      - card
+    paymentMethodWithId:
+      title: paymentMethodWithId
+      description: Use existing unique payment method identifier.
+      properties:
+        paymentMethodSource:
+          $ref: '#/components/schemas/paymentMethodRequestSource'
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+      required:
+      - paymentMethodSource
+      - paymentMethodId
+    cardholderName:
+      type: string
+      description: Cardholder name
+      minLength: 1
+      maxLength: 60
+      example: John Doe
+    paymentMethodPermanentToken:
+      title: paymentMethodPermanentToken
+      description: 'A Permanent Token is issued by Moneris to the merchant and represents the card details. This option is used for legacy purposes.
+
+        '
+      allOf:
+      - type: object
+        properties:
+          permanentToken:
+            $ref: '#/components/schemas/token'
+        required:
+        - permanentToken
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      required:
+      - paymentMethodSource
+      - permanentToken
+    cardInformation:
+      type: object
+      description: Information about the card being used for the transaction
+      properties:
+        bankIdentificationNumber:
+          type:
+          - string
+          - 'null'
+          description: "**BIN**: Bank Identification Number \n\nConsists of the first six to eight digits of the Primary Account Number (PAN) and identifies the relevant payment network and the specific payment issuing institution.\n"
+          minLength: 6
+          maxLength: 8
+          example: '123456'
+        lastFour:
+          type:
+          - string
+          - 'null'
+          description: Last 4 digits of the card.
+          minLength: 4
+          maxLength: 4
+          example: '1234'
+        expiryMonth:
+          $ref: '#/components/schemas/expiryMonth'
+        expiryYear:
+          $ref: '#/components/schemas/expiryYear'
+        cardBrand:
+          $ref: '#/components/schemas/cardBrand'
+        cardType:
+          type:
+          - string
+          - 'null'
+          description: Specifies the intended card use; i.e. debit or credit.
+          enum:
+          - CREDIT
+          - DEBIT
+          - DOMESTIC_DEBIT
+          - PREPAID_RELOADABLE
+          - PREPAID_NON_RELOADABLE
+          - UNKNOWN
+          - GIFT
+          - LOYALTY
+          - FLEET
+          - CORPORATE
+          example: CREDIT
+        cardFingerprint:
+          $ref: '#/components/schemas/cardFingerprint'
+        issuer:
+          $ref: '#/components/schemas/issuer'
+    storePaymentMethod:
+      description: "Store this payment method created through this payment for future use. \n- DO_NOT_STORE: Payment method will not be stored.\n- CARDHOLDER_INITIATED: Payment method to be stored and can only re-used with cardholder's consent. Limited to store, pre-authorisation, and card validations.\"\n- MERCHANT_INITIATED: Payment method to be stored and can be reused without the cardholder's consent. For example, subscriptions.\n"
+      type: string
+      default: DO_NOT_STORE
+      enum:
+      - DO_NOT_STORE
+      - CARDHOLDER_INITIATED
+      - MERCHANT_INITIATED
+    cardNumber:
+      type: string
+      description: Identifies the customer's credit or debit card number (Primary Account Number).
+      pattern: ^[0-9]{13,19}$
+      example: '4242424242424242'
+    companyName:
+      type:
+      - string
+      - 'null'
+      description: Identifies the associated company name
+      minLength: 1
+      maxLength: 50
+      example: SP Ltd
+    cardSecurityCode:
+      type: string
+      pattern: '[0-9]*'
+      description: CVD value located on credit card. The CVD value (supplied by the cardholder) must only be passed to the payment gateway. Under no circumstances may it be stored for subsequent use or displayed as part of the receipt information.
+      minLength: 3
+      maxLength: 4
+      example: '123'
+    modifiedAt:
+      description: Time at which the object was modified
+      type:
+      - string
+      - 'null'
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    customData:
+      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+      type:
+      - object
+      - 'null'
+      additionalProperties:
+        type: string
+        minLength: 1
+        maxLength: 50
+      maxProperties: 10
+    paymentAccountReference:
+      type:
+      - string
+      - 'null'
+      description: 'Used to link Primary Account Number (PAN) based transactions and transactions on associated payment tokens without using the PAN as the linking mechanism.
+
+        '
+      minLength: 1
+      maxLength: 29
+      example: '11112222333344445555666677778'
+    cardFingerprint:
+      type:
+      - string
+      - 'null'
+      description: "Unique card identifier. \n\nFingerprinting randomly assigns identfiers for cards that share the same Primary Account Number (PAN) to easily identify when multiple payments methods are attached to the same underlying card, and assists merchants identify individual customers across various channels; i.e.  loyalty programs.\n"
+      maxLength: 255
+      example: 1Q2W3E4r5t6rfwewerwewrrw
+    cardBrand:
+      type:
+      - string
+      - 'null'
+      description: Displays the card brand name associated with the card type.
+      enum:
+      - MASTERCARD
+      - VISA
+      - AMERICAN_EXPRESS
+      - JCB
+      - DISCOVER
+      - INTERAC
+      - UNIONPAY
+      - GIFT_MONERIS
+      - GIFT_DATACANDY
+      - GIFT_GIVEX
+      - null
+      example: MASTERCARD
+    token:
+      type: string
+      description: Created when a temporary token is created and returned. This acts as a unique profile identifier, and is a required value for temporary token transactions.
+      minLength: 25
+      maxLength: 28
+      example: ot-HCUeCFtXJfEZSSUqvUJkS0
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
+    cardholderInformation:
+      type:
+      - object
+      - 'null'
+      description: Information about the holder of the card.
+      properties:
+        cardholderName:
+          $ref: '#/components/schemas/cardholderName'
+        companyName:
+          $ref: '#/components/schemas/companyName'
+      required:
+      - cardholderName
+    createdAt:
+      description: Time at which the object was created
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    idempotencyKey:
+      type: string
+      description: "A Unique Identifier that is required for handling idempotent requests. \n\nNote: Moneris encourages the use of UUID Version 4 in APIs as an idempotency key.\"    \n"
+      minLength: 1
+      maxLength: 36
+      example: 6q5w4e7r8t9y
+    error:
+      description: Error response details.
+      properties:
+        type:
+          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
+
+            '
+          type: string
+          format: uri
+          example: https://api-developer.moneris.com/responsehandling
+        title:
+          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
+
+            '
+          type:
+          - string
+          - 'null'
+          example: INSUFFICIENT_FUNDS
+        status:
+          description: 'it conveys the HTTP status code used for the convenience of the consumer.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 100
+          maximum: 505
+        detail:
+          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: Funds are insufficient to execute the operation.
+        instance:
+          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
+          format: uri-reference
+        category:
+          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
+          enum:
+          - API_ERROR
+          - IDEMPOTENCY_ERROR
+          - INVALID_REQUEST_ERROR
+          - DECLINED_ERROR
+          - UNAUTHORIZED_ERROR
+          - INTERNAL_SERVER_ERROR
+          - null
+          type:
+          - string
+          - 'null'
+          example: DECLINED_ERROR
+        errors:
+          type: array
+          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          items:
+            type: object
+            $ref: '#/components/schemas/parameterError'
+          example:
+          - parameterName: address.postalCode
+            parameterValue: MAP3J8
+            errorMessage: address.Postal code does not match regular expression
+            reasonCode: INVALID_FORMAT
+      title: API Error
+      type: object
+      required:
+      - type
+    paymentMethodRequestSource:
+      type: string
+      description: "The source of Payment Method being used. It can be:\n  - The Id of a Payment Method already created.\n  - Permanent Token.\n  - Temporary Token.\n  - Card.\n  - E-Wallet.\n"
+      enum:
+      - PAYMENT_METHOD_ID
+      - CARD
+      - TEMPORARY_TOKEN
+      - PERMANENT_TOKEN
+      - APPLE_PAY_ENCRYPTED
+      - APPLE_PAY_DECRYPTED
+      - GOOGLE_PAY_ENCRYPTED
+      - GOOGLE_PAY_DECRYPTED
+    paymentMethodRequestBase:
+      description: 'Payment Method details.
+
+
+        Note: If defined, this will result in the creation of Payment Method as defined in the Payment Method API.
+
+        '
+      type: object
+      properties:
+        cardholderInformation:
+          $ref: '#/components/schemas/cardholderInformation'
+        contactDetails:
+          $ref: '#/components/schemas/contactDetails'
+        billingAddress:
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        paymentMethodSource:
+          $ref: '#/components/schemas/paymentMethodRequestSource'
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - paymentMethodSource
+    contactDetails:
+      type:
+      - object
+      - 'null'
+      description: Contact details
+      properties:
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          pattern: ^\+[1-9]\d{1,14}$
+          minLength: 3
+          maxLength: 16
+          example: '+18663197450'
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+          description: 'Contains the customer''s email address.
+
+
+            For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+            '
+          minLength: 1
+          maxLength: 320
+          example: moneris@moneris.com
+      example:
+        phoneNumber: '+18663197450'
+        email: moneris@moneris.com
+    surChargePaymentMethodRequest:
+      title: surchargePaymentMethodRequest
+      description: 'surcharge payment Method details.
+
+        Note: If defined, this will result in the creation of a Permanent Payment Method as defined in the Payment Method API.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/paymentMethodWithId'
+      - $ref: '#/components/schemas/paymentMethodCard'
+      - $ref: '#/components/schemas/paymentMethodTemporaryToken'
+      - $ref: '#/components/schemas/paymentMethodPermanentToken'
+      discriminator:
+        propertyName: paymentMethodSource
+        mapping:
+          PAYMENT_METHOD_ID: '#/components/schemas/paymentMethodWithId'
+          CARD: '#/components/schemas/paymentMethodCard'
+          TEMPORARY_TOKEN: '#/components/schemas/paymentMethodTemporaryToken'
+          PERMANENT_TOKEN: '#/components/schemas/paymentMethodPermanentToken'
+    money:
+      type: object
+      description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 16000
+        currency: CAD
+    paymentMethod:
+      title: paymentMethod
+      description: Payment method response object
+      type: object
+      properties:
+        paymentMethodId:
+          $ref: '#/components/schemas/paymentMethodId'
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        cardholderInformation:
+          $ref: '#/components/schemas/cardholderInformation'
+        contactDetails:
+          $ref: '#/components/schemas/contactDetails'
+        billingAddress:
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        paymentMethodInformation:
+          $ref: '#/components/schemas/cardPaymentMethodInformation'
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+        modifiedAt:
+          $ref: '#/components/schemas/modifiedAt'
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - paymentMethodId
+      - merchantId
+      - paymentMethodInformation
+      - createdAt
+    cardPaymentMethodInformation:
+      title: Card Payment Method Information
+      description: Details about the card used in the payment method.
+      type: object
+      properties:
+        paymentMethodType:
+          type: string
+          description: "The type of Payment Method being used. It can be:\n  - Card.\n"
+          enum:
+          - CARD
+        paymentMethodSource:
+          type: string
+          description: "The source of Payment Method being used. It can be:\n  - The Id of a Payment Method already created.\n  - Permanent Token.\n  - Temporary Token.\n  - Card.\n  - E-Wallet.\n"
+          enum:
+          - CARD
+          - TEMPORARY_TOKEN
+          - PERMANENT_TOKEN
+          - APPLE_PAY_ENCRYPTED
+          - APPLE_PAY_DECRYPTED
+          - GOOGLE_PAY_ENCRYPTED
+          - GOOGLE_PAY_DECRYPTED
+          example: TEMPORARY_TOKEN
+        cardInformation:
+          $ref: '#/components/schemas/cardInformation'
+        paymentAccountReference:
+          $ref: '#/components/schemas/paymentAccountReference'
+        storePaymentMethod:
+          $ref: '#/components/schemas/storePaymentMethod'
+      required:
+      - paymentMethodType
+      - paymentMethodSource
+      - cardInformation
+      - storePaymentMethod
+    paymentMethodId:
+      type: string
+      description: Unique Identifier of the payment method.
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    paymentMethodTemporaryToken:
+      title: paymentMethodTemporaryToken
+      description: 'A Temporary Token is issued by Moneris to the merchant and represents the card details. Please review the Hosted Tokenization feature documentation to learn how to issue such a token.
+
+        '
+      allOf:
+      - type: object
+        properties:
+          temporaryToken:
+            $ref: '#/components/schemas/token'
+        required:
+        - paymentMethodSource
+        - temporaryToken
+      - $ref: '#/components/schemas/paymentMethodRequestBase'
+      required:
+      - paymentMethodSource
+      - temporaryToken
+    card:
+      type: object
+      description: Card details
+      properties:
+        cardNumber:
+          $ref: '#/components/schemas/cardNumber'
+        expiryMonth:
+          $ref: '#/components/schemas/expiryMonth'
+        expiryYear:
+          $ref: '#/components/schemas/expiryYear'
+        cardSecurityCode:
+          $ref: '#/components/schemas/cardSecurityCode'
+      required:
+      - cardNumber
+      - expiryMonth
+      - expiryYear
+      - cardSecurityCode
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    issuer:
+      type:
+      - string
+      - 'null'
+      description: Card issuer.
+      minLength: 1
+      maxLength: 100
+      example: RBC
+    expiryMonth:
+      type: integer
+      format: int32
+      description: Card expiration month. Format must be MM
+      minimum: 1
+      maximum: 12
+      example: 1
+    merchantId:
+      type: string
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
+    SurchargeEligibilityRequest:
+      title: surchargeEligibilityRequest
+      type: object
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        amount:
+          description: This is for surcharge amount.
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        paymentMethod:
+          $ref: '#/components/schemas/surChargePaymentMethodRequest'
+      required:
+      - idempotencyKey
+      - paymentMethod
+      - amount
+    amount:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999999
+      example: 10000
+      description: Amount
+    SurchargeEligibility:
+      type: object
+      properties:
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        amount:
+          description: Represents the surcharge amount
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        surchargeMessage:
+          type: string
+          description: Message indicating surcharge eligibility status
+        maximumSurchargeRate:
+          type: number
+          format: double
+          description: Maximum surcharge rate applicable
+        maximumSurchargeAmount:
+          $ref: '#/components/schemas/money'
+        paymentMethod:
+          $ref: '#/components/schemas/paymentMethod'
+      required:
+      - merchantId
+      - amount
+      - surchargeMessage
+      - maximumSurchargeRate
+      - maximumSurchargeAmount
+      - paymentMethod
+  responses:
+    invalidListbadRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/InvalidListRequestErrorResponse'
+    conflict:
+      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: UNAUTHORIZED_REQUEST
+            status: 401
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    forbidden:
+      description: Forbidden. The user does not have permission to access the requested resource.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="insufficient_scope"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: FORBIDDEN_REQUEST
+            status: 403
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    SurchargeEligibilitySuccessfulResponse:
+      description: surcharge eligible response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SurchargeEligibility'
+          example:
+            merchantId: 0030200564948
+            amount:
+              amount: 5600
+              currency: CAD
+            surchargeMessage: Surcharge eligible
+            maximumSurchargeRate: 2.4
+            maximumSurchargeAmount:
+              amount: 134
+              currency: CAD
+            paymentMethod:
+              paymentMethodId: pm0001JYKTKZM2R5BXDFF1QGGXYRYP
+              merchantId: 0030200564948
+              cardholderInformation:
+                cardholderName: John Doe
+                companyName: SP Ltd
+              contactDetails:
+                phoneNumber: '+18663197450'
+                email: moneris@moneris.com
+              billingAddress:
+                unitNumber: 123A
+                streetNumber: '3300'
+                streetName: Bloor Street West
+                city: Toronto
+                province: 'ON'
+                postalCode: M8X 2X2
+                country: CA
+              paymentMethodInformation:
+                paymentMethodType: CARD
+                cardInformation:
+                  bankIdentificationNumber: '424242'
+                  lastFour: '4242'
+                  expiryMonth: 1
+                  expiryYear: 2026
+                  cardBrand: VISA
+                  cardType: CREDIT
+                  cardFingerprint: 1Q2W3E4r5t6rfwewerwewrrw
+                  issuer: RBC
+                paymentAccountReference: '11112222333344445555666677778'
+                storePaymentMethod: DO_NOT_STORE
+                paymentMethodSource: CARD
+              createdAt: '2025-06-25T15:17:05.285Z'
+              modifiedAt: '2025-06-25T15:17:05.285Z'
+              customData:
+                property1: string
+                property2: string
+    internalServer:
+      description: Unexpected error.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
+    unprocessableContent:
+      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+  parameters:
+    correlationId:
+      in: header
+      name: X-Correlation-Id
+      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
+      required: false
+      schema:
+        type: string
+        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+    apiVersion:
+      in: header
+      name: Api-Version
+      required: true
+      example: '2024-09-17'
+      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
+      schema:
+        $ref: '#/components/schemas/apiVersion'
+    merchantId:
+      in: header
+      name: X-Merchant-Id
+      example: 0123456789101
+      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      required: true
+      schema:
+        $ref: '#/components/schemas/merchantId'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: 'An API key is a token that a client provides when making API calls.
+
+
+        API keys are supposed to be a secret that only the client and server know about.
+
+        '
+    OAuth2:
+      type: oauth2
+      description: 'OAuth 2.0 is an authorization protocol that gives an API client limited access to user data on a web server.
+
+
+        OAuth relies on authentication scenarios, that allows the resource owner (user) to share the protected content from the server, hosting the resource, without sharing their credentials. For that purpose, an OAuth 2.0 server issues access tokens that the client applications can use to access protected resources on behalf of the resource owner.
+
+
+        Moneris recommends the use of OAuth 2.0 as it provides fine grained authorization levels.
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            payment.read: Grants read access to payment related APIs
+            payment.write: Grants read & write access to payment related APIs
+            refund.read: Grants read access to refunds
+            refund.write: Grants read & write access to refunds
+            customer.read: Grants read access to customer data
+            customer.write: Grants read & write access to customer data
+            kount.read: Grants read access to Kount inquiries
+            kount.write: Grants read & write access to Kount inquiries
+            onboarding.merchant.read: Grants read access to merchant onboarding related APIs
+            onboarding.merchant.write: Grants read & write access to merchant onboarding related APIs
+            onboarding.order.read: Grants read access to onboarding orders related APIs
+            onboarding.order.write: Grants read & write access to onboarding orders related APIs
+            dispute.read: Grants read access to disputes
+            dispute.write: Grants read & write access to disputes

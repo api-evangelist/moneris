@@ -1,0 +1,3248 @@
+openapi: 3.2.0
+info:
+  version: 2.6.1
+  title: Moneris Merchant Onboarding API
+  description: 'Moneris API Platform
+
+
+
+    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height:32px;">](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
+  termsOfService: https://www.moneris.com/en/legal/terms-of-use
+  contact:
+    url: https://api-developer.moneris.com
+    email: UnifiedAPI@moneris.com
+  license:
+    name: Moneris
+    url: https://developer.moneris.com/Agreements/Terms%20of%20Use
+  x-audience: external-public
+servers:
+- url: https://api.sb.moneris.io
+  description: Sandbox server (uses test data)
+  x-internal: false
+- url: https://api.moneris.io
+  description: Production server (uses live data)
+  x-internal: false
+tags:
+- name: Merchant Onboarding
+  description: Manage Merchants onboarding
+paths:
+  /onboarding/merchants:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    post:
+      summary: Create Merchant
+      description: Submit a merchant payload to create a merchant
+      operationId: createMerchant
+      security:
+      - OAuth2:
+        - onboarding.merchant.write
+      - ApiKeyAuth: []
+      tags:
+      - Merchant Onboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createMerchantRequest'
+      responses:
+        '201':
+          description: Successful response
+          headers:
+            Api-Version:
+              $ref: '#/components/headers/apiVersion'
+            X-Correlation-Id:
+              $ref: '#/components/headers/correlationId'
+            Sunset:
+              $ref: '#/components/headers/sunset'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/rateLimitCount'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/rateLimitRemaining'
+            Location:
+              $ref: '#/components/headers/location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchant'
+              example:
+                merchantId: 0030211900875
+                businessDetails:
+                  isSeasonalMerchant: false
+                  merchantCategoryCode: '0742'
+                  averageTicketSize: 3
+                  directSellingPercentage: 86
+                  motoTransactionPercentage: 14
+                  ecommerceTransactionPercentage: 0
+                  businessUrl: https://www.test.io
+                  serviceProvider: moneris.com
+                  serviceDeliverToCanadaAvailable: true
+                  serviceDeliverToUSAvailable: true
+                  creditTransactionVolume: 250000
+                  masterCardTransactionVolume: 100000
+                  visaTransactionVolume: 100000
+                  visaDebitTransactionVolume: 0
+                  amexTransactionVolume: 25000
+                  interacTransactionVolume: 50000
+                  masterCardDebitTransactionVolume: 0
+                  category: CONTRACTED_SERVICES
+                  subCategory: VETERINARY_SERVICES
+                  offeredProductsAndServicesDescription: food
+                merchantDetails:
+                  contactInformation:
+                    firstName: Joe
+                    lastName: Test
+                    phone: '+11234567890'
+                  merchantInformation:
+                    cardholderName: Joe Test
+                    language: en
+                    legalName: Joe
+                    operatingAsName: Joe OPS
+                    yearsOfOwnership: 3
+                    monthsOfOwnership: 2
+                    customerServicePhoneNumber: '+11234567890'
+                    email: qa-test@moneris.com
+                    merchantType: NATIONAL
+                  locationAddress:
+                    postalCode: M5T2G2
+                    city: TORONTO
+                    province: 'ON'
+                    streetName: SPADINA AVE
+                    country: CA
+                businessActivity:
+                  dropShipping: true
+                securityDetails:
+                  legalEntity:
+                    businessType: PRIVATE_CORPORATION
+                  signingOfficers:
+                  - signingOfficerIdentifier: 1234
+                    dateOfBirth: '1980-01-01'
+                    creditReportAllowed: true
+                    firstName: DOMEMIC
+                    lastName: TESTPOTKIDIS
+                    address:
+                      postalCode: K1M1N8
+                      city: OTTAWA
+                      province: 'ON'
+                      streetName: STANLEY
+                      country: CA
+                    ownershipPercentage: 100
+                    title: VICE_PRESIDENT
+                riskDetails:
+                  merchantRiskRate: A_PLUS
+                pointOfSaleOptions:
+                  settlementOption: MERCHANT_CLOSE
+                  settlementTime: '23:00:00'
+                  debitPerTransactionRefundLimit:
+                    amount: 0
+                    currency: CAD
+                  dailyRefundLimit:
+                    amount: 0
+                    currency: CAD
+                  dailyCancellationLimit:
+                    amount: 0
+                    currency: CAD
+                bankingDetails:
+                  creditDepositAccount:
+                    currency: CAD
+                    institutionNumber: 00809
+                    transitNumber: '00160'
+                    accountNumber: '3333333333'
+                  additionalBankingAccounts: []
+                chainId: '0030600062664'
+                createdAt: '2025-01-01T00:00:00Z'
+                modifiedAt: '2025-01-01T00:00:00Z'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/unprocessableContent'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /onboarding/merchants/{merchant-id}:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/prm-merchants_merchantId'
+    get:
+      summary: Get the details of a Merchant
+      operationId: getMerchantDetailsByMerchantId
+      tags:
+      - Merchant Onboarding
+      description: 'Get merchant details by ID
+
+        '
+      security:
+      - OAuth2:
+        - onboarding.merchant.read
+      - OAuth2:
+        - onboarding.merchant.write
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Successful response corresponding to the provided merchant id parameter
+          headers:
+            Api-Version:
+              $ref: '#/components/headers/apiVersion'
+            X-Correlation-Id:
+              $ref: '#/components/headers/correlationId'
+            Sunset:
+              $ref: '#/components/headers/sunset'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/rateLimitCount'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/rateLimitRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchant'
+              example:
+                merchantId: 0030211900875
+                businessDetails:
+                  isSeasonalMerchant: false
+                  merchantCategoryCode: '0742'
+                  averageTicketSize: 3
+                  directSellingPercentage: 86
+                  motoTransactionPercentage: 14
+                  ecommerceTransactionPercentage: 0
+                  businessUrl: https://www.test.io
+                  serviceProvider: moneris.com
+                  serviceDeliverToCanadaAvailable: true
+                  serviceDeliverToUSAvailable: true
+                  creditTransactionVolume: 250000
+                  masterCardTransactionVolume: 100000
+                  visaTransactionVolume: 100000
+                  visaDebitTransactionVolume: 0
+                  amexTransactionVolume: 25000
+                  interacTransactionVolume: 50000
+                  masterCardDebitTransactionVolume: 0
+                  category: CONTRACTED_SERVICES
+                  subCategory: VETERINARY_SERVICES
+                  offeredProductsAndServicesDescription: food
+                merchantDetails:
+                  contactInformation:
+                    firstName: Joe
+                    lastName: Test
+                    phone: '+11234567890'
+                  merchantInformation:
+                    cardholderName: Joe Test
+                    language: en
+                    legalName: Joe
+                    operatingAsName: Joe OPS
+                    yearsOfOwnership: 3
+                    monthsOfOwnership: 2
+                    customerServicePhoneNumber: '+11234567890'
+                    email: qa-test@moneris.com
+                    merchantType: NATIONAL
+                  locationAddress:
+                    postalCode: M5T2G2
+                    city: TORONTO
+                    province: 'ON'
+                    streetName: SPADINA AVE
+                    country: CA
+                businessActivity:
+                  dropShipping: true
+                securityDetails:
+                  legalEntity:
+                    businessType: PRIVATE_CORPORATION
+                  signingOfficers:
+                  - signingOfficerIdentifier: 1234
+                    dateOfBirth: '1980-01-01'
+                    creditReportAllowed: true
+                    firstName: DOMEMIC
+                    lastName: TESTPOTKIDIS
+                    address:
+                      postalCode: K1M1N8
+                      city: OTTAWA
+                      province: 'ON'
+                      streetName: STANLEY
+                      country: CA
+                    ownershipPercentage: 100
+                    title: VICE_PRESIDENT
+                riskDetails:
+                  merchantRiskRate: A_PLUS
+                pointOfSaleOptions:
+                  settlementOption: MERCHANT_CLOSE
+                  settlementTime: '23:00:00'
+                  debitPerTransactionRefundLimit:
+                    amount: 0
+                    currency: CAD
+                  dailyRefundLimit:
+                    amount: 0
+                    currency: CAD
+                  dailyCancellationLimit:
+                    amount: 0
+                    currency: CAD
+                bankingDetails:
+                  creditDepositAccount:
+                    currency: CAD
+                    institutionNumber: 00809
+                    transitNumber: '00160'
+                    accountNumber: '3333333333'
+                  additionalBankingAccounts: []
+                chainId: '0030600062664'
+                createdAt: '2025-01-01T00:00:00Z'
+                modifiedAt: '2025-01-01T00:00:00Z'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+    put:
+      summary: Update Merchant
+      operationId: updateMerchant
+      security:
+      - OAuth2:
+        - onboarding.merchant.write
+      - ApiKeyAuth: []
+      tags:
+      - Merchant Onboarding
+      description: 'Update merchant based on the supplied payload.
+
+        '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/merchantPayload'
+      responses:
+        '204':
+          description: Successful response
+          headers:
+            Api-Version:
+              $ref: '#/components/headers/apiVersion'
+            X-Correlation-Id:
+              $ref: '#/components/headers/correlationId'
+            Sunset:
+              $ref: '#/components/headers/sunset'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/rateLimitCount'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/rateLimitRemaining'
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '422':
+          $ref: '#/components/responses/unprocessableContent'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+  /onboarding/merchants/{merchant-id}/supplies:
+    parameters:
+    - $ref: '#/components/parameters/apiVersion'
+    - $ref: '#/components/parameters/correlationId'
+    - $ref: '#/components/parameters/prm-merchants_merchantId'
+    get:
+      summary: List merchant supplies
+      operationId: listMerchantSupplies
+      security:
+      - OAuth2:
+        - onboarding.merchant.read
+      - OAuth2:
+        - onboarding.merchant.write
+      - ApiKeyAuth: []
+      tags:
+      - Merchant Onboarding
+      description: 'Get merchant supplies by merchant ID
+
+        '
+      responses:
+        '200':
+          description: Successful response corresponding to the provided payload
+          headers:
+            Api-Version:
+              $ref: '#/components/headers/apiVersion'
+            X-Correlation-Id:
+              $ref: '#/components/headers/correlationId'
+            Sunset:
+              $ref: '#/components/headers/sunset'
+            X-RateLimit-Limit:
+              $ref: '#/components/headers/rateLimitCount'
+            X-RateLimit-Remaining:
+              $ref: '#/components/headers/rateLimitRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/merchantSupplies'
+              example:
+                data:
+                - deviceName: iWL220 + Communication Base
+                  carriers:
+                  - Telus
+                  - Rogers
+                  softwareVendors:
+                  - DataCandy
+                  serviceCode: '0010'
+                  unitPrice:
+                    amount: 10
+                    currency: CAD
+                  supplyType: wireless
+                  supplies:
+                  - supplyName: Manual Flatbed Imprinter and Plate
+                    unitPrice:
+                      amount: 1600
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter Replacement Plate
+                    unitPrice:
+                      amount: 2000
+                      currency: CAD
+                  - supplyName: Paper Rolls - 2.25"x1.64"x62 (15)
+                    unitPrice:
+                      amount: 1650
+                      currency: CAD
+                  - supplyName: Torx 25 Security Wrench and Screws
+                    unitPrice:
+                      amount: 950
+                      currency: CAD
+                  - supplyName: Paper Rolls - Thermal 2.25"x1.64" (100)
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                  - supplyName: 'Paper Rolls - Phenol-free: 62'' (100)'
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                - deviceName: iWL220 + Charge Base
+                  carriers:
+                  - Telus
+                  - Rogers
+                  softwareVendors:
+                  - DataCandy
+                  serviceCode: '0011'
+                  unitPrice:
+                    amount: 11
+                    currency: CAD
+                  supplyType: wireless
+                  supplies:
+                  - supplyName: Manual Flatbed Imprinter and Plate
+                    unitPrice:
+                      amount: 1600
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter Replacement Plate
+                    unitPrice:
+                      amount: 2000
+                      currency: CAD
+                  - supplyName: Paper Rolls - 2.25"x1.64"x62 (15)
+                    unitPrice:
+                      amount: 1650
+                      currency: CAD
+                  - supplyName: Torx 25 Security Wrench and Screws
+                    unitPrice:
+                      amount: 950
+                      currency: CAD
+                  - supplyName: Paper Rolls - Thermal 2.25"x1.64" (100)
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                  - supplyName: 'Paper Rolls - Phenol-free: 62'' (100)'
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                - deviceName: iWL220 Communication Base
+                  carriers:
+                  - Telus
+                  - Rogers
+                  softwareVendors:
+                  - DataCandy
+                  serviceCode: '0014'
+                  unitPrice:
+                    amount: 14
+                    currency: CAD
+                  supplyType: wireless
+                  supplies:
+                  - supplyName: Manual Flatbed Imprinter and Plate
+                    unitPrice:
+                      amount: 1600
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter Replacement Plate
+                    unitPrice:
+                      amount: 2000
+                      currency: CAD
+                  - supplyName: Paper Rolls - 2.25"x1.64"x62 (15)
+                    unitPrice:
+                      amount: 1650
+                      currency: CAD
+                  - supplyName: Torx 25 Security Wrench and Screws
+                    unitPrice:
+                      amount: 950
+                      currency: CAD
+                  - supplyName: Paper Rolls - Thermal 2.25"x1.64" (100)
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                  - supplyName: 'Paper Rolls - Phenol-free: 62'' (100)'
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                - deviceName: iWL220 Charge Base
+                  carriers:
+                  - Telus
+                  - Rogers
+                  softwareVendors:
+                  - DataCandy
+                  serviceCode: 0019
+                  unitPrice:
+                    amount: 19
+                    currency: CAD
+                  supplyType: wireless
+                  supplies:
+                  - supplyName: Manual Flatbed Imprinter and Plate
+                    unitPrice:
+                      amount: 1600
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter Replacement Plate
+                    unitPrice:
+                      amount: 2000
+                      currency: CAD
+                  - supplyName: Paper Rolls - 2.25"x1.64"x62 (15)
+                    unitPrice:
+                      amount: 1650
+                      currency: CAD
+                  - supplyName: Torx 25 Security Wrench and Screws
+                    unitPrice:
+                      amount: 950
+                      currency: CAD
+                  - supplyName: Paper Rolls - Thermal 2.25"x1.64" (100)
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                  - supplyName: 'Paper Rolls - Phenol-free: 62'' (100)'
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                - deviceName: iWL255 + Charge Base
+                  carriers:
+                  - Rogers
+                  - Telus
+                  softwareVendors:
+                  - DataCandy
+                  serviceCode: '0460'
+                  unitPrice:
+                    amount: 9900
+                    currency: CAD
+                  supplyType: wireless
+                  supplies:
+                  - supplyName: Torx 25 Security Wrench and Screws
+                    unitPrice:
+                      amount: 950
+                      currency: CAD
+                  - supplyName: Case/Shoulder Strap for iWL255
+                    unitPrice:
+                      amount: 4700
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter and Plate
+                    unitPrice:
+                      amount: 1600
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter Replacement Plate
+                    unitPrice:
+                      amount: 2000
+                      currency: CAD
+                  - supplyName: Paper Rolls - 2.25"x1.64"x62 (15)
+                    unitPrice:
+                      amount: 1650
+                      currency: CAD
+                  - supplyName: Paper Rolls - Thermal 2.25"x1.64" (100)
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                  - supplyName: Car Charger for iWL255
+                    unitPrice:
+                      amount: 3350
+                      currency: CAD
+                  - supplyName: 'Paper Rolls - Phenol-free: 62'' (100)'
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                - deviceName: iWL255
+                  carriers:
+                  - Rogers
+                  - Telus
+                  softwareVendors:
+                  - DataCandy
+                  serviceCode: '0461'
+                  unitPrice:
+                    amount: 461
+                    currency: CAD
+                  supplyType: wireless
+                  supplies:
+                  - supplyName: Torx 25 Security Wrench and Screws
+                    unitPrice:
+                      amount: 950
+                      currency: CAD
+                  - supplyName: Case/Shoulder Strap for iWL255
+                    unitPrice:
+                      amount: 4700
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter and Plate
+                    unitPrice:
+                      amount: 1600
+                      currency: CAD
+                  - supplyName: Manual Flatbed Imprinter Replacement Plate
+                    unitPrice:
+                      amount: 2000
+                      currency: CAD
+                  - supplyName: Paper Rolls - 2.25"x1.64"x62 (15)
+                    unitPrice:
+                      amount: 1650
+                      currency: CAD
+                  - supplyName: Paper Rolls - Thermal 2.25"x1.64" (100)
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+                  - supplyName: Car Charger for iWL255
+                    unitPrice:
+                      amount: 3350
+                      currency: CAD
+                  - supplyName: 'Paper Rolls - Phenol-free: 62'' (100)'
+                    unitPrice:
+                      amount: 7080
+                      currency: CAD
+        '400':
+          $ref: '#/components/responses/badRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/notFound'
+        '429':
+          $ref: '#/components/responses/tooManyRequests'
+        '500':
+          $ref: '#/components/responses/internalServer'
+        '503':
+          $ref: '#/components/responses/serviceUnavailable'
+components:
+  schemas:
+    signingOfficer:
+      type: object
+      description: An object containing all details about the signing officer of the business.
+      required:
+      - creditReportAllowed
+      - firstName
+      - lastName
+      - address
+      - dateOfBirth
+      - ownershipPercentage
+      - title
+      properties:
+        signingOfficerIdentifier:
+          description: A unique identifier for the signing officer.
+          type: integer
+          format: int64
+        creditReportAllowed:
+          type: boolean
+          description: A boolean value indicating whether the business has authorized the review of its credit report.
+        firstName:
+          description: The first name of the signing officer.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 30
+          example: John
+        lastName:
+          description: The last name of the signing officer.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 30
+          example: Doe
+        address:
+          $ref: '#/components/schemas/address'
+        dateOfBirth:
+          description: The date of birth of the signing officer.
+          type: string
+          format: date
+          example: '2019-07-30'
+        ownershipPercentage:
+          description: A numeric value representing the percentage of ownership held by an individual in the business.
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 100
+          example: 90.5
+        title:
+          description: The official position of the signing officer within the business.
+          type: string
+          maxLength: 60
+          enum:
+          - OWNER
+          - PRESIDENT
+          - VICE_PRESIDENT
+          - SECRETARY
+          - TREASURER
+          - DIRECTOR
+          - OTHER
+        merchantRiskRate:
+          type:
+          - string
+          - 'null'
+          description: A score indicating the level of risk associated with the merchant's transactions.
+          maxLength: 60
+          example: A+
+          enum:
+          - A
+          - A_PLUS
+          - B_HIGH
+          - B_LOW
+          - B_LOW_PLUS
+          - B_MID
+          - C
+          - C_HIGH
+          - C_HIGH_PLUS
+          - C_LOW
+          - C_LOW_PLUS
+          - C_MID
+          - C_MID_PLUS
+          - C_PLUS
+          - D
+          - D_HIGH
+          - D_LOW
+          - D_MID
+          - E
+          - E_MINUS
+          - F
+    merchantSupplies:
+      description: An object containing a list of supplies associated with the merchant.
+      type: object
+      properties:
+        data:
+          type: array
+          description: A list of supply items associated with the resource
+          items:
+            $ref: '#/components/schemas/merchantSupply'
+        self:
+          $ref: '#/components/schemas/self'
+        first:
+          $ref: '#/components/schemas/first'
+        last:
+          $ref: '#/components/schemas/last'
+        next:
+          $ref: '#/components/schemas/next'
+        previous:
+          $ref: '#/components/schemas/previous'
+    businessType:
+      type: string
+      description: The category of the business.
+      enum:
+      - SOLE_PROPRIETOR
+      - LIMITED_PARTNERSHIP
+      - PARTNERSHIP
+      - NON_PROFIT
+      - NON_FOR_PROFIT
+      - PRIVATE_CORPORATION
+      - PUBLIC_CORPORATION
+      - GOVERNMENT
+    deviceName:
+      type:
+      - string
+      - 'null'
+      description: The name of the device.
+    monthsOfOwnership:
+      type: integer
+      description: An integer representing the number of months the merchant has been in ownership.
+      format: int32
+    creditTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through credit-based payments.
+      format: int32
+    email:
+      type: string
+      format: email
+      description: 'Contains the customer''s email address.
+
+
+        For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+        '
+      minLength: 1
+      maxLength: 320
+      example: moneris@moneris.com
+    merchantInformation:
+      type: object
+      description: An object containing all information about the merchant.
+      required:
+      - language
+      - legalName
+      - operatingAsName
+      - cardholderName
+      - yearsOfOwnership
+      - monthsOfOwnership
+      - customerServicePhoneNumber
+      - email
+      properties:
+        language:
+          enum:
+          - en
+          - fr
+          description: The preferred language of the merchant.
+          type: string
+          format: iso-639
+          minLength: 2
+          maxLength: 2
+          example: en
+        legalName:
+          $ref: '#/components/schemas/legalName'
+        operatingAsName:
+          $ref: '#/components/schemas/operatingAsName'
+        cardholderName:
+          description: The name of the person to whom the credit or debit card is issued.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 60
+          example: John Doe
+        yearsOfOwnership:
+          $ref: '#/components/schemas/yearsOfOwnership'
+        monthsOfOwnership:
+          $ref: '#/components/schemas/monthsOfOwnership'
+        customerServicePhoneNumber:
+          $ref: '#/components/schemas/phoneNumber'
+        email:
+          $ref: '#/components/schemas/email'
+        merchantType:
+          $ref: '#/components/schemas/merchantType'
+    interacTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through Interac payments.
+      format: int32
+      example: 1000
+    institutionNumber:
+      type: string
+      description: The name or identifier of the financial institution.
+      maxLength: 5
+      example: 809
+      pattern: ^\d{5}
+    addionalBankingAccountType:
+      type: string
+      description: The type of the additional banking account.
+      enum:
+      - POS_BILLING_ACCOUNT
+      - CHARGEBACK_ACCOUNT
+      - DEBIT_DEPOSIT_ACCOUNT
+    bank:
+      type: object
+      description: An object that contains information about the bank associated with the account or transaction.
+      required:
+      - currency
+      - institutionNumber
+      - transitNumber
+      - accountNumber
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        institutionNumber:
+          $ref: '#/components/schemas/institutionNumber'
+        transitNumber:
+          $ref: '#/components/schemas/transitNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+    lastName:
+      type:
+      - string
+      - 'null'
+      description: Last name.
+      minLength: 1
+      maxLength: 30
+      example: Doe
+    masterCardDebitTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through MasterCard Debit payments.
+      format: int32
+      example: 1000
+    merchant:
+      description: An object containing the details of a merchant.
+      type: object
+      properties:
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        businessDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing key information about the business associated with the account or transaction.
+          required:
+          - merchantCategoryCode
+          - isSeasonalMerchant
+          - directSellingPercentage
+          - motoTransactionPercentage
+          - ecommerceTransactionPercentage
+          properties:
+            merchantCategoryCode:
+              $ref: '#/components/schemas/merchantCategoryCode'
+            averageTicketSize:
+              $ref: '#/components/schemas/averageTicketSize'
+            isSeasonalMerchant:
+              $ref: '#/components/schemas/isSeasonalMerchant'
+            maximumTransactionVolume:
+              $ref: '#/components/schemas/maximumTransactionVolume'
+            directSellingPercentage:
+              $ref: '#/components/schemas/directSellingPercentage'
+            motoTransactionPercentage:
+              $ref: '#/components/schemas/motoTransactionPercentage'
+            ecommerceTransactionPercentage:
+              $ref: '#/components/schemas/ecommerceTransactionPercentage'
+            businessUrl:
+              $ref: '#/components/schemas/businessUrl'
+            serviceProvider:
+              $ref: '#/components/schemas/serviceProvider'
+            serviceDeliverToCanadaAvailable:
+              $ref: '#/components/schemas/serviceDeliverToCanadaAvailable'
+            serviceDeliverToUSAvailable:
+              $ref: '#/components/schemas/serviceDeliverToUSAvailable'
+            creditTransactionVolume:
+              $ref: '#/components/schemas/creditTransactionVolume'
+            masterCardTransactionVolume:
+              $ref: '#/components/schemas/masterCardTransactionVolume'
+            visaTransactionVolume:
+              $ref: '#/components/schemas/visaTransactionVolume'
+            visaDebitTransactionVolume:
+              $ref: '#/components/schemas/visaDebitTransactionVolume'
+            amexTransactionVolume:
+              $ref: '#/components/schemas/amexTransactionVolume'
+            interacTransactionVolume:
+              $ref: '#/components/schemas/interacTransactionVolume'
+            masterCardDebitTransactionVolume:
+              $ref: '#/components/schemas/masterCardDebitTransactionVolume'
+            unionPayTransactionVolume:
+              $ref: '#/components/schemas/unionPayTransactionVolume'
+            discoverTransactionVolume:
+              $ref: '#/components/schemas/discoverTransactionVolume'
+            category:
+              $ref: '#/components/schemas/businessCategory'
+            subCategory:
+              $ref: '#/components/schemas/businessSubCategory'
+            offeredProductsAndServicesDescription:
+              $ref: '#/components/schemas/offeredProductsAndServicesDescription'
+            riskLevel:
+              $ref: '#/components/schemas/riskLevel'
+        merchantDetails:
+          type:
+          - object
+          - 'null'
+          description: An object that contains key information about the merchant associated.
+          required:
+          - contactInformation
+          - merchantInformation
+          - locationAddress
+          properties:
+            contactInformation:
+              $ref: '#/components/schemas/contactInformation'
+            merchantInformation:
+              $ref: '#/components/schemas/merchantInformation'
+            locationAddress:
+              $ref: '#/components/schemas/address'
+            marketSegment:
+              $ref: '#/components/schemas/marketSegment'
+        businessActivity:
+          type:
+          - object
+          - 'null'
+          description: An object containing all details about the business activity.
+          required:
+          - dropShipping
+          properties:
+            dropShipping:
+              $ref: '#/components/schemas/dropShipping'
+        securityDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing all details about the security details.
+          required:
+          - legalEntity
+          - signingOfficers
+          properties:
+            legalEntity:
+              $ref: '#/components/schemas/legalEntity'
+            signingOfficers:
+              type: array
+              description: A list of signing officer entities.
+              maxItems: 100
+              items:
+                $ref: '#/components/schemas/signingOfficer'
+        riskDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing information related to the risk assessment of a transaction or account.
+          required:
+          - merchantRiskRate
+          properties:
+            merchantRiskRate:
+              $ref: '#/components/schemas/merchantRiskRate'
+        pointOfSaleOptions:
+          type:
+          - object
+          - 'null'
+          description: An object containing details about the point of sale options available for processing transactions.
+          required:
+          - settlementOption
+          properties:
+            settlementOption:
+              $ref: '#/components/schemas/settlementOption'
+            settlementTime:
+              $ref: '#/components/schemas/settlementTime'
+            debitPerTransactionRefundLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+            dailyRefundLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+            dailyCancellationLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+        bankingDetails:
+          type:
+          - object
+          - 'null'
+          description: An object that contains the necessary banking information related to the account or transaction.
+          required:
+          - creditDepositAccount
+          properties:
+            creditDepositAccount:
+              $ref: '#/components/schemas/bank'
+            additionalBankingAccounts:
+              type: array
+              description: A list of additional banking accounts associated with the merchant.
+              items:
+                $ref: '#/components/schemas/additionalBankingAccount'
+              maxItems: 10
+        chainId:
+          $ref: '#/components/schemas/chainId'
+        createdAt:
+          description: Time at which the object was created
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2019-07-30T06:43:40.252Z'
+        modifiedAt:
+          description: Time at which the object was modified
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2019-07-30T06:43:40.252Z'
+      required:
+      - merchantId
+    address:
+      type: object
+      description: 'The postal address including street, town/city, province, and postal code.
+
+        Optionally an unit number can be provided.
+
+        '
+      properties:
+        unitNumber:
+          type:
+          - string
+          - 'null'
+          description: Unit number
+          minLength: 1
+          maxLength: 19
+          example: 123A
+        streetNumber:
+          type:
+          - string
+          - 'null'
+          description: Street number
+          minLength: 1
+          maxLength: 19
+          example: '3300'
+        streetName:
+          type:
+          - string
+          - 'null'
+          description: Street name
+          minLength: 1
+          maxLength: 100
+          example: Bloor
+        city:
+          type:
+          - string
+          - 'null'
+          description: 'Identifies the city.
+
+            '
+          minLength: 1
+          maxLength: 50
+          example: Toronto
+        province:
+          type:
+          - string
+          - 'null'
+          description: 'Province or state ISO 3166-2 code '
+          minLength: 1
+          maxLength: 3
+          format: iso-3166-2
+          example: 'ON'
+        postalCode:
+          type:
+          - string
+          - 'null'
+          description: Postal or zip code
+          minLength: 1
+          maxLength: 30
+          example: M8X 2X2
+        country:
+          type:
+          - string
+          - 'null'
+          description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+          minLength: 2
+          maxLength: 2
+          example: CA
+          format: iso-3166
+      example:
+        unitNumber: 123A
+        streetNumber: '3300'
+        streetName: Bloor Street West
+        city: Toronto
+        province: 'ON'
+        postalCode: M8X 2X2
+        country: CA
+    money:
+      type: object
+      description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 16000
+        currency: CAD
+    businessSubCategory:
+      type:
+      - string
+      - 'null'
+      description: The sub-category of the business.
+      enum:
+      - A_1_RENT_A_CAR
+      - ACCOUNTING
+      - ACTION_RENT_A_CAR
+      - ADAMS_MARK
+      - ADRIA
+      - ADVANTAGE_RENT_A_CAR
+      - ADVERTISING
+      - AER_LINGUS
+      - AERO_COACH_AVIATION
+      - AERO_PERU
+      - AERO_SERVICO_CARABOBO
+      - AERO_VIRGIN_ISLANDS
+      - AEROLINEAS_ARGENTINAS
+      - AEROLINEAS_NICARAGUENSIS
+      - AEROMEXICO
+      - AFFILIATED_AUTO_RENTAL
+      - AGENCY_RENT_A_CAR
+      - AGRICULTURAL_COOPERATIVES
+      - AIR_AFRIQUE
+      - AIR_ALGERIE
+      - AIR_BRITISH_COLUMBIA
+      - AIR_CANADA
+      - AIR_CHINA
+      - AIR_CONDITIONER
+      - AIR_CONDITIONING_CONTRACTOR
+      - AIR_COURIER
+      - AIR_DJIBOUTI
+      - AIR_FRANCE
+      - AIR_INDIA
+      - AIR_JAMAICA
+      - AIR_LANKA
+      - AIR_LITTORAL
+      - AIR_MAURITIUS
+      - AIR_NEW_ZEALAND
+      - AIR_PANAMA
+      - AIR_SEYCHELLES
+      - AIR_ZAIRE
+      - AIR_ZIMBABWE
+      - AIRCRAFT_EQUIPMENT
+      - AIRINTER
+      - AIRPORT_TERMINALS
+      - AIRPORTS
+      - AIRWAYS_RENT_A_CAR
+      - AJAX_RENT_A_CAR
+      - ALAMO_RENT_A_CAR
+      - ALASKA
+      - ALCOHOL_STORE
+      - ALIMONY
+      - ALL_NIPPON
+      - ALLSTATE_RENT_A_CAR
+      - ALM_ANTILEAN
+      - ALOHA
+      - ALTERATIONS
+      - ALTRA_RENT_A_CAR
+      - AMBULANCE_SERVICES
+      - AMELIA_ISLAND_PLANTATION
+      - AMERICA_WEST
+      - AMERICAN
+      - AMERICAN_INT_RENT_A_CAR
+      - AMERICAN_TRANS_AIR
+      - AMERICANA
+      - AMERISUITES
+      - AMFAC
+      - AMUSEMENT_PARKS
+      - ANA
+      - ANSA_INTERNATIONAL_RENT_A_CAR
+      - ANSETT
+      - ANTIQUE_REPAIR
+      - ANTIQUE_REPRODUCTION
+      - ANTIQUE_RESTORATION
+      - ANTIQUES
+      - APPLIANCE
+      - AQUARIUMS
+      - ARABELLA
+      - ARCADE
+      - ARCHITECTS
+      - ARCTIA
+      - ART_DEALERS
+      - ART_SUPPLIES
+      - ARTIFICIAL_LIMBS
+      - ASIANA
+      - ATHLETIC_FIELDS
+      - ATTORNEYS
+      - AUBERGE_DES_GOVERNMENTS
+      - AUDITING
+      - AUSTRIAN
+      - AUSTRIAN_AIR_SERVICE
+      - AUTO_BODY
+      - AUTO_CASH_FI
+      - AUTO_DEALER_USED
+      - AUTO_HOST_CAR_RENTAL
+      - AUTOHANSA_RENT_A_CAR
+      - AUTOMATE_RENT_A_CAR
+      - AUTOMATED_FUEL_DISPENSER
+      - AUTOMOBILE_ASSOCIATION
+      - AUTOMOTIVE_PAINT
+      - AUTOMOTIVE_SERVICE
+      - AUTOMOTIVE_SERVICE_SHOPS
+      - AVCAR_RENT_A_CAR
+      - AVENSA
+      - AVIANCA
+      - AVIATION_FUEL
+      - AVIS_RENT_A_CAR
+      - AVON_RENT_A_CAR
+      - AWNINGS
+      - BAHAMAS_AIR
+      - BAIL_PAYMENTS
+      - BAKERIES
+      - BALLYS
+      - BANDS
+      - BAR_HARBOUR
+      - BARBER_SHOP
+      - BARS
+      - BEAU_RIVAGE
+      - BEAUTY_SALON
+      - BEAUTY_SPA
+      - BEER
+      - BELLAGIO
+      - BEMIDJI
+      - BEST_WESTERN
+      - BICYCLE_SALES
+      - BICYCLE_SERVICE
+      - BIG_BOX_HOME_SUPPLIERS
+      - BILLIARD_AND_POOL_HALL
+      - BILTMORE
+      - BINIONS_HORSESHOE_CLUB
+      - BLINDS
+      - BLUEPRINTING
+      - BOAT_DEALER
+      - BOAT_LEASES
+      - BOAT_RENTALS
+      - BOCA_RATON_RESORT
+      - BOND_PAYMENTS
+      - BOOKKEEPING
+      - BOOKS
+      - BOTANICAL_GARDENS
+      - BOWLING_ALLEYS
+      - BOYS_CLOTHING
+      - BRADBURY_SUITES
+      - BRIDGE_TOLLS
+      - BRITISH_AIRWAYS
+      - BRITISH_MIDLAND
+      - BROADMOOR
+      - BROCKWAY
+      - BROKERS
+      - BROOKS_RENT_A_CAR
+      - BUDGET_HOST_INNS
+      - BUDGET_RENT_A_CAR
+      - BUDGETEL_INNS
+      - BUFFALO_BILLS
+      - BUILDING_SUPPLIES
+      - BUS_LINES
+      - BUSES_LOCAL
+      - BUSINESS_SCHOOLS
+      - BUSINESS_SERVICES_OTHER
+      - BUTCHERS
+      - BUYING_SERVICES
+      - BWIA_INTERNATIONAL
+      - CABLE_SERVICES
+      - CABS
+      - CAESARS
+      - CALIFORNIA
+      - CAMERA
+      - CAMP_GROUNDS
+      - CAMPANILE
+      - CAMPER_DEALER
+      - CANADIAN
+      - CANDY
+      - CANYON_RANCH
+      - CAPTITOL
+      - CAR_ACCESSORIES
+      - CAR_AUTO_BODY
+      - CAR_PAINTING
+      - CAR_PARTS
+      - CAR_SERVICE
+      - CAR_SUPPLIES
+      - CAR_WASHERS
+      - CAREFREE_RESORTS
+      - CAREY_RENT_A_CAR
+      - CARLTON
+      - CARNIVAL
+      - CARNIVALS
+      - CARPENTER
+      - CARPET
+      - CARPET_CLEANING
+      - CATALOGUE
+      - CATALOGUE_AND_RETAIL
+      - CATERERS
+      - CATHAY_PACIFIC
+      - CHARITABLE_ORG
+      - CHATEAU_ELAN_RESORT
+      - CHEMICALS_OTHER
+      - CHILD_CARE
+      - CHILD_SUPPORT
+      - CHILDRENS_CLOTHING
+      - CHINA
+      - CHINA_EASTERN
+      - CHIROPODISTS
+      - CHIROPRACTORS
+      - CIGA
+      - CIGAR_STAND
+      - CIGARS
+      - CIRCUS_CIRCUS
+      - CIRCUSES
+      - CITE_RENT_A_CAR
+      - CITY_LODGE
+      - CIVIC_ASSOCIATIONS
+      - CLARION
+      - CLEANING_AND_MAINTENANCE
+      - CLEANING_PRODUCTS
+      - CLIMATE_DE_FRANCE
+      - CLOCK
+      - CLUB_MED
+      - COAL_DEALER
+      - COAST
+      - COIN
+      - COLLECTION_AGENCIES
+      - COLLEGES
+      - COLORADO_BELLE
+      - COMAIR
+      - COMFORT_INNS
+      - COMMAND
+      - COMMERCIAL_CLOTHING
+      - COMMERCIAL_CONTRACTOR
+      - COMMERCIAL_EQUIPMENT_OTHER
+      - COMMERCIAL_FOOTWEAR
+      - COMMERCIAL_FURNITURE
+      - COMMERCIAL_LAUNDRY
+      - COMMERCIAL_PHOTOGRAPHER
+      - COMMERCIAL_SPORTS
+      - COMPANIA_FAUCETT
+      - COMPANIA_PANEMENA
+      - COMPRI
+      - COMPUTER_EQUIPMENT
+      - COMPUTER_INFORMATION_SERVICES
+      - COMPUTER_NETWORK_SERVICES
+      - COMPUTER_PROGRAMMING
+      - COMPUTER_SERVICES
+      - COMPUTER_SERVICES_OTHER
+      - COMPUTER_SOFTWARE
+      - CONCORDE
+      - CONCRETE_WORK
+      - CONFECTIONERY
+      - CONSORT
+      - CONSTRUCTION_MATERIALS_OTHER
+      - CONSULTING_SERVICES
+      - CONTINENTAL
+      - CONTRACTORS_SPECIAL_TRADE
+      - CORNER_STORE
+      - CORRESPONDENCE_SCHOOLS
+      - COSMETICS
+      - COUNTRY_CLUBS
+      - COUNTRY_INN_BY_CARLSON
+      - COURIER_SERVICES
+      - COURT_COSTS
+      - COURTYARD_INNS
+      - CP
+      - CRAFT_SHOWS
+      - CRAFT_SUPPLIES
+      - CREDIT_REPORTING_AGENCIES
+      - CREMATORIUMS
+      - CROATIA
+      - CROWN
+      - CROWNE_PLAZA
+      - CRUISE_LINES
+      - CRUZEIRO
+      - CRYSTAL
+      - CSA
+      - CUMBERLAND
+      - CUMULOS
+      - CUNARD
+      - CURTAIN
+      - CYPRUS_AIR
+      - DAIRY_PRODUCTS
+      - DAN
+      - DAN_AIR
+      - DANCE_HALLS
+      - DANCE_SCHOOL
+      - DANCE_STUDIO
+      - DATA_PROCESSING_SERVICES
+      - DATING_SERVICE
+      - DAY_CARE_CENTERS
+      - DAYS_INNS
+      - DE_VERA
+      - DEALERS
+      - DEBT_COUNSELING
+      - DELTA
+      - DENTAL_EQUIPMENT
+      - DENTAL_LABORATORIES
+      - DENTISTS
+      - DEPARTMENT_STORE
+      - DETECTIVE_AGENCY
+      - DIGITAL_APPLICATIONS
+      - DIGITAL_GAMES
+      - DIGITAL_MEDIA_BOOKS_MOVIES_MUSIC
+      - DILLON_INNS
+      - DIRECT_MARKETING
+      - DISCO
+      - DISCOUNT_STORE
+      - DISINFECTORS
+      - DISNEYLAND
+      - DOCTORS_OTHER
+      - DOLLAR_RENT_A_CAR
+      - DOLLAR_STORE
+      - DOLPHYINARIUMS
+      - DOOR_TO_DOOR_SALES
+      - DORAL
+      - DORNIT
+      - DOUBLETREE
+      - DOWNTOWER_PASSPORT
+      - DRAPERY
+      - DRIVE_IN_THEATER
+      - DRUG
+      - DRUG_SUPPLIES
+      - DRURY_INN
+      - DRY_CLEANER
+      - DRY_GOODS
+      - DUNFEY
+      - DURABLE_GOODS_OTHER
+      - DUTY_FREE
+      - DVD_RENTAL
+      - ECONO_CAR_RENT_A_CAR
+      - ECONOLODGES
+      - ECONOMY_INNS
+      - ECUATORIANA
+      - EGYPTAIR
+      - EL_AL
+      - ELDORADO
+      - ELECTRIC_CHARGING_STATION
+      - ELECTRIC_UTILITY
+      - ELECTRICAL
+      - ELECTRICAL_CONTRACTORS
+      - ELECTRICAL_PARTS_EQUIPMENT
+      - ELECTRONIC
+      - ELECTRONICS
+      - ELEMENTARY_SCHOOLS
+      - EMBASSY
+      - EMBASSY_SUITES
+      - EMIRATES
+      - ENGINEERS
+      - ENTERPRISE_RENT_A_CAR
+      - EQUESTRIAN
+      - ESCORT_SERVICE
+      - ETHIOPIAN
+      - EUROPE_BY_CAR
+      - EUROPE_CAR
+      - EVA
+      - EXCALIBUR
+      - EXCEL_INN
+      - EXPOSITIONS
+      - EXTERMINATORS
+      - FABRIC
+      - FAIRFIELD
+      - FAIRFIELD_INN
+      - FAIRMONT
+      - FAMILY_CLOTHING
+      - FAMILY_LAUNDRY
+      - FARM_EQUIPMENT
+      - FAST_FOOD_RESTAURANT
+      - FAX_PACKAGES
+      - FERRIES
+      - FI_AUTO_CASH
+      - FI_MANUAL_CASH
+      - FILM_DEVELOPING
+      - FINES
+      - FINNAIR
+      - FIREPLACE
+      - FIREPLACE_ACCESSORIES
+      - FLAG_INN
+      - FLOOR_COVERING
+      - FLORIST
+      - FLORIST_SUPPLIES
+      - FLOWER_SUPPLIES
+      - FLOWERS
+      - FLYING_FIELDS
+      - FOOD_STORES_OTHER
+      - FOOTWEAR_COMMERCIAL
+      - FORMAL_WEAR
+      - FORTE
+      - FORTUNE_TELLERS
+      - FORUM
+      - FOUR_POINTS
+      - FOUR_SEASONS
+      - FRATERNAL_ASSOCIATIONS
+      - FREEDOM
+      - FREEZER
+      - FREIGHT_CARRIERS
+      - FREIGHT_COURIER
+      - FREMONT
+      - FRIENDSHIP_INNS
+      - FRONTIER
+      - FUEL_DEALERS
+      - FUNERAL_HOMES
+      - FUR_STORE
+      - FURNITURE
+      - FURNITURE_EQUIPMENT
+      - FURNITURE_LEASING
+      - FURNITURE_OFFICE_COMMERCIAL
+      - FURNITURE_REFINISHING
+      - FURNITURE_RENTAL
+      - FURRIER
+      - GALLERY
+      - GAMBLING_TRANSACTIONS
+      - GAME
+      - GARAGES
+      - GARDENS
+      - GARMENT_CLEANING
+      - GARUDA
+      - GAS_STATION_AUTOMATED
+      - GAS_STATIONS
+      - GAS_UTILITY
+      - GENERAL_CONTRACTOR
+      - GENERAL_RENT_A_CAR
+      - GIFT_CARD
+      - GLASS
+      - GLASSES
+      - GLASSWARE
+      - GODFREY_RENT_A_CAR
+      - GOLDEN_NUGGET
+      - GOLDEN_PACIFIC
+      - GOLDEN_TULIP
+      - GOLF_COURSES_PUBLIC
+      - GOVERNMENTAL_SERVICES_OTHER
+      - GRAPHIC_ART
+      - GREENBRIAN_RESORT
+      - GROCERY_STORE
+      - GROUND_COURIER
+      - GULF
+      - GUYANA
+      - HALEKULANI
+      - HAMPTON_INN
+      - HARDWARE_EQUIPMENT
+      - HARDWARE_STORE
+      - HARLEY
+      - HARRAHS
+      - HARVEY_BRISTOL
+      - HAT_CLEANING
+      - HAVASU
+      - HAWAIIAN
+      - HEALTH_SPA
+      - HEARING_AID_SUPPLIES
+      - HEARING_AIDS
+      - HEATING_CONTRACTOR
+      - HEATING_EQUIPMENT
+      - HELMSLEY
+      - HERTZ_RENT_A_CAR
+      - HILTON
+      - HILTON_INTERNATIONAL
+      - HOBBY_SHOP
+      - HOLIDAY_INNS
+      - HOLIDAY_RENT_A_CAR
+      - HOME_FURNISHINGS
+      - HOME_FURNISHINGS_OTHER
+      - HOME_SUPPLY_WAREHOUSE
+      - HORTICULTURAL_SERVICES
+      - HOSPITAL_EQUIPMENT
+      - HOSPITALITY_INNS
+      - HOSPITALS
+      - HOTEL_IBIS
+      - HOTEL_MELIA
+      - HOTEL_MERCURE
+      - HOTEL_OKURA
+      - HOTEL_UNIVERSAL
+      - HOTELES_EL_PRESIDENTE
+      - HOUSEHOLD_APPLIANCES
+      - HOWARD_JOHNSON_INN
+      - HUDSON_HOTEL
+      - HUNGAR
+      - HUSA
+      - HYATT
+      - IBERTOL
+      - IBUSZ
+      - ICELANDIAR
+      - IMPERIAL_LONDON
+      - INBOUND_TELEMARKETING
+      - INDIAN
+      - INDUSTRIAL_SUPPLIES_OTHER
+      - INFANTS_CLOTHING
+      - INFORMATION_SERVICES
+      - INNKEEPERS
+      - INSTRUMENT
+      - INSURANCE
+      - INSURANCE_PREMIUMS
+      - INSURANCE_RENT_A_CAR
+      - INSURANCE_UNDERWRITING
+      - INTEGRATED_SYSTEMS_DESIGN
+      - INTERCONTINENTAL
+      - INTERENT_RENT_A_CAR
+      - INTERHOTEL_CLERK
+      - INTERNOR_HOTELS
+      - ISLAND
+      - ITA_AIRWAYS
+      - JANITORIAL_SERVICES
+      - JAPAN
+      - JEWELLERY
+      - JOHN_ASCUAGAS_NUGGET
+      - JOLLY
+      - JOURNEYS_END_MOTELS
+      - JUGOSLAV
+      - KAHALA_MANDARIN_ORIENTAL
+      - KAROS
+      - KEMWELL_GROUP_RENT_A_CAR
+      - KENYA
+      - KLM
+      - KM_MALTA_AIRLINES
+      - KNIGHTS_INN
+      - KOREAN
+      - KUWAIT
+      - LA_MANSION_DEL_RIO
+      - LA_QUINTA_MOTOR_INNS
+      - LAB_BOLIVIA
+      - LABORATORIES_NON_MEDICAL
+      - LABORATORY_EQUIPMENT
+      - LACSA_COSTA_RICA
+      - LADBROKE
+      - LADECO
+      - LADY_LUCK
+      - LANCHILE
+      - LANDSCAPING_SERVICES
+      - LAP
+      - LAUNDROMATS
+      - LAUNDRY_CLEANING
+      - LAUNDRY_FAMILY
+      - LAV_LINEA_VENEZOLANA
+      - LAWN_AND_GARDEN
+      - LEASING_EQUIPMENT
+      - LEATHER_GOODS
+      - LEGAL_SERVICES
+      - LIAT
+      - LIMOUSINES
+      - LIQUOUR
+      - LOCAL_TELEPHONE_ACCESS
+      - LOCAL_TRANSPORTATION
+      - LOEWS
+      - LONG_DISTANCE_TELEPHONE_PACKAGES
+      - LOT
+      - LOTTERY
+      - LUFTHANSA
+      - LUGGAGE
+      - LUMBER
+      - LUXAIR
+      - LUXOR
+      - MAIN_STREET_STATION
+      - MAJOR_RENT_A_CAR
+      - MALAYSIAN
+      - MALEV
+      - MANAGEMENT_SERVICES
+      - MANDALAY_BAY_RESORT
+      - MANDARIN_ORIENTAL
+      - MANUAL_CASH_FI
+      - MARINAS
+      - MARINE_SERVICE
+      - MARINE_SUPPLIES
+      - MARITIM
+      - MARKETPLACES
+      - MARRIAGE_COUNSELING
+      - MARRIOTT
+      - MASONRY
+      - MASSAGE_PARLORS
+      - MASTERS_ECONOMY_INNS
+      - MEAT_FREEZERS
+      - MEAT_LOCKER_PROVISIONERS
+      - MEAT_MARKETS
+      - MEDICAL_EQUIPMENT
+      - MEDICAL_LABORATORIES
+      - MEDICAL_OTHER
+      - MEMBER_MERCHANDISE
+      - MEMBERSHIP_CLUBS
+      - MEMBERSHIP_OTHER
+      - MEN_AND_BOYS_CLOTHING
+      - MEN_AND_WOMENS_CLOTHING
+      - MENDING
+      - MERIDIAN
+      - MERLIN
+      - MESA
+      - METAL_SERVICES_CENTERS
+      - METAL_SERVICES_OFFICES
+      - METRO
+      - METROFLIGHT
+      - METROPOLE
+      - MEXICANA
+      - MGM_GRAND
+      - MICROFILM_EQUIPMENT
+      - MIDDLE_EAST
+      - MIDWAY_MOTOR_LODGE
+      - MIDWEST_EXPRESS
+      - MILLENNIUM_BROADWAY
+      - MILLEVILLE_RENT_A_CAR
+      - MIRGAGE
+      - MISC_ENTERTAINERS
+      - MIYAKO
+      - MOBILE_HOME_DEALER
+      - MONTE_CARLO
+      - MOTEL_6
+      - MOTION_PICTURE_PRODUCTION
+      - MOTION_PICTURE_THEATRES
+      - MOTOR_HOME_DEALER
+      - MOTOR_HOME_RENTAL
+      - MOTOR_VEHICLE_SUPPLIES
+      - MOTORCYCLE_DEALER
+      - MOTORCYCLE_SHOP
+      - MOUNT_CHARLOTTE_THISTLE
+      - MOUNT_COOK
+      - MOVENPICK
+      - MOVERS_TRUCKS
+      - MOVIE_PRODUCTION
+      - MOVIE_THEATER
+      - MUSEUMS
+      - MUSIC
+      - NANNIES
+      - NATIONAIR
+      - NATIONAL_CAR_RENTAL
+      - NEEDLEWORK
+      - NEVELE_GRAND
+      - NEW_AND_USED_TRUCK_DEALER
+      - NEW_OTANI
+      - NEW_PARTS_CARS
+      - NEW_YORK_NEW_YORK
+      - NEW_YORK_HELICOPTER
+      - NEWS_DEALERS
+      - NEWS_STANDS
+      - NEWSPAPERS
+      - NIGERIA
+      - NIGHTCLUB
+      - NOAHS
+      - NONDURABLE_GOODS_OTHER
+      - NON_FIN_INSTITUTION_STORED_CARD_PURCHASE_LOAD
+      - NON_MEDICAL_LABORATORIES
+      - NORONTAIR
+      - NORTHWEST
+      - NOVELTY_GOODS
+      - NOVOTEL
+      - NUMISMATIC_SUPPLIES
+      - NURSERY
+      - NURSERY_SCHOOLS
+      - NURSERY_STOCK
+      - NURSING_HOME
+      - NUTS
+      - OBEROI
+      - OFFICE_EQUIPMENT
+      - OFFICE_FURNITURE
+      - OFFICE_SUPPLIES
+      - OIL_DEALER
+      - OLYMPIC
+      - OMNI
+      - OPHTHALMIC_EQUIPMENT
+      - OPHTHALMOLOGISTS
+      - OPRYLAND
+      - OPTICAL_GOODS
+      - OPTICIANS
+      - OPTOMETRISTS
+      - ORCHESTRAS
+      - ORTHODONTISTS
+      - ORTHOPEDIC_GOODS
+      - OSTEOPATHS
+      - OTHER_AIRLINE
+      - OTHER_BUSINESS_SERVICES
+      - OTHER_CLOTHING
+      - OTHER_DIRECT_MARKETING
+      - OTHER_EQUIPMENT
+      - OTHER_HOTELS
+      - OTHER_PERSONAL_SERVICES
+      - OTHER_RENTAL_CAR
+      - OUTBOUND_TELEMARKETING
+      - PAINT
+      - PAINT_SUPPLIES
+      - PAKISTAN
+      - PAN_AMERICAN
+      - PANNONI
+      - PARK_INNS_INTERNATIONAL
+      - PARK_PLAZA_HOTEL
+      - PARKING_LOTS
+      - PATRICIA_GRAND_RESORTS
+      - PAWN_SHOP
+      - PAY_TV_SERVICES
+      - PAYLESS_CAR_RENTAL
+      - PEABODY
+      - PENINSULA
+      - PENTA
+      - PERIODICALS
+      - PERSONAL_CARE_FACILITY
+      - PERSONAL_COUNSELING
+      - PET_FOOD
+      - PET_STORE
+      - PET_SUPPLIES
+      - PETROLEUM
+      - PETROLEUM_DEALER
+      - PETROLEUM_PRODUCTS
+      - PHARMACY
+      - PHILATELIC_SUPPLIES
+      - PHILIPPINE
+      - PHOTO_DEVELOPING
+      - PHOTOCOPY_EQUIPMENT
+      - PHOTOCOPYING_SERVICES
+      - PHOTOGRAPHER
+      - PHOTOGRAPHER_COMMERCIAL
+      - PHOTOGRAPHIC_STUDIOS
+      - PHOTOGRAPHIC_SUPPLIES
+      - PHOTOGRAPHY_EQUIPMENT
+      - PIANO
+      - PIECE_GOODS
+      - PIECE_NOTIONS
+      - PLASTER_INSTALLATION
+      - PLUMBER_CONTRACTOR
+      - PLUMBING_EQUIPMENT
+      - PODIATRISTS
+      - POLISHING_PRODUCTS
+      - POLITICAL_ORGANIZATION
+      - POOL_HALL
+      - POOL_SUPPLIES
+      - POSTAL_SERVICES_GOVT_ONLY
+      - PRECIOUS_METALS
+      - PRECIOUS_STONES
+      - PRIMADONNA
+      - PRINCE
+      - PRINCESS
+      - PRINCEVILLE
+      - PRINTING_SERVICES_OTHER
+      - PRINTING_SUPPLIES
+      - PRIVATE_GOLF_CLUBS
+      - PROF_SPORTS_CLUB
+      - PROFESSIONAL_SCHOOLS
+      - PROSTHETICS
+      - PROTEA
+      - PROTECTIVE_AGENCY
+      - PUBLIC_GOLF_COURSES
+      - PUBLIC_RELATIONS
+      - PUBLIC_WAREHOUSING
+      - PUBLISHING_MISCELLANEOUS
+      - PULLMAN_INTERNATIONAL
+      - QANTAS
+      - QATAR
+      - QUALIFY_PACIFIC
+      - QUALITY_INNS
+      - QUASI_CASH_MERCHANT
+      - RADIO_SERVICES
+      - RADISSON
+      - RAILWAY_FREIGHT
+      - RAILWAYS
+      - RAMADA_INNS
+      - RANK
+      - RANTASIPI
+      - RAZOR
+      - RAZOR_SERVICE
+      - REAL_ESTATE_AGENTS
+      - RECORD
+      - RECREATIONAL_CAMP
+      - RECREATIONAL_TRAILER_DEALER
+      - RECREATIONAL_VEHICLE_RENTAL
+      - RED_ROOF_INNS
+      - REFRIGERATION
+      - REFRIGERATOR
+      - REGAL_8_INNS
+      - REGENT_INTERNATIONAL
+      - RELAX_INNS
+      - RELIGIOUS_ITEMS
+      - RELIGIOUS_ORGANIZATIONS
+      - RENAISSANCE
+      - RENO
+      - RENTAL_EQUIPMENT
+      - RENTAL_TRUCK
+      - RENTAL_UNIFORMS
+      - RENTAL_TRUCK_AND_UTILITY_TRAILER
+      - RENT_A_WRECK
+      - REPAIR_SHOPS_OTHER
+      - REPLACEMENT_RENT_A_CAR
+      - REPRODUCTIONS
+      - RESERVE_RENT_A_CAR
+      - RESIDENCE_INN
+      - RESIDENTIAL_CONTRACTOR
+      - RESO
+      - RESTAURANTS
+      - RETAIL_AND_CATALOGUE
+      - REUPHOLSTERER
+      - RICA
+      - RIDING_APPARELL
+      - RIO_HOTELS
+      - RIO_SUITES
+      - RIVIERA
+      - RIYADH_AIR
+      - ROAD_TOLLS
+      - ROADWAY_INNS
+      - ROOFER
+      - ROYAL
+      - ROYAL_AIR_MAROC
+      - ROYAL_DUTCH_AIRLINES_KLM
+      - ROYCE
+      - RUG
+      - SABENA
+      - SAETA
+      - SAHARA
+      - SALVAGE_YARDS
+      - SAMS_TOWN
+      - SAN_JUAN
+      - SANDMAN
+      - SANDMAN_INN
+      - SANDS_RESORT
+      - SANITATION_PRODUCTS
+      - SANITATION_UTILITY
+      - SARA
+      - SAROVA
+      - SAS
+      - SASHA
+      - SATELLITE_SERVICES
+      - SAUDI_ARABIAN
+      - SCANDIC
+      - SCENIC
+      - SCHOOL_SUPPLIES
+      - SCHOOLS_OTHER
+      - SEA_AQUARIUMS
+      - SEA_PINES_RESORT
+      - SEAMSTRESSES
+      - SECOND_HAND
+      - SECONDARY_SCHOOLS
+      - SECRETARIAL_SCHOOLS
+      - SECRETARIAL_SUPPORT
+      - SECURITIES
+      - SECURITY
+      - SERVICE_SHOP_CAR
+      - SERVICE_STATION_AUTOMATED
+      - SEWING
+      - SHANGRI_LA_INTERNATIONAL
+      - SHEET_METAL_WORK
+      - SHEET_MUSIC
+      - SHERATON
+      - SHILO_INN
+      - SHOE_REPAIR_SHOP
+      - SHOE_SHINING
+      - SHOES
+      - SHONEYS_INNS
+      - SHOPPING_SERVICES
+      - SHOWCASE_RENT_A_CAR
+      - SIDER
+      - SIERRA_SUITES
+      - SILVER_LEGACY
+      - SILVER_STAR
+      - SILVERWARE
+      - SIMMONS
+      - SINGAPORE
+      - SINGLETON
+      - SLEEP_INN
+      - SMALL_APPLIANCE
+      - SNAPPY_CAR_RENTAL
+      - SNOWMOBILE_DEALER
+      - SOCIAL_ASSOCIATIONS
+      - SOCIAL_SERVICE
+      - SOFITEL
+      - SOKOS
+      - SOL
+      - SONESTA
+      - SOUTH_AFRICAN
+      - SOUTHERN_PACIFIC
+      - SOUTHERN_SUN
+      - SOUTHWEST
+      - SOUVENIR
+      - SPANAIR
+      - SPECIAL_TRADE_CONTRACTOR
+      - SPORTING_CAMP
+      - SPORTING_GOODS
+      - SPORTS_COMMERCIAL
+      - SPORTS_PROMOTERS
+      - SPRINGHILL_SUITES
+      - ST_REGIS
+      - STAKIS
+      - STAMP
+      - STARWOOD_RESORTS
+      - STATIONARY
+      - STEIGENBERGER
+      - STENOGRAPHY
+      - STONEWORK
+      - SUBSCRIPTION
+      - SUBWAYS
+      - SUDAN
+      - SUNBELT
+      - SUNWORLD
+      - SUPER_8
+      - SUPERMARKET
+      - SURINAM
+      - SURVEYORS
+      - SWIMMING_POOLS
+      - SWISSAIR
+      - SWISSOTEL
+      - TACA_INTERNATIONAL
+      - TAILORS
+      - TALAIR
+      - TAME
+      - TAN
+      - TAP
+      - TAROM
+      - TAVERN
+      - TAX_PAYMENTS
+      - TAX_PREPARATION
+      - TAXIS
+      - TELECOM_EQUIPMENT
+      - TELECOM_SVC
+      - TELEGRAPH_SERVICES
+      - TELEPHONE_EQUIPMENT
+      - TELEPHONE_SERVICES
+      - TEMPORARY_HELP
+      - TENTS
+      - THAI
+      - THE_RITZ_CARLTON
+      - THE_VENETIAL
+      - THEATER_TICKET_AGENCIES
+      - THEATRICAL_PRODUCERS
+      - THRIFT
+      - THRIFTY_CAR_RENTAL
+      - THUNDERBIRD
+      - THY
+      - TILDEN_RENT_A_CAR
+      - TILE_SETTING
+      - TIME_SHARES
+      - TIRE_RETREADING_AND_REPAIR
+      - TIRE_SHOPS
+      - TOKYO
+      - TOKYO_INN
+      - TOOL_LEASING
+      - TOOL_RENTAL
+      - TOUPEE_SHOP
+      - TOUR_OPERATORS
+      - TOURIST_ATTRACTIONS
+      - TOWER
+      - TOWING
+      - TOWNEPLACE_SUITES
+      - TOYS
+      - TRADE_SCHOOLS
+      - TRAILER_PARKS
+      - TRAILER_RENTALS
+      - TRAINS_LOCAL
+      - TRANSAERO
+      - TRANSPORTATION_OTHER
+      - TRANSWORLD
+      - TRAVEL_AGENCIES
+      - TRAVEL_RELATED
+      - TRAVELODGE
+      - TREASURE_ISLAND
+      - TROPICAL_RENT_A_CAR
+      - TROPICANA
+      - TRUCK_DEALER_NEW_AND_USED
+      - TRUCK_DEALER_USED
+      - TUNIS
+      - TYPESETTING
+      - US_AIR_SHUTLE
+      - UGLY_DUCKLING_RENT_A_CAR
+      - UNIFORMS
+      - UNITED
+      - UNIVERSITIES
+      - UPHOLSTERY_CLEANING
+      - US_AIRWAYS
+      - USA_RENT_A_CAR
+      - USED_AND_NEW_AUTO_DEALER
+      - USED_AND_NEW_TRUCK_DEALER
+      - USED_AUTO_DEALER
+      - USED_CLOTHING
+      - USED_TRUCK_DEALER
+      - UTA
+      - UTILITY_TRAILER_DEALER
+      - VAGABOND
+      - VALLEY
+      - VALUE_RENT_A_CAR
+      - VANGUARD
+      - VARIETY_STORE
+      - VARIG
+      - VARNISH_SUPPLIES
+      - VASP
+      - VENEZOLANA_INTERNATIONAL
+      - VENTURE_INNS
+      - VETERINARY_SERVICES
+      - VIDEO_GAME_ARCADES
+      - VIDEO_GAME_SUPPLIER
+      - VIDEO_GAME_SUPPLIES
+      - VIDEO_RENTAL
+      - VIDEO_TAPE_PRODUCTION
+      - VIRGIN_ATLANTIC
+      - VIRGIN_RIVER
+      - VOCATIONAL_SCHOOLS
+      - W_HOTELS
+      - WALDORF
+      - WALLPAPER
+      - WAREHOUSES
+      - WATCH
+      - WATCHES
+      - WATER_UTILITY
+      - WELCOMGROUP
+      - WELDING
+      - WELLESLEY_INNS
+      - WESTIN
+      - WHISKEY_PETES
+      - WHOLESALE_CLUBS
+      - WIDEROES
+      - WIG_SHOP
+      - WINDOW_COVERINGS
+      - WINDOW_UPHOLSTERY
+      - WINDWARD_ISLAND
+      - WINE
+      - WINERIES
+      - WINGS
+      - WOMEN_AND_MENS_CLOTHING
+      - WOMENS_ACCESSORIES
+      - WOMENS_READY_TO_WEAR
+      - WOMENS_SPECIALTY_SHOP
+      - WOOD_DEALER
+      - WOODSIDE
+      - WRAPPING_PAPER
+      - WRECKERS
+      - ZABO
+      - ZOOS
+    serviceDeliverToUSAvailable:
+      type: boolean
+      description: A boolean value indicating whether the business is available for delivery to US.
+    first:
+      description: Pagination link pointing to the first page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    firstName:
+      type:
+      - string
+      - 'null'
+      description: First name.
+      minLength: 1
+      maxLength: 30
+      example: John
+    businessDetails:
+      type: object
+      description: An object containing key information about the business associated with the account or transaction.
+      required:
+      - merchantCategoryCode
+      - isSeasonalMerchant
+      - directSellingPercentage
+      - motoTransactionPercentage
+      - ecommerceTransactionPercentage
+      properties:
+        merchantCategoryCode:
+          $ref: '#/components/schemas/merchantCategoryCode'
+        averageTicketSize:
+          $ref: '#/components/schemas/averageTicketSize'
+        isSeasonalMerchant:
+          $ref: '#/components/schemas/isSeasonalMerchant'
+        maximumTransactionVolume:
+          $ref: '#/components/schemas/maximumTransactionVolume'
+        directSellingPercentage:
+          $ref: '#/components/schemas/directSellingPercentage'
+        motoTransactionPercentage:
+          $ref: '#/components/schemas/motoTransactionPercentage'
+        ecommerceTransactionPercentage:
+          $ref: '#/components/schemas/ecommerceTransactionPercentage'
+        businessUrl:
+          $ref: '#/components/schemas/businessUrl'
+        serviceProvider:
+          $ref: '#/components/schemas/serviceProvider'
+        serviceDeliverToCanadaAvailable:
+          $ref: '#/components/schemas/serviceDeliverToCanadaAvailable'
+        serviceDeliverToUSAvailable:
+          $ref: '#/components/schemas/serviceDeliverToUSAvailable'
+        creditTransactionVolume:
+          $ref: '#/components/schemas/creditTransactionVolume'
+        masterCardTransactionVolume:
+          $ref: '#/components/schemas/masterCardTransactionVolume'
+        visaTransactionVolume:
+          $ref: '#/components/schemas/visaTransactionVolume'
+        visaDebitTransactionVolume:
+          $ref: '#/components/schemas/visaDebitTransactionVolume'
+        amexTransactionVolume:
+          $ref: '#/components/schemas/amexTransactionVolume'
+        interacTransactionVolume:
+          $ref: '#/components/schemas/interacTransactionVolume'
+        masterCardDebitTransactionVolume:
+          $ref: '#/components/schemas/masterCardDebitTransactionVolume'
+        unionPayTransactionVolume:
+          $ref: '#/components/schemas/unionPayTransactionVolume'
+        discoverTransactionVolume:
+          $ref: '#/components/schemas/discoverTransactionVolume'
+        category:
+          $ref: '#/components/schemas/businessCategory'
+        subCategory:
+          $ref: '#/components/schemas/businessSubCategory'
+        offeredProductsAndServicesDescription:
+          $ref: '#/components/schemas/offeredProductsAndServicesDescription'
+        riskLevel:
+          $ref: '#/components/schemas/riskLevel'
+    serviceCode:
+      type:
+      - string
+      - 'null'
+      description: The service code associated with the device.
+    operatingAsName:
+      type: string
+      description: The trade name under which the merchant operates.
+      maxLength: 30
+      example: Pizza 2 Go
+    motoTransactionPercentage:
+      description: The percentage of transactions processed through mail order / telephone order.
+      type: number
+      format: decimal
+      minimum: 0
+      maximum: 100
+      example: 90.5
+    amexTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through American Express payments.
+      format: int32
+      example: 1000
+    serviceProvider:
+      type:
+      - string
+      - 'null'
+      description: The name or identifier of the service provider associated to the business.
+      maxLength: 255
+      example: moneris.com
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
+    serviceDeliverToCanadaAvailable:
+      type: boolean
+      description: A boolean value indicating whether the business is available for delivery to Canada.
+    error:
+      description: Error response details.
+      properties:
+        type:
+          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
+
+            '
+          type: string
+          format: uri
+          example: https://api-developer.moneris.com/responsehandling
+        title:
+          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
+
+            '
+          type:
+          - string
+          - 'null'
+          example: INSUFFICIENT_FUNDS
+        status:
+          description: 'it conveys the HTTP status code used for the convenience of the consumer.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 100
+          maximum: 505
+        detail:
+          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: Funds are insufficient to execute the operation.
+        instance:
+          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
+          format: uri-reference
+        category:
+          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
+          enum:
+          - API_ERROR
+          - IDEMPOTENCY_ERROR
+          - INVALID_REQUEST_ERROR
+          - DECLINED_ERROR
+          - UNAUTHORIZED_ERROR
+          - INTERNAL_SERVER_ERROR
+          - null
+          type:
+          - string
+          - 'null'
+          example: DECLINED_ERROR
+        errors:
+          type: array
+          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          items:
+            type: object
+            $ref: '#/components/schemas/parameterError'
+          example:
+          - parameterName: address.postalCode
+            parameterValue: MAP3J8
+            errorMessage: address.Postal code does not match regular expression
+            reasonCode: INVALID_FORMAT
+      title: API Error
+      type: object
+      required:
+      - type
+    maximumTransactionVolume:
+      type: integer
+      description: A numeric value that represents the highest expected transaction volume.
+      format: int32
+    ecommerceTransactionPercentage:
+      description: The percentage of transactions processed through e-commerce.
+      type: number
+      format: decimal
+      minimum: 0
+      maximum: 100
+      example: 90.5
+    supplyType:
+      type:
+      - string
+      - 'null'
+      description: The type of supply associated with the device.
+    marketSegment:
+      type:
+      - string
+      - 'null'
+      description: Identifies the specific customer or business segment targeted by a product or service.
+      enum:
+      - PAYROC
+      - ADVANCE_IT
+      - ATB
+      - ATB_8760
+      - ADYEN
+      - BRAINTREE
+      - CYDCOR
+      - DIRECT_CASH
+      - INTUIT
+      - MCA
+      - OPTIMAL
+      - PAYSAFE_RETAIL_RESELLER
+      - PROTOCOL
+      - SAGE
+      - SONA
+      - SOFT_TECH
+      - TILL_PAYMENTS
+      - UEAT
+      - CLEVERPAYS
+      - PAYLITE
+      - ILIXIUM
+      - LOYALTY_SENSE
+      - POWER_PAYMENTS
+      - PAYMENT_EXPERTS
+      - INTERNATIONAL_PAYMENT_SOLUTIONS
+      - PAYOLOGY
+      - NATIONAL_PAYMENTS
+    accountNumber:
+      type:
+      - string
+      - 'null'
+      description: Attribute that represent the unique identifier for a bank account.
+      maxLength: 10
+    unionPayTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through UnionPay payments.
+      format: int32
+      example: 1000
+    merchantSupply:
+      type: object
+      description: An object containing all details related to a merchant supply.
+      required:
+      - deviceName
+      - supplyType
+      properties:
+        deviceName:
+          $ref: '#/components/schemas/deviceName'
+        carriers:
+          $ref: '#/components/schemas/carriers'
+        softwareVendors:
+          $ref: '#/components/schemas/softwareVendors'
+        cardReaderName:
+          $ref: '#/components/schemas/cardReaderName'
+        pinpadType:
+          $ref: '#/components/schemas/pinpadType'
+        serviceCode:
+          $ref: '#/components/schemas/serviceCode'
+        unitPrice:
+          type:
+          - object
+          - 'null'
+          description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        supplyType:
+          $ref: '#/components/schemas/supplyType'
+        supplies:
+          type: array
+          description: A list of supplies associated with the device.
+          items:
+            $ref: '#/components/schemas/supply'
+    legalName:
+      type: string
+      description: The registered name of the merchant.
+      maxLength: 60
+      example: Pizza 2 Go
+    pinpadType:
+      type:
+      - string
+      - 'null'
+      description: The type of pinpad associated with the device.
+    contactInformation:
+      type: object
+      description: An object containing all the contact details.
+      required:
+      - firstName
+      - lastName
+      - phone
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        phone:
+          $ref: '#/components/schemas/phoneNumber'
+    visaDebitTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through Visa Debit payments.
+      format: int32
+      example: 42
+    settlementTime:
+      type:
+      - string
+      - 'null'
+      description: A timestamp indicating the time when a transaction is settled.
+      format: time
+      example: '18:10:00'
+    createMerchantRequest:
+      description: Create a new merchant with the provided details.
+      allOf:
+      - type: object
+        properties:
+          idempotencyKey:
+            $ref: '#/components/schemas/idempotencyKey'
+        required:
+        - idempotencyKey
+      - $ref: '#/components/schemas/merchantPayload'
+    settlementOption:
+      type: string
+      description: The method for settling transactions.
+      enum:
+      - SYSTEM_CLOSE
+      - MERCHANT_CLOSE
+    visaTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through Visa payments.
+      format: int32
+    dropShipping:
+      type: boolean
+      description: A boolean value indicating whether the business engages in drop shipping as part of its operations.
+    securityDetails:
+      type: object
+      description: An object containing all details about the security details.
+      required:
+      - legalEntity
+      - signingOfficers
+      properties:
+        legalEntity:
+          $ref: '#/components/schemas/legalEntity'
+        signingOfficers:
+          type: array
+          description: A list of signing officer entities.
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/signingOfficer'
+    merchantDetails:
+      type: object
+      description: An object that contains key information about the merchant associated.
+      required:
+      - contactInformation
+      - merchantInformation
+      - locationAddress
+      properties:
+        contactInformation:
+          $ref: '#/components/schemas/contactInformation'
+        merchantInformation:
+          $ref: '#/components/schemas/merchantInformation'
+        locationAddress:
+          $ref: '#/components/schemas/address'
+        marketSegment:
+          $ref: '#/components/schemas/marketSegment'
+    masterCardTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through MasterCard payments.
+      format: int32
+    businessCategory:
+      type:
+      - string
+      - 'null'
+      description: The category of the business.
+      maxLength: 255
+      example: RESTAURANTS
+      enum:
+      - AIRLINES
+      - AMUSEMENT_AND_ENTERTAINMENT
+      - AUTOMOBILE_VEHICLE_RENTAL
+      - AUTOMOBILES_AND_VEHICLES
+      - BUSINESS_SERVICES
+      - CONTRACTED_SERVICES
+      - GOVERNMENT_SERVICES
+      - HOTELS_AND_MOTELS
+      - MAIL_ORDER_TELEPHONE_ORDER_PROVIDERS
+      - PERSONAL_SERVICE_PROVIDERS
+      - PROFESSIONAL_SERVICES_AND_MEMBERSHIPS
+      - REPAIR_SERVICES
+      - RESTAURANTS
+      - RETAILER
+      - RETAILERS
+      - SERVICE_PROVIDERS
+      - TRANSPORTATION
+      - UTILITIES
+      - WHOLESALERS_MANUFACTURERS
+    softwareVendors:
+      type: array
+      description: A list of software vendors associated with the device.
+      items:
+        type: string
+    next:
+      description: Pagination link pointing to the next page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    discoverTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through Discover payments.
+      format: int32
+      example: 1000
+    idempotencyKey:
+      type: string
+      description: "A Unique Identifier that is required for handling idempotent requests. \n\nNote: Moneris encourages the use of UUID Version 4 in APIs as an idempotency key.\"    \n"
+      minLength: 1
+      maxLength: 36
+      example: 6q5w4e7r8t9y
+    yearsOfOwnership:
+      type: integer
+      description: An integer representing the number of years the merchant has been in ownership.
+      format: int32
+    supplyName:
+      type: string
+      description: Indicates the name of the good available for fulfillment or distribution.
+      maxLength: 100
+      example: 2-PLY Sales Draft Slips (25)
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    merchantType:
+      type:
+      - string
+      - 'null'
+      description: The category of the merchant's business.
+      enum:
+      - NATIONAL
+      - INDEPENDENT_BUSINESS
+    cardReaderName:
+      type:
+      - string
+      - 'null'
+      description: The name of the card reader associated with the device.
+    currency:
+      type: string
+      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
+      minLength: 3
+      maxLength: 4
+      example: CAD
+      format: iso-4217
+    directSellingPercentage:
+      description: The percentage of transactions processed through direct selling.
+      type: number
+      format: decimal
+      minimum: 0
+      maximum: 100
+      example: 90.5
+    riskLevel:
+      type:
+      - string
+      - 'null'
+      description: The risk level associated with the business.
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      example: LOW
+    self:
+      description: Pagination link pointing to the current page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    merchantCategoryCode:
+      type: string
+      description: A four-digit code that classifies the type of business or service provided by the merchant, based on standard industry categories.
+      minLength: 4
+      maxLength: 4
+      example: '0742'
+    supply:
+      type: object
+      description: An object containing all details related to a supply.
+      required:
+      - supplyName
+      - unitPrice
+      properties:
+        supplyName:
+          $ref: '#/components/schemas/supplyName'
+        unitPrice:
+          $ref: '#/components/schemas/money'
+        quantity:
+          $ref: '#/components/schemas/quantity'
+    averageTicketSize:
+      type: integer
+      description: A numeric value representing the average transaction amount for the business.
+      format: int32
+    phoneNumber:
+      type: string
+      description: Phone number.
+      pattern: ^\+[1-9]\d{1,14}$
+      minLength: 3
+      maxLength: 16
+      example: '+18663197450'
+    businessUrl:
+      type:
+      - string
+      - 'null'
+      description: The official website URL of the business.
+      format: uri
+      maxLength: 255
+      example: www.abc.com
+    offeredProductsAndServicesDescription:
+      type:
+      - string
+      - 'null'
+      description: A description of type of products and services offered by the business.
+      maxLength: 255
+      example: food
+    isSeasonalMerchant:
+      type: boolean
+      description: A boolean value indicating whether the business operates seasonally.
+    merchantRiskRate:
+      type: string
+      description: A score indicating the level of risk associated with the merchant's transactions.
+      maxLength: 60
+      example: A+
+      enum:
+      - A
+      - A_PLUS
+      - B_HIGH
+      - B_LOW
+      - B_LOW_PLUS
+      - B_MID
+      - C
+      - C_HIGH
+      - C_HIGH_PLUS
+      - C_LOW
+      - C_LOW_PLUS
+      - C_MID
+      - C_MID_PLUS
+      - C_PLUS
+      - D
+      - D_HIGH
+      - D_LOW
+      - D_MID
+      - E
+      - E_MINUS
+      - F
+    last:
+      description: Pagination link pointing to the last page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    quantity:
+      type: integer
+      description: Specifies the amount of goods currently available for a particular product.
+      format: int32
+      minimum: 1
+      maximum: 100
+      example: 1
+    previous:
+      description: Pagination link pointing to the previous page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    merchantPayload:
+      type: object
+      description: An object containing the merchant payload details.
+      required:
+      - bankingDetails
+      - businessDetails
+      - merchantDetails
+      - businessActivity
+      - securityDetails
+      properties:
+        chainId:
+          $ref: '#/components/schemas/chainId'
+        bankingDetails:
+          $ref: '#/components/schemas/bankingDetails'
+        pointOfSaleOptions:
+          type:
+          - object
+          - 'null'
+          description: An object containing details about the point of sale options available for processing transactions.
+          required:
+          - settlementOption
+          properties:
+            settlementOption:
+              $ref: '#/components/schemas/settlementOption'
+            settlementTime:
+              $ref: '#/components/schemas/settlementTime'
+            debitPerTransactionRefundLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+            dailyRefundLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+            dailyCancellationLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+        businessDetails:
+          $ref: '#/components/schemas/businessDetails'
+        merchantDetails:
+          $ref: '#/components/schemas/merchantDetails'
+        businessActivity:
+          $ref: '#/components/schemas/businessActivity'
+        securityDetails:
+          $ref: '#/components/schemas/securityDetails'
+        riskDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing information related to the risk assessment of a transaction or account.
+          required:
+          - merchantRiskRate
+          properties:
+            merchantRiskRate:
+              $ref: '#/components/schemas/merchantRiskRate'
+    merchantId:
+      type: string
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
+    transitNumber:
+      type:
+      - string
+      - 'null'
+      description: Attribute representing the five-digit branch number of a financial institution.
+      maxLength: 10
+    carriers:
+      type: array
+      description: A list of carrier options available for the device.
+      items:
+        type: string
+      maxItems: 10
+    bankingDetails:
+      type: object
+      description: An object that contains the necessary banking information related to the account or transaction.
+      required:
+      - creditDepositAccount
+      properties:
+        creditDepositAccount:
+          $ref: '#/components/schemas/bank'
+        additionalBankingAccounts:
+          type: array
+          description: A list of additional banking accounts associated with the merchant.
+          items:
+            $ref: '#/components/schemas/additionalBankingAccount'
+          maxItems: 10
+    chainId:
+      type:
+      - string
+      - 'null'
+      description: A unique identifier assigned to a specific organizational chain.
+      minLength: 13
+      maxLength: 13
+      example: '0030400001622'
+    businessActivity:
+      type: object
+      description: An object containing all details about the business activity.
+      required:
+      - dropShipping
+      properties:
+        dropShipping:
+          $ref: '#/components/schemas/dropShipping'
+    additionalBankingAccount:
+      type: object
+      description: An object that contains additional banking account information.
+      allOf:
+      - $ref: '#/components/schemas/bank'
+      - type: object
+        required:
+        - accountType
+        properties:
+          accountType:
+            $ref: '#/components/schemas/addionalBankingAccountType'
+    amount:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999999
+      example: 10000
+      description: Amount
+    legalEntity:
+      type: object
+      title: Legal Entity
+      description: An object containing all details about the legal entity of the business.
+      required:
+      - businessType
+      properties:
+        businessType:
+          $ref: '#/components/schemas/businessType'
+  responses:
+    forbidden:
+      description: Forbidden. The user does not have permission to access the requested resource.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="insufficient_scope"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: FORBIDDEN_REQUEST
+            status: 403
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
+    conflict:
+      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: UNAUTHORIZED_REQUEST
+            status: 401
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    unprocessableContent:
+      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    notFound:
+      description: Not Found.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: NOT_FOUND
+            status: 404
+            detail: null
+            instance: /payments/pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            category: INVALID_REQUEST_ERROR
+            errors: []
+    internalServer:
+      description: Unexpected error.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+  parameters:
+    apiVersion:
+      in: header
+      name: Api-Version
+      required: true
+      example: '2024-09-17'
+      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
+      schema:
+        $ref: '#/components/schemas/apiVersion'
+    prm-merchants_merchantId:
+      in: path
+      name: merchant-id
+      example: 0123456789101
+      required: true
+      description: "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      schema:
+        $ref: '#/components/schemas/merchantId'
+    correlationId:
+      in: header
+      name: X-Correlation-Id
+      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
+      required: false
+      schema:
+        type: string
+        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: 'An API key is a token that a client provides when making API calls.
+
+
+        API keys are supposed to be a secret that only the client and server know about.
+
+        '
+    OAuth2:
+      type: oauth2
+      description: 'OAuth 2.0 is an authorization protocol that gives an API client limited access to user data on a web server.
+
+
+        OAuth relies on authentication scenarios, that allows the resource owner (user) to share the protected content from the server, hosting the resource, without sharing their credentials. For that purpose, an OAuth 2.0 server issues access tokens that the client applications can use to access protected resources on behalf of the resource owner.
+
+
+        Moneris recommends the use of OAuth 2.0 as it provides fine grained authorization levels.
+
+        '
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes:
+            payment.read: Grants read access to payment related APIs
+            payment.write: Grants read & write access to payment related APIs
+            refund.read: Grants read access to refunds
+            refund.write: Grants read & write access to refunds
+            customer.read: Grants read access to customer data
+            customer.write: Grants read & write access to customer data
+            kount.read: Grants read access to Kount inquiries
+            kount.write: Grants read & write access to Kount inquiries
+            onboarding.merchant.read: Grants read access to merchant onboarding related APIs
+            onboarding.merchant.write: Grants read & write access to merchant onboarding related APIs
+            onboarding.order.read: Grants read access to onboarding orders related APIs
+            onboarding.order.write: Grants read & write access to onboarding orders related APIs
+            dispute.read: Grants read access to disputes
+            dispute.write: Grants read & write access to disputes
