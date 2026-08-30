@@ -478,6 +478,8 @@ apis:
   humanURL: https://developer.moneris.com/moneris-api/docs/purchase
   baseURL: https://api.moneris.io
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -570,6 +572,8 @@ apis:
   humanURL: https://developer.moneris.com/moneris-api/docs/purchase
   baseURL: https://api.moneris.io
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
