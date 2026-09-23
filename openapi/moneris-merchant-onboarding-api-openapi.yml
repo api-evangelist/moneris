@@ -5,8 +5,7 @@ info:
   description: 'Moneris API Platform
 
 
-
-    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height:32px;">](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
+    [](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
   termsOfService: https://www.moneris.com/en/legal/terms-of-use
   contact:
     url: https://api-developer.moneris.com
@@ -178,9 +177,7 @@ paths:
       operationId: getMerchantDetailsByMerchantId
       tags:
       - Merchant Onboarding
-      description: 'Get merchant details by ID
-
-        '
+      description: Get merchant details by ID
       security:
       - OAuth2:
         - onboarding.merchant.read
@@ -315,9 +312,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Merchant Onboarding
-      description: 'Update merchant based on the supplied payload.
-
-        '
+      description: Update merchant based on the supplied payload.
       requestBody:
         content:
           application/json:
@@ -371,9 +366,7 @@ paths:
       - ApiKeyAuth: []
       tags:
       - Merchant Onboarding
-      description: 'Get merchant supplies by merchant ID
-
-        '
+      description: Get merchant supplies by merchant ID
       responses:
         '200':
           description: Successful response corresponding to the provided payload
@@ -642,115 +635,26 @@ paths:
           $ref: '#/components/responses/serviceUnavailable'
 components:
   schemas:
-    signingOfficer:
+    averageTicketSize:
+      type: integer
+      description: A numeric value representing the average transaction amount for the business.
+      format: int32
+    merchantDetails:
       type: object
-      description: An object containing all details about the signing officer of the business.
+      description: An object that contains key information about the merchant associated.
       required:
-      - creditReportAllowed
-      - firstName
-      - lastName
-      - address
-      - dateOfBirth
-      - ownershipPercentage
-      - title
+      - contactInformation
+      - merchantInformation
+      - locationAddress
       properties:
-        signingOfficerIdentifier:
-          description: A unique identifier for the signing officer.
-          type: integer
-          format: int64
-        creditReportAllowed:
-          type: boolean
-          description: A boolean value indicating whether the business has authorized the review of its credit report.
-        firstName:
-          description: The first name of the signing officer.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 30
-          example: John
-        lastName:
-          description: The last name of the signing officer.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 30
-          example: Doe
-        address:
+        contactInformation:
+          $ref: '#/components/schemas/contactInformation'
+        merchantInformation:
+          $ref: '#/components/schemas/merchantInformation'
+        locationAddress:
           $ref: '#/components/schemas/address'
-        dateOfBirth:
-          description: The date of birth of the signing officer.
-          type: string
-          format: date
-          example: '2019-07-30'
-        ownershipPercentage:
-          description: A numeric value representing the percentage of ownership held by an individual in the business.
-          type: number
-          format: decimal
-          minimum: 0
-          maximum: 100
-          example: 90.5
-        title:
-          description: The official position of the signing officer within the business.
-          type: string
-          maxLength: 60
-          enum:
-          - OWNER
-          - PRESIDENT
-          - VICE_PRESIDENT
-          - SECRETARY
-          - TREASURER
-          - DIRECTOR
-          - OTHER
-        merchantRiskRate:
-          type:
-          - string
-          - 'null'
-          description: A score indicating the level of risk associated with the merchant's transactions.
-          maxLength: 60
-          example: A+
-          enum:
-          - A
-          - A_PLUS
-          - B_HIGH
-          - B_LOW
-          - B_LOW_PLUS
-          - B_MID
-          - C
-          - C_HIGH
-          - C_HIGH_PLUS
-          - C_LOW
-          - C_LOW_PLUS
-          - C_MID
-          - C_MID_PLUS
-          - C_PLUS
-          - D
-          - D_HIGH
-          - D_LOW
-          - D_MID
-          - E
-          - E_MINUS
-          - F
-    merchantSupplies:
-      description: An object containing a list of supplies associated with the merchant.
-      type: object
-      properties:
-        data:
-          type: array
-          description: A list of supply items associated with the resource
-          items:
-            $ref: '#/components/schemas/merchantSupply'
-        self:
-          $ref: '#/components/schemas/self'
-        first:
-          $ref: '#/components/schemas/first'
-        last:
-          $ref: '#/components/schemas/last'
-        next:
-          $ref: '#/components/schemas/next'
-        previous:
-          $ref: '#/components/schemas/previous'
+        marketSegment:
+          $ref: '#/components/schemas/marketSegment'
     businessType:
       type: string
       description: The category of the business.
@@ -763,87 +667,13 @@ components:
       - PRIVATE_CORPORATION
       - PUBLIC_CORPORATION
       - GOVERNMENT
-    deviceName:
-      type:
-      - string
-      - 'null'
-      description: The name of the device.
-    monthsOfOwnership:
-      type: integer
-      description: An integer representing the number of months the merchant has been in ownership.
-      format: int32
-    creditTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through credit-based payments.
-      format: int32
-    email:
-      type: string
-      format: email
-      description: 'Contains the customer''s email address.
-
-
-        For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
-
-        '
-      minLength: 1
-      maxLength: 320
-      example: moneris@moneris.com
-    merchantInformation:
-      type: object
-      description: An object containing all information about the merchant.
-      required:
-      - language
-      - legalName
-      - operatingAsName
-      - cardholderName
-      - yearsOfOwnership
-      - monthsOfOwnership
-      - customerServicePhoneNumber
-      - email
-      properties:
-        language:
-          enum:
-          - en
-          - fr
-          description: The preferred language of the merchant.
-          type: string
-          format: iso-639
-          minLength: 2
-          maxLength: 2
-          example: en
-        legalName:
-          $ref: '#/components/schemas/legalName'
-        operatingAsName:
-          $ref: '#/components/schemas/operatingAsName'
-        cardholderName:
-          description: The name of the person to whom the credit or debit card is issued.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 60
-          example: John Doe
-        yearsOfOwnership:
-          $ref: '#/components/schemas/yearsOfOwnership'
-        monthsOfOwnership:
-          $ref: '#/components/schemas/monthsOfOwnership'
-        customerServicePhoneNumber:
-          $ref: '#/components/schemas/phoneNumber'
-        email:
-          $ref: '#/components/schemas/email'
-        merchantType:
-          $ref: '#/components/schemas/merchantType'
-    interacTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through Interac payments.
-      format: int32
-      example: 1000
-    institutionNumber:
-      type: string
-      description: The name or identifier of the financial institution.
-      maxLength: 5
-      example: 809
-      pattern: ^\d{5}
+    directSellingPercentage:
+      description: The percentage of transactions processed through direct selling.
+      type: number
+      format: decimal
+      minimum: 0
+      maximum: 100
+      example: 90.5
     addionalBankingAccountType:
       type: string
       description: The type of the additional banking account.
@@ -851,341 +681,12 @@ components:
       - POS_BILLING_ACCOUNT
       - CHARGEBACK_ACCOUNT
       - DEBIT_DEPOSIT_ACCOUNT
-    bank:
-      type: object
-      description: An object that contains information about the bank associated with the account or transaction.
-      required:
-      - currency
-      - institutionNumber
-      - transitNumber
-      - accountNumber
-      properties:
-        currency:
-          $ref: '#/components/schemas/currency'
-        institutionNumber:
-          $ref: '#/components/schemas/institutionNumber'
-        transitNumber:
-          $ref: '#/components/schemas/transitNumber'
-        accountNumber:
-          $ref: '#/components/schemas/accountNumber'
-    lastName:
-      type:
-      - string
-      - 'null'
-      description: Last name.
-      minLength: 1
-      maxLength: 30
-      example: Doe
-    masterCardDebitTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through MasterCard Debit payments.
-      format: int32
-      example: 1000
-    merchant:
-      description: An object containing the details of a merchant.
-      type: object
-      properties:
-        merchantId:
-          $ref: '#/components/schemas/merchantId'
-        businessDetails:
-          type:
-          - object
-          - 'null'
-          description: An object containing key information about the business associated with the account or transaction.
-          required:
-          - merchantCategoryCode
-          - isSeasonalMerchant
-          - directSellingPercentage
-          - motoTransactionPercentage
-          - ecommerceTransactionPercentage
-          properties:
-            merchantCategoryCode:
-              $ref: '#/components/schemas/merchantCategoryCode'
-            averageTicketSize:
-              $ref: '#/components/schemas/averageTicketSize'
-            isSeasonalMerchant:
-              $ref: '#/components/schemas/isSeasonalMerchant'
-            maximumTransactionVolume:
-              $ref: '#/components/schemas/maximumTransactionVolume'
-            directSellingPercentage:
-              $ref: '#/components/schemas/directSellingPercentage'
-            motoTransactionPercentage:
-              $ref: '#/components/schemas/motoTransactionPercentage'
-            ecommerceTransactionPercentage:
-              $ref: '#/components/schemas/ecommerceTransactionPercentage'
-            businessUrl:
-              $ref: '#/components/schemas/businessUrl'
-            serviceProvider:
-              $ref: '#/components/schemas/serviceProvider'
-            serviceDeliverToCanadaAvailable:
-              $ref: '#/components/schemas/serviceDeliverToCanadaAvailable'
-            serviceDeliverToUSAvailable:
-              $ref: '#/components/schemas/serviceDeliverToUSAvailable'
-            creditTransactionVolume:
-              $ref: '#/components/schemas/creditTransactionVolume'
-            masterCardTransactionVolume:
-              $ref: '#/components/schemas/masterCardTransactionVolume'
-            visaTransactionVolume:
-              $ref: '#/components/schemas/visaTransactionVolume'
-            visaDebitTransactionVolume:
-              $ref: '#/components/schemas/visaDebitTransactionVolume'
-            amexTransactionVolume:
-              $ref: '#/components/schemas/amexTransactionVolume'
-            interacTransactionVolume:
-              $ref: '#/components/schemas/interacTransactionVolume'
-            masterCardDebitTransactionVolume:
-              $ref: '#/components/schemas/masterCardDebitTransactionVolume'
-            unionPayTransactionVolume:
-              $ref: '#/components/schemas/unionPayTransactionVolume'
-            discoverTransactionVolume:
-              $ref: '#/components/schemas/discoverTransactionVolume'
-            category:
-              $ref: '#/components/schemas/businessCategory'
-            subCategory:
-              $ref: '#/components/schemas/businessSubCategory'
-            offeredProductsAndServicesDescription:
-              $ref: '#/components/schemas/offeredProductsAndServicesDescription'
-            riskLevel:
-              $ref: '#/components/schemas/riskLevel'
-        merchantDetails:
-          type:
-          - object
-          - 'null'
-          description: An object that contains key information about the merchant associated.
-          required:
-          - contactInformation
-          - merchantInformation
-          - locationAddress
-          properties:
-            contactInformation:
-              $ref: '#/components/schemas/contactInformation'
-            merchantInformation:
-              $ref: '#/components/schemas/merchantInformation'
-            locationAddress:
-              $ref: '#/components/schemas/address'
-            marketSegment:
-              $ref: '#/components/schemas/marketSegment'
-        businessActivity:
-          type:
-          - object
-          - 'null'
-          description: An object containing all details about the business activity.
-          required:
-          - dropShipping
-          properties:
-            dropShipping:
-              $ref: '#/components/schemas/dropShipping'
-        securityDetails:
-          type:
-          - object
-          - 'null'
-          description: An object containing all details about the security details.
-          required:
-          - legalEntity
-          - signingOfficers
-          properties:
-            legalEntity:
-              $ref: '#/components/schemas/legalEntity'
-            signingOfficers:
-              type: array
-              description: A list of signing officer entities.
-              maxItems: 100
-              items:
-                $ref: '#/components/schemas/signingOfficer'
-        riskDetails:
-          type:
-          - object
-          - 'null'
-          description: An object containing information related to the risk assessment of a transaction or account.
-          required:
-          - merchantRiskRate
-          properties:
-            merchantRiskRate:
-              $ref: '#/components/schemas/merchantRiskRate'
-        pointOfSaleOptions:
-          type:
-          - object
-          - 'null'
-          description: An object containing details about the point of sale options available for processing transactions.
-          required:
-          - settlementOption
-          properties:
-            settlementOption:
-              $ref: '#/components/schemas/settlementOption'
-            settlementTime:
-              $ref: '#/components/schemas/settlementTime'
-            debitPerTransactionRefundLimit:
-              type:
-              - object
-              - 'null'
-              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
-              properties:
-                amount:
-                  $ref: '#/components/schemas/amount'
-                currency:
-                  $ref: '#/components/schemas/currency'
-              required:
-              - amount
-              - currency
-              example:
-                amount: 16000
-                currency: CAD
-            dailyRefundLimit:
-              type:
-              - object
-              - 'null'
-              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
-              properties:
-                amount:
-                  $ref: '#/components/schemas/amount'
-                currency:
-                  $ref: '#/components/schemas/currency'
-              required:
-              - amount
-              - currency
-              example:
-                amount: 16000
-                currency: CAD
-            dailyCancellationLimit:
-              type:
-              - object
-              - 'null'
-              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
-              properties:
-                amount:
-                  $ref: '#/components/schemas/amount'
-                currency:
-                  $ref: '#/components/schemas/currency'
-              required:
-              - amount
-              - currency
-              example:
-                amount: 16000
-                currency: CAD
-        bankingDetails:
-          type:
-          - object
-          - 'null'
-          description: An object that contains the necessary banking information related to the account or transaction.
-          required:
-          - creditDepositAccount
-          properties:
-            creditDepositAccount:
-              $ref: '#/components/schemas/bank'
-            additionalBankingAccounts:
-              type: array
-              description: A list of additional banking accounts associated with the merchant.
-              items:
-                $ref: '#/components/schemas/additionalBankingAccount'
-              maxItems: 10
-        chainId:
-          $ref: '#/components/schemas/chainId'
-        createdAt:
-          description: Time at which the object was created
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2019-07-30T06:43:40.252Z'
-        modifiedAt:
-          description: Time at which the object was modified
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2019-07-30T06:43:40.252Z'
-      required:
-      - merchantId
-    address:
-      type: object
-      description: 'The postal address including street, town/city, province, and postal code.
-
-        Optionally an unit number can be provided.
-
-        '
-      properties:
-        unitNumber:
-          type:
-          - string
-          - 'null'
-          description: Unit number
-          minLength: 1
-          maxLength: 19
-          example: 123A
-        streetNumber:
-          type:
-          - string
-          - 'null'
-          description: Street number
-          minLength: 1
-          maxLength: 19
-          example: '3300'
-        streetName:
-          type:
-          - string
-          - 'null'
-          description: Street name
-          minLength: 1
-          maxLength: 100
-          example: Bloor
-        city:
-          type:
-          - string
-          - 'null'
-          description: 'Identifies the city.
-
-            '
-          minLength: 1
-          maxLength: 50
-          example: Toronto
-        province:
-          type:
-          - string
-          - 'null'
-          description: 'Province or state ISO 3166-2 code '
-          minLength: 1
-          maxLength: 3
-          format: iso-3166-2
-          example: 'ON'
-        postalCode:
-          type:
-          - string
-          - 'null'
-          description: Postal or zip code
-          minLength: 1
-          maxLength: 30
-          example: M8X 2X2
-        country:
-          type:
-          - string
-          - 'null'
-          description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
-          minLength: 2
-          maxLength: 2
-          example: CA
-          format: iso-3166
-      example:
-        unitNumber: 123A
-        streetNumber: '3300'
-        streetName: Bloor Street West
-        city: Toronto
-        province: 'ON'
-        postalCode: M8X 2X2
-        country: CA
-    money:
-      type: object
-      description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
-      properties:
-        amount:
-          $ref: '#/components/schemas/amount'
-        currency:
-          $ref: '#/components/schemas/currency'
-      required:
-      - amount
-      - currency
-      example:
-        amount: 16000
-        currency: CAD
+    merchantCategoryCode:
+      type: string
+      description: A four-digit code that classifies the type of business or service provided by the merchant, based on standard industry categories.
+      minLength: 4
+      maxLength: 4
+      example: '0742'
     businessSubCategory:
       type:
       - string
@@ -2199,279 +1700,58 @@ components:
       - WRECKERS
       - ZABO
       - ZOOS
-    serviceDeliverToUSAvailable:
-      type: boolean
-      description: A boolean value indicating whether the business is available for delivery to US.
-    first:
-      description: Pagination link pointing to the first page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    firstName:
-      type:
-      - string
-      - 'null'
-      description: First name.
-      minLength: 1
-      maxLength: 30
-      example: John
-    businessDetails:
+    securityDetails:
       type: object
-      description: An object containing key information about the business associated with the account or transaction.
+      description: An object containing all details about the security details.
       required:
-      - merchantCategoryCode
-      - isSeasonalMerchant
-      - directSellingPercentage
-      - motoTransactionPercentage
-      - ecommerceTransactionPercentage
+      - legalEntity
+      - signingOfficers
       properties:
-        merchantCategoryCode:
-          $ref: '#/components/schemas/merchantCategoryCode'
-        averageTicketSize:
-          $ref: '#/components/schemas/averageTicketSize'
-        isSeasonalMerchant:
-          $ref: '#/components/schemas/isSeasonalMerchant'
-        maximumTransactionVolume:
-          $ref: '#/components/schemas/maximumTransactionVolume'
-        directSellingPercentage:
-          $ref: '#/components/schemas/directSellingPercentage'
-        motoTransactionPercentage:
-          $ref: '#/components/schemas/motoTransactionPercentage'
-        ecommerceTransactionPercentage:
-          $ref: '#/components/schemas/ecommerceTransactionPercentage'
-        businessUrl:
-          $ref: '#/components/schemas/businessUrl'
-        serviceProvider:
-          $ref: '#/components/schemas/serviceProvider'
-        serviceDeliverToCanadaAvailable:
-          $ref: '#/components/schemas/serviceDeliverToCanadaAvailable'
-        serviceDeliverToUSAvailable:
-          $ref: '#/components/schemas/serviceDeliverToUSAvailable'
-        creditTransactionVolume:
-          $ref: '#/components/schemas/creditTransactionVolume'
-        masterCardTransactionVolume:
-          $ref: '#/components/schemas/masterCardTransactionVolume'
-        visaTransactionVolume:
-          $ref: '#/components/schemas/visaTransactionVolume'
-        visaDebitTransactionVolume:
-          $ref: '#/components/schemas/visaDebitTransactionVolume'
-        amexTransactionVolume:
-          $ref: '#/components/schemas/amexTransactionVolume'
-        interacTransactionVolume:
-          $ref: '#/components/schemas/interacTransactionVolume'
-        masterCardDebitTransactionVolume:
-          $ref: '#/components/schemas/masterCardDebitTransactionVolume'
-        unionPayTransactionVolume:
-          $ref: '#/components/schemas/unionPayTransactionVolume'
-        discoverTransactionVolume:
-          $ref: '#/components/schemas/discoverTransactionVolume'
-        category:
-          $ref: '#/components/schemas/businessCategory'
-        subCategory:
-          $ref: '#/components/schemas/businessSubCategory'
-        offeredProductsAndServicesDescription:
-          $ref: '#/components/schemas/offeredProductsAndServicesDescription'
-        riskLevel:
-          $ref: '#/components/schemas/riskLevel'
-    serviceCode:
-      type:
-      - string
-      - 'null'
-      description: The service code associated with the device.
-    operatingAsName:
-      type: string
-      description: The trade name under which the merchant operates.
-      maxLength: 30
-      example: Pizza 2 Go
-    motoTransactionPercentage:
-      description: The percentage of transactions processed through mail order / telephone order.
-      type: number
-      format: decimal
-      minimum: 0
-      maximum: 100
-      example: 90.5
-    amexTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through American Express payments.
-      format: int32
-      example: 1000
-    serviceProvider:
-      type:
-      - string
-      - 'null'
-      description: The name or identifier of the service provider associated to the business.
-      maxLength: 255
-      example: moneris.com
-    parameterError:
-      title: Parameter error
-      description: Request property or header related error.
-      type: object
-      properties:
-        parameterName:
-          type: string
-          description: Property or header name. Can contain nested path separated by '.'
-          example: address.postalCode
-        parameterValue:
-          type:
-          - string
-          - 'null'
-          description: Property or header value string representation.
-          example: MAP3J8
-        reasonCode:
-          type: string
-          description: Reason that triggered the error.
-          enum:
-          - INVALID_FORMAT
-          - REQUIRED_FIELD
-          - INVALID_VALUE
-          example: INVALID_FORMAT
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Human readable description of the error.
-          example: String 'MAP3J8' does not match the postal code pattern.
-      required:
-      - parameterName
-      - reasonCode
-    serviceDeliverToCanadaAvailable:
-      type: boolean
-      description: A boolean value indicating whether the business is available for delivery to Canada.
-    error:
-      description: Error response details.
-      properties:
-        type:
-          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
-
-            '
-          type: string
-          format: uri
-          example: https://api-developer.moneris.com/responsehandling
-        title:
-          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
-
-            '
-          type:
-          - string
-          - 'null'
-          example: INSUFFICIENT_FUNDS
-        status:
-          description: 'it conveys the HTTP status code used for the convenience of the consumer.
-
-            '
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 100
-          maximum: 505
-        detail:
-          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: Funds are insufficient to execute the operation.
-        instance:
-          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
-          format: uri-reference
-        category:
-          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
-          enum:
-          - API_ERROR
-          - IDEMPOTENCY_ERROR
-          - INVALID_REQUEST_ERROR
-          - DECLINED_ERROR
-          - UNAUTHORIZED_ERROR
-          - INTERNAL_SERVER_ERROR
-          - null
-          type:
-          - string
-          - 'null'
-          example: DECLINED_ERROR
-        errors:
+        legalEntity:
+          $ref: '#/components/schemas/legalEntity'
+        signingOfficers:
           type: array
-          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          description: A list of signing officer entities.
+          maxItems: 100
           items:
-            type: object
-            $ref: '#/components/schemas/parameterError'
-          example:
-          - parameterName: address.postalCode
-            parameterValue: MAP3J8
-            errorMessage: address.Postal code does not match regular expression
-            reasonCode: INVALID_FORMAT
-      title: API Error
+            $ref: '#/components/schemas/signingOfficer'
+    supply:
       type: object
+      description: An object containing all details related to a supply.
       required:
-      - type
-    maximumTransactionVolume:
-      type: integer
-      description: A numeric value that represents the highest expected transaction volume.
-      format: int32
-    ecommerceTransactionPercentage:
-      description: The percentage of transactions processed through e-commerce.
-      type: number
-      format: decimal
-      minimum: 0
-      maximum: 100
-      example: 90.5
-    supplyType:
-      type:
-      - string
-      - 'null'
-      description: The type of supply associated with the device.
-    marketSegment:
-      type:
-      - string
-      - 'null'
-      description: Identifies the specific customer or business segment targeted by a product or service.
-      enum:
-      - PAYROC
-      - ADVANCE_IT
-      - ATB
-      - ATB_8760
-      - ADYEN
-      - BRAINTREE
-      - CYDCOR
-      - DIRECT_CASH
-      - INTUIT
-      - MCA
-      - OPTIMAL
-      - PAYSAFE_RETAIL_RESELLER
-      - PROTOCOL
-      - SAGE
-      - SONA
-      - SOFT_TECH
-      - TILL_PAYMENTS
-      - UEAT
-      - CLEVERPAYS
-      - PAYLITE
-      - ILIXIUM
-      - LOYALTY_SENSE
-      - POWER_PAYMENTS
-      - PAYMENT_EXPERTS
-      - INTERNATIONAL_PAYMENT_SOLUTIONS
-      - PAYOLOGY
-      - NATIONAL_PAYMENTS
-    accountNumber:
-      type:
-      - string
-      - 'null'
-      description: Attribute that represent the unique identifier for a bank account.
-      maxLength: 10
-    unionPayTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through UnionPay payments.
-      format: int32
-      example: 1000
+      - supplyName
+      - unitPrice
+      properties:
+        supplyName:
+          $ref: '#/components/schemas/supplyName'
+        unitPrice:
+          $ref: '#/components/schemas/money'
+        quantity:
+          $ref: '#/components/schemas/quantity'
+    money:
+      type: object
+      description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+      properties:
+        amount:
+          $ref: '#/components/schemas/amount'
+        currency:
+          $ref: '#/components/schemas/currency'
+      required:
+      - amount
+      - currency
+      example:
+        amount: 16000
+        currency: CAD
+    createMerchantRequest:
+      description: Create a new merchant with the provided details.
+      allOf:
+      - type: object
+        properties:
+          idempotencyKey:
+            $ref: '#/components/schemas/idempotencyKey'
+        required:
+        - idempotencyKey
+      - $ref: '#/components/schemas/merchantPayload'
     merchantSupply:
       type: object
       description: An object containing all details related to a merchant supply.
@@ -2514,165 +1794,87 @@ components:
           description: A list of supplies associated with the device.
           items:
             $ref: '#/components/schemas/supply'
-    legalName:
-      type: string
-      description: The registered name of the merchant.
-      maxLength: 60
-      example: Pizza 2 Go
-    pinpadType:
-      type:
-      - string
-      - 'null'
-      description: The type of pinpad associated with the device.
-    contactInformation:
-      type: object
-      description: An object containing all the contact details.
-      required:
-      - firstName
-      - lastName
-      - phone
-      properties:
-        firstName:
-          $ref: '#/components/schemas/firstName'
-        lastName:
-          $ref: '#/components/schemas/lastName'
-        phone:
-          $ref: '#/components/schemas/phoneNumber'
     visaDebitTransactionVolume:
       type: integer
       description: A numeric value representing the total transaction volume generated through Visa Debit payments.
       format: int32
       example: 42
-    settlementTime:
-      type:
-      - string
-      - 'null'
-      description: A timestamp indicating the time when a transaction is settled.
-      format: time
-      example: '18:10:00'
-    createMerchantRequest:
-      description: Create a new merchant with the provided details.
-      allOf:
-      - type: object
-        properties:
-          idempotencyKey:
-            $ref: '#/components/schemas/idempotencyKey'
-        required:
-        - idempotencyKey
-      - $ref: '#/components/schemas/merchantPayload'
-    settlementOption:
-      type: string
-      description: The method for settling transactions.
-      enum:
-      - SYSTEM_CLOSE
-      - MERCHANT_CLOSE
-    visaTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through Visa payments.
-      format: int32
-    dropShipping:
-      type: boolean
-      description: A boolean value indicating whether the business engages in drop shipping as part of its operations.
-    securityDetails:
+    address:
       type: object
-      description: An object containing all details about the security details.
-      required:
-      - legalEntity
-      - signingOfficers
-      properties:
-        legalEntity:
-          $ref: '#/components/schemas/legalEntity'
-        signingOfficers:
-          type: array
-          description: A list of signing officer entities.
-          maxItems: 100
-          items:
-            $ref: '#/components/schemas/signingOfficer'
-    merchantDetails:
-      type: object
-      description: An object that contains key information about the merchant associated.
-      required:
-      - contactInformation
-      - merchantInformation
-      - locationAddress
-      properties:
-        contactInformation:
-          $ref: '#/components/schemas/contactInformation'
-        merchantInformation:
-          $ref: '#/components/schemas/merchantInformation'
-        locationAddress:
-          $ref: '#/components/schemas/address'
-        marketSegment:
-          $ref: '#/components/schemas/marketSegment'
-    masterCardTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through MasterCard payments.
-      format: int32
-    businessCategory:
-      type:
-      - string
-      - 'null'
-      description: The category of the business.
-      maxLength: 255
-      example: RESTAURANTS
-      enum:
-      - AIRLINES
-      - AMUSEMENT_AND_ENTERTAINMENT
-      - AUTOMOBILE_VEHICLE_RENTAL
-      - AUTOMOBILES_AND_VEHICLES
-      - BUSINESS_SERVICES
-      - CONTRACTED_SERVICES
-      - GOVERNMENT_SERVICES
-      - HOTELS_AND_MOTELS
-      - MAIL_ORDER_TELEPHONE_ORDER_PROVIDERS
-      - PERSONAL_SERVICE_PROVIDERS
-      - PROFESSIONAL_SERVICES_AND_MEMBERSHIPS
-      - REPAIR_SERVICES
-      - RESTAURANTS
-      - RETAILER
-      - RETAILERS
-      - SERVICE_PROVIDERS
-      - TRANSPORTATION
-      - UTILITIES
-      - WHOLESALERS_MANUFACTURERS
-    softwareVendors:
-      type: array
-      description: A list of software vendors associated with the device.
-      items:
-        type: string
-    next:
-      description: Pagination link pointing to the next page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    discoverTransactionVolume:
-      type: integer
-      description: A numeric value representing the total transaction volume generated through Discover payments.
-      format: int32
-      example: 1000
-    idempotencyKey:
-      type: string
-      description: "A Unique Identifier that is required for handling idempotent requests. \n\nNote: Moneris encourages the use of UUID Version 4 in APIs as an idempotency key.\"    \n"
-      minLength: 1
-      maxLength: 36
-      example: 6q5w4e7r8t9y
-    yearsOfOwnership:
-      type: integer
-      description: An integer representing the number of years the merchant has been in ownership.
-      format: int32
-    supplyName:
-      type: string
-      description: Indicates the name of the good available for fulfillment or distribution.
-      maxLength: 100
-      example: 2-PLY Sales Draft Slips (25)
-    apiVersion:
-      description: 'The endpoint''s API Version.  Must be provided through headers.
+      description: 'The postal address including street, town/city, province, and postal code.
+
+        Optionally an unit number can be provided.
 
         '
-      type: string
-      example: '2025-08-14'
-      default: '2025-08-14'
+      properties:
+        unitNumber:
+          type:
+          - string
+          - 'null'
+          description: Unit number
+          minLength: 1
+          maxLength: 19
+          example: 123A
+        streetNumber:
+          type:
+          - string
+          - 'null'
+          description: Street number
+          minLength: 1
+          maxLength: 19
+          example: '3300'
+        streetName:
+          type:
+          - string
+          - 'null'
+          description: Street name
+          minLength: 1
+          maxLength: 100
+          example: Bloor
+        city:
+          type:
+          - string
+          - 'null'
+          description: 'Identifies the city.
+
+            '
+          minLength: 1
+          maxLength: 50
+          example: Toronto
+        province:
+          type:
+          - string
+          - 'null'
+          description: 'Province or state ISO 3166-2 code '
+          minLength: 1
+          maxLength: 3
+          format: iso-3166-2
+          example: 'ON'
+        postalCode:
+          type:
+          - string
+          - 'null'
+          description: Postal or zip code
+          minLength: 1
+          maxLength: 30
+          example: M8X 2X2
+        country:
+          type:
+          - string
+          - 'null'
+          description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+          minLength: 2
+          maxLength: 2
+          example: CA
+          format: iso-3166
+      example:
+        unitNumber: 123A
+        streetNumber: '3300'
+        streetName: Bloor Street West
+        city: Toronto
+        province: 'ON'
+        postalCode: M8X 2X2
+        country: CA
     merchantType:
       type:
       - string
@@ -2681,135 +1883,36 @@ components:
       enum:
       - NATIONAL
       - INDEPENDENT_BUSINESS
-    cardReaderName:
-      type:
-      - string
-      - 'null'
-      description: The name of the card reader associated with the device.
-    currency:
-      type: string
-      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
-      minLength: 3
-      maxLength: 4
-      example: CAD
-      format: iso-4217
-    directSellingPercentage:
-      description: The percentage of transactions processed through direct selling.
-      type: number
-      format: decimal
-      minimum: 0
-      maximum: 100
-      example: 90.5
-    riskLevel:
-      type:
-      - string
-      - 'null'
-      description: The risk level associated with the business.
-      enum:
-      - LOW
-      - MEDIUM
-      - HIGH
-      example: LOW
-    self:
-      description: Pagination link pointing to the current page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    merchantCategoryCode:
-      type: string
-      description: A four-digit code that classifies the type of business or service provided by the merchant, based on standard industry categories.
-      minLength: 4
-      maxLength: 4
-      example: '0742'
-    supply:
+    businessActivity:
       type: object
-      description: An object containing all details related to a supply.
+      description: An object containing all details about the business activity.
       required:
-      - supplyName
-      - unitPrice
+      - dropShipping
       properties:
-        supplyName:
-          $ref: '#/components/schemas/supplyName'
-        unitPrice:
-          $ref: '#/components/schemas/money'
-        quantity:
-          $ref: '#/components/schemas/quantity'
-    averageTicketSize:
-      type: integer
-      description: A numeric value representing the average transaction amount for the business.
-      format: int32
-    phoneNumber:
+        dropShipping:
+          $ref: '#/components/schemas/dropShipping'
+    email:
       type: string
-      description: Phone number.
-      pattern: ^\+[1-9]\d{1,14}$
-      minLength: 3
-      maxLength: 16
-      example: '+18663197450'
-    businessUrl:
-      type:
-      - string
-      - 'null'
-      description: The official website URL of the business.
-      format: uri
-      maxLength: 255
-      example: www.abc.com
-    offeredProductsAndServicesDescription:
-      type:
-      - string
-      - 'null'
-      description: A description of type of products and services offered by the business.
-      maxLength: 255
-      example: food
-    isSeasonalMerchant:
-      type: boolean
-      description: A boolean value indicating whether the business operates seasonally.
-    merchantRiskRate:
-      type: string
-      description: A score indicating the level of risk associated with the merchant's transactions.
-      maxLength: 60
-      example: A+
-      enum:
-      - A
-      - A_PLUS
-      - B_HIGH
-      - B_LOW
-      - B_LOW_PLUS
-      - B_MID
-      - C
-      - C_HIGH
-      - C_HIGH_PLUS
-      - C_LOW
-      - C_LOW_PLUS
-      - C_MID
-      - C_MID_PLUS
-      - C_PLUS
-      - D
-      - D_HIGH
-      - D_LOW
-      - D_MID
-      - E
-      - E_MINUS
-      - F
-    last:
-      description: Pagination link pointing to the last page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    quantity:
+      format: email
+      description: 'Contains the customer''s email address.
+
+
+        For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+        '
+      minLength: 1
+      maxLength: 320
+      example: moneris@moneris.com
+    interacTransactionVolume:
       type: integer
-      description: Specifies the amount of goods currently available for a particular product.
+      description: A numeric value representing the total transaction volume generated through Interac payments.
       format: int32
-      minimum: 1
-      maximum: 100
-      example: 1
-    previous:
-      description: Pagination link pointing to the previous page.
+      example: 1000
+    deviceName:
       type:
       - string
       - 'null'
-      format: uri-reference
+      description: The name of the device.
     merchantPayload:
       type: object
       description: An object containing the merchant payload details.
@@ -2902,18 +2005,771 @@ components:
           properties:
             merchantRiskRate:
               $ref: '#/components/schemas/merchantRiskRate'
+    quantity:
+      type: integer
+      description: Specifies the amount of goods currently available for a particular product.
+      format: int32
+      minimum: 1
+      maximum: 100
+      example: 1
+    monthsOfOwnership:
+      type: integer
+      description: An integer representing the number of months the merchant has been in ownership.
+      format: int32
+    first:
+      description: Pagination link pointing to the first page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    chainId:
+      type:
+      - string
+      - 'null'
+      description: A unique identifier assigned to a specific organizational chain.
+      minLength: 13
+      maxLength: 13
+      example: '0030400001622'
+    visaTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through Visa payments.
+      format: int32
+    serviceCode:
+      type:
+      - string
+      - 'null'
+      description: The service code associated with the device.
+    amexTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through American Express payments.
+      format: int32
+      example: 1000
+    businessDetails:
+      type: object
+      description: An object containing key information about the business associated with the account or transaction.
+      required:
+      - merchantCategoryCode
+      - isSeasonalMerchant
+      - directSellingPercentage
+      - motoTransactionPercentage
+      - ecommerceTransactionPercentage
+      properties:
+        merchantCategoryCode:
+          $ref: '#/components/schemas/merchantCategoryCode'
+        averageTicketSize:
+          $ref: '#/components/schemas/averageTicketSize'
+        isSeasonalMerchant:
+          $ref: '#/components/schemas/isSeasonalMerchant'
+        maximumTransactionVolume:
+          $ref: '#/components/schemas/maximumTransactionVolume'
+        directSellingPercentage:
+          $ref: '#/components/schemas/directSellingPercentage'
+        motoTransactionPercentage:
+          $ref: '#/components/schemas/motoTransactionPercentage'
+        ecommerceTransactionPercentage:
+          $ref: '#/components/schemas/ecommerceTransactionPercentage'
+        businessUrl:
+          $ref: '#/components/schemas/businessUrl'
+        serviceProvider:
+          $ref: '#/components/schemas/serviceProvider'
+        serviceDeliverToCanadaAvailable:
+          $ref: '#/components/schemas/serviceDeliverToCanadaAvailable'
+        serviceDeliverToUSAvailable:
+          $ref: '#/components/schemas/serviceDeliverToUSAvailable'
+        creditTransactionVolume:
+          $ref: '#/components/schemas/creditTransactionVolume'
+        masterCardTransactionVolume:
+          $ref: '#/components/schemas/masterCardTransactionVolume'
+        visaTransactionVolume:
+          $ref: '#/components/schemas/visaTransactionVolume'
+        visaDebitTransactionVolume:
+          $ref: '#/components/schemas/visaDebitTransactionVolume'
+        amexTransactionVolume:
+          $ref: '#/components/schemas/amexTransactionVolume'
+        interacTransactionVolume:
+          $ref: '#/components/schemas/interacTransactionVolume'
+        masterCardDebitTransactionVolume:
+          $ref: '#/components/schemas/masterCardDebitTransactionVolume'
+        unionPayTransactionVolume:
+          $ref: '#/components/schemas/unionPayTransactionVolume'
+        discoverTransactionVolume:
+          $ref: '#/components/schemas/discoverTransactionVolume'
+        category:
+          $ref: '#/components/schemas/businessCategory'
+        subCategory:
+          $ref: '#/components/schemas/businessSubCategory'
+        offeredProductsAndServicesDescription:
+          $ref: '#/components/schemas/offeredProductsAndServicesDescription'
+        riskLevel:
+          $ref: '#/components/schemas/riskLevel'
+    additionalBankingAccount:
+      type: object
+      description: An object that contains additional banking account information.
+      allOf:
+      - $ref: '#/components/schemas/bank'
+      - type: object
+        required:
+        - accountType
+        properties:
+          accountType:
+            $ref: '#/components/schemas/addionalBankingAccountType'
+    legalEntity:
+      type: object
+      title: Legal Entity
+      description: An object containing all details about the legal entity of the business.
+      required:
+      - businessType
+      properties:
+        businessType:
+          $ref: '#/components/schemas/businessType'
+    legalName:
+      type: string
+      description: The registered name of the merchant.
+      maxLength: 60
+      example: Pizza 2 Go
+    maximumTransactionVolume:
+      type: integer
+      description: A numeric value that represents the highest expected transaction volume.
+      format: int32
+    operatingAsName:
+      type: string
+      description: The trade name under which the merchant operates.
+      maxLength: 30
+      example: Pizza 2 Go
+    signingOfficer:
+      type: object
+      description: An object containing all details about the signing officer of the business.
+      required:
+      - creditReportAllowed
+      - firstName
+      - lastName
+      - address
+      - dateOfBirth
+      - ownershipPercentage
+      - title
+      properties:
+        signingOfficerIdentifier:
+          description: A unique identifier for the signing officer.
+          type: integer
+          format: int64
+        creditReportAllowed:
+          type: boolean
+          description: A boolean value indicating whether the business has authorized the review of its credit report.
+        firstName:
+          description: The first name of the signing officer.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 30
+          example: John
+        lastName:
+          description: The last name of the signing officer.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 30
+          example: Doe
+        address:
+          $ref: '#/components/schemas/address'
+        dateOfBirth:
+          description: The date of birth of the signing officer.
+          type: string
+          format: date
+          example: '2019-07-30'
+        ownershipPercentage:
+          description: A numeric value representing the percentage of ownership held by an individual in the business.
+          type: number
+          format: decimal
+          minimum: 0
+          maximum: 100
+          example: 90.5
+        title:
+          description: The official position of the signing officer within the business.
+          type: string
+          maxLength: 60
+          enum:
+          - OWNER
+          - PRESIDENT
+          - VICE_PRESIDENT
+          - SECRETARY
+          - TREASURER
+          - DIRECTOR
+          - OTHER
+        merchantRiskRate:
+          type:
+          - string
+          - 'null'
+          description: A score indicating the level of risk associated with the merchant's transactions.
+          maxLength: 60
+          example: A+
+          enum:
+          - A
+          - A_PLUS
+          - B_HIGH
+          - B_LOW
+          - B_LOW_PLUS
+          - B_MID
+          - C
+          - C_HIGH
+          - C_HIGH_PLUS
+          - C_LOW
+          - C_LOW_PLUS
+          - C_MID
+          - C_MID_PLUS
+          - C_PLUS
+          - D
+          - D_HIGH
+          - D_LOW
+          - D_MID
+          - E
+          - E_MINUS
+          - F
+    businessCategory:
+      type:
+      - string
+      - 'null'
+      description: The category of the business.
+      maxLength: 255
+      example: RESTAURANTS
+      enum:
+      - AIRLINES
+      - AMUSEMENT_AND_ENTERTAINMENT
+      - AUTOMOBILE_VEHICLE_RENTAL
+      - AUTOMOBILES_AND_VEHICLES
+      - BUSINESS_SERVICES
+      - CONTRACTED_SERVICES
+      - GOVERNMENT_SERVICES
+      - HOTELS_AND_MOTELS
+      - MAIL_ORDER_TELEPHONE_ORDER_PROVIDERS
+      - PERSONAL_SERVICE_PROVIDERS
+      - PROFESSIONAL_SERVICES_AND_MEMBERSHIPS
+      - REPAIR_SERVICES
+      - RESTAURANTS
+      - RETAILER
+      - RETAILERS
+      - SERVICE_PROVIDERS
+      - TRANSPORTATION
+      - UTILITIES
+      - WHOLESALERS_MANUFACTURERS
+    masterCardTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through MasterCard payments.
+      format: int32
+    isSeasonalMerchant:
+      type: boolean
+      description: A boolean value indicating whether the business operates seasonally.
     merchantId:
       type: string
       description: "Thirteen character long identification provided to merchants by Moneris. \n"
       minLength: 13
       maxLength: 13
       example: 0123456789101
-    transitNumber:
+    amount:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999999
+      example: 10000
+      description: Amount
+    contactInformation:
+      type: object
+      description: An object containing all the contact details.
+      required:
+      - firstName
+      - lastName
+      - phone
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        phone:
+          $ref: '#/components/schemas/phoneNumber'
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    accountNumber:
       type:
       - string
       - 'null'
-      description: Attribute representing the five-digit branch number of a financial institution.
+      description: Attribute that represent the unique identifier for a bank account.
       maxLength: 10
+    serviceDeliverToUSAvailable:
+      type: boolean
+      description: A boolean value indicating whether the business is available for delivery to US.
+    firstName:
+      type:
+      - string
+      - 'null'
+      description: First name.
+      minLength: 1
+      maxLength: 30
+      example: John
+    cardReaderName:
+      type:
+      - string
+      - 'null'
+      description: The name of the card reader associated with the device.
+    merchant:
+      description: An object containing the details of a merchant.
+      type: object
+      properties:
+        merchantId:
+          $ref: '#/components/schemas/merchantId'
+        businessDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing key information about the business associated with the account or transaction.
+          required:
+          - merchantCategoryCode
+          - isSeasonalMerchant
+          - directSellingPercentage
+          - motoTransactionPercentage
+          - ecommerceTransactionPercentage
+          properties:
+            merchantCategoryCode:
+              $ref: '#/components/schemas/merchantCategoryCode'
+            averageTicketSize:
+              $ref: '#/components/schemas/averageTicketSize'
+            isSeasonalMerchant:
+              $ref: '#/components/schemas/isSeasonalMerchant'
+            maximumTransactionVolume:
+              $ref: '#/components/schemas/maximumTransactionVolume'
+            directSellingPercentage:
+              $ref: '#/components/schemas/directSellingPercentage'
+            motoTransactionPercentage:
+              $ref: '#/components/schemas/motoTransactionPercentage'
+            ecommerceTransactionPercentage:
+              $ref: '#/components/schemas/ecommerceTransactionPercentage'
+            businessUrl:
+              $ref: '#/components/schemas/businessUrl'
+            serviceProvider:
+              $ref: '#/components/schemas/serviceProvider'
+            serviceDeliverToCanadaAvailable:
+              $ref: '#/components/schemas/serviceDeliverToCanadaAvailable'
+            serviceDeliverToUSAvailable:
+              $ref: '#/components/schemas/serviceDeliverToUSAvailable'
+            creditTransactionVolume:
+              $ref: '#/components/schemas/creditTransactionVolume'
+            masterCardTransactionVolume:
+              $ref: '#/components/schemas/masterCardTransactionVolume'
+            visaTransactionVolume:
+              $ref: '#/components/schemas/visaTransactionVolume'
+            visaDebitTransactionVolume:
+              $ref: '#/components/schemas/visaDebitTransactionVolume'
+            amexTransactionVolume:
+              $ref: '#/components/schemas/amexTransactionVolume'
+            interacTransactionVolume:
+              $ref: '#/components/schemas/interacTransactionVolume'
+            masterCardDebitTransactionVolume:
+              $ref: '#/components/schemas/masterCardDebitTransactionVolume'
+            unionPayTransactionVolume:
+              $ref: '#/components/schemas/unionPayTransactionVolume'
+            discoverTransactionVolume:
+              $ref: '#/components/schemas/discoverTransactionVolume'
+            category:
+              $ref: '#/components/schemas/businessCategory'
+            subCategory:
+              $ref: '#/components/schemas/businessSubCategory'
+            offeredProductsAndServicesDescription:
+              $ref: '#/components/schemas/offeredProductsAndServicesDescription'
+            riskLevel:
+              $ref: '#/components/schemas/riskLevel'
+        merchantDetails:
+          type:
+          - object
+          - 'null'
+          description: An object that contains key information about the merchant associated.
+          required:
+          - contactInformation
+          - merchantInformation
+          - locationAddress
+          properties:
+            contactInformation:
+              $ref: '#/components/schemas/contactInformation'
+            merchantInformation:
+              $ref: '#/components/schemas/merchantInformation'
+            locationAddress:
+              $ref: '#/components/schemas/address'
+            marketSegment:
+              $ref: '#/components/schemas/marketSegment'
+        businessActivity:
+          type:
+          - object
+          - 'null'
+          description: An object containing all details about the business activity.
+          required:
+          - dropShipping
+          properties:
+            dropShipping:
+              $ref: '#/components/schemas/dropShipping'
+        securityDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing all details about the security details.
+          required:
+          - legalEntity
+          - signingOfficers
+          properties:
+            legalEntity:
+              $ref: '#/components/schemas/legalEntity'
+            signingOfficers:
+              type: array
+              description: A list of signing officer entities.
+              maxItems: 100
+              items:
+                $ref: '#/components/schemas/signingOfficer'
+        riskDetails:
+          type:
+          - object
+          - 'null'
+          description: An object containing information related to the risk assessment of a transaction or account.
+          required:
+          - merchantRiskRate
+          properties:
+            merchantRiskRate:
+              $ref: '#/components/schemas/merchantRiskRate'
+        pointOfSaleOptions:
+          type:
+          - object
+          - 'null'
+          description: An object containing details about the point of sale options available for processing transactions.
+          required:
+          - settlementOption
+          properties:
+            settlementOption:
+              $ref: '#/components/schemas/settlementOption'
+            settlementTime:
+              $ref: '#/components/schemas/settlementTime'
+            debitPerTransactionRefundLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+            dailyRefundLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+            dailyCancellationLimit:
+              type:
+              - object
+              - 'null'
+              description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
+              properties:
+                amount:
+                  $ref: '#/components/schemas/amount'
+                currency:
+                  $ref: '#/components/schemas/currency'
+              required:
+              - amount
+              - currency
+              example:
+                amount: 16000
+                currency: CAD
+        bankingDetails:
+          type:
+          - object
+          - 'null'
+          description: An object that contains the necessary banking information related to the account or transaction.
+          required:
+          - creditDepositAccount
+          properties:
+            creditDepositAccount:
+              $ref: '#/components/schemas/bank'
+            additionalBankingAccounts:
+              type: array
+              description: A list of additional banking accounts associated with the merchant.
+              items:
+                $ref: '#/components/schemas/additionalBankingAccount'
+              maxItems: 10
+        chainId:
+          $ref: '#/components/schemas/chainId'
+        createdAt:
+          description: Time at which the object was created
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2019-07-30T06:43:40.252Z'
+        modifiedAt:
+          description: Time at which the object was modified
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2019-07-30T06:43:40.252Z'
+      required:
+      - merchantId
+    ecommerceTransactionPercentage:
+      description: The percentage of transactions processed through e-commerce.
+      type: number
+      format: decimal
+      minimum: 0
+      maximum: 100
+      example: 90.5
+    serviceDeliverToCanadaAvailable:
+      type: boolean
+      description: A boolean value indicating whether the business is available for delivery to Canada.
+    merchantInformation:
+      type: object
+      description: An object containing all information about the merchant.
+      required:
+      - language
+      - legalName
+      - operatingAsName
+      - cardholderName
+      - yearsOfOwnership
+      - monthsOfOwnership
+      - customerServicePhoneNumber
+      - email
+      properties:
+        language:
+          enum:
+          - en
+          - fr
+          description: The preferred language of the merchant.
+          type: string
+          format: iso-639
+          minLength: 2
+          maxLength: 2
+          example: en
+        legalName:
+          $ref: '#/components/schemas/legalName'
+        operatingAsName:
+          $ref: '#/components/schemas/operatingAsName'
+        cardholderName:
+          description: The name of the person to whom the credit or debit card is issued.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 60
+          example: John Doe
+        yearsOfOwnership:
+          $ref: '#/components/schemas/yearsOfOwnership'
+        monthsOfOwnership:
+          $ref: '#/components/schemas/monthsOfOwnership'
+        customerServicePhoneNumber:
+          $ref: '#/components/schemas/phoneNumber'
+        email:
+          $ref: '#/components/schemas/email'
+        merchantType:
+          $ref: '#/components/schemas/merchantType'
+    merchantSupplies:
+      description: An object containing a list of supplies associated with the merchant.
+      type: object
+      properties:
+        data:
+          type: array
+          description: A list of supply items associated with the resource
+          items:
+            $ref: '#/components/schemas/merchantSupply'
+        self:
+          $ref: '#/components/schemas/self'
+        first:
+          $ref: '#/components/schemas/first'
+        last:
+          $ref: '#/components/schemas/last'
+        next:
+          $ref: '#/components/schemas/next'
+        previous:
+          $ref: '#/components/schemas/previous'
+    idempotencyKey:
+      type: string
+      description: "A Unique Identifier that is required for handling idempotent requests. \n\nNote: Moneris encourages the use of UUID Version 4 in APIs as an idempotency key.\"    \n"
+      minLength: 1
+      maxLength: 36
+      example: 6q5w4e7r8t9y
+    serviceProvider:
+      type:
+      - string
+      - 'null'
+      description: The name or identifier of the service provider associated to the business.
+      maxLength: 255
+      example: moneris.com
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
+    offeredProductsAndServicesDescription:
+      type:
+      - string
+      - 'null'
+      description: A description of type of products and services offered by the business.
+      maxLength: 255
+      example: food
+    creditTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through credit-based payments.
+      format: int32
+    lastName:
+      type:
+      - string
+      - 'null'
+      description: Last name.
+      minLength: 1
+      maxLength: 30
+      example: Doe
+    merchantRiskRate:
+      type: string
+      description: A score indicating the level of risk associated with the merchant's transactions.
+      maxLength: 60
+      example: A+
+      enum:
+      - A
+      - A_PLUS
+      - B_HIGH
+      - B_LOW
+      - B_LOW_PLUS
+      - B_MID
+      - C
+      - C_HIGH
+      - C_HIGH_PLUS
+      - C_LOW
+      - C_LOW_PLUS
+      - C_MID
+      - C_MID_PLUS
+      - C_PLUS
+      - D
+      - D_HIGH
+      - D_LOW
+      - D_MID
+      - E
+      - E_MINUS
+      - F
+    error:
+      description: Error response details.
+      properties:
+        type:
+          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
+
+            '
+          type: string
+          format: uri
+          example: https://api-developer.moneris.com/responsehandling
+        title:
+          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
+
+            '
+          type:
+          - string
+          - 'null'
+          example: INSUFFICIENT_FUNDS
+        status:
+          description: 'it conveys the HTTP status code used for the convenience of the consumer.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 100
+          maximum: 505
+        detail:
+          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: Funds are insufficient to execute the operation.
+        instance:
+          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
+          format: uri-reference
+        category:
+          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
+          enum:
+          - API_ERROR
+          - IDEMPOTENCY_ERROR
+          - INVALID_REQUEST_ERROR
+          - DECLINED_ERROR
+          - UNAUTHORIZED_ERROR
+          - INTERNAL_SERVER_ERROR
+          - null
+          type:
+          - string
+          - 'null'
+          example: DECLINED_ERROR
+        errors:
+          type: array
+          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          items:
+            type: object
+            $ref: '#/components/schemas/parameterError'
+          example:
+          - parameterName: address.postalCode
+            parameterValue: MAP3J8
+            errorMessage: address.Postal code does not match regular expression
+            reasonCode: INVALID_FORMAT
+      title: API Error
+      type: object
+      required:
+      - type
     carriers:
       type: array
       description: A list of carrier options available for the device.
@@ -2934,52 +2790,189 @@ components:
           items:
             $ref: '#/components/schemas/additionalBankingAccount'
           maxItems: 10
-    chainId:
+    phoneNumber:
+      type: string
+      description: Phone number.
+      pattern: ^\+[1-9]\d{1,14}$
+      minLength: 3
+      maxLength: 16
+      example: '+18663197450'
+    yearsOfOwnership:
+      type: integer
+      description: An integer representing the number of years the merchant has been in ownership.
+      format: int32
+    riskLevel:
       type:
       - string
       - 'null'
-      description: A unique identifier assigned to a specific organizational chain.
-      minLength: 13
-      maxLength: 13
-      example: '0030400001622'
-    businessActivity:
-      type: object
-      description: An object containing all details about the business activity.
-      required:
-      - dropShipping
-      properties:
-        dropShipping:
-          $ref: '#/components/schemas/dropShipping'
-    additionalBankingAccount:
-      type: object
-      description: An object that contains additional banking account information.
-      allOf:
-      - $ref: '#/components/schemas/bank'
-      - type: object
-        required:
-        - accountType
-        properties:
-          accountType:
-            $ref: '#/components/schemas/addionalBankingAccountType'
-    amount:
+      description: The risk level associated with the business.
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      example: LOW
+    dropShipping:
+      type: boolean
+      description: A boolean value indicating whether the business engages in drop shipping as part of its operations.
+    businessUrl:
+      type:
+      - string
+      - 'null'
+      description: The official website URL of the business.
+      format: uri
+      maxLength: 255
+      example: www.abc.com
+    settlementOption:
+      type: string
+      description: The method for settling transactions.
+      enum:
+      - SYSTEM_CLOSE
+      - MERCHANT_CLOSE
+    next:
+      description: Pagination link pointing to the next page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    marketSegment:
+      type:
+      - string
+      - 'null'
+      description: Identifies the specific customer or business segment targeted by a product or service.
+      enum:
+      - PAYROC
+      - ADVANCE_IT
+      - ATB
+      - ATB_8760
+      - ADYEN
+      - BRAINTREE
+      - CYDCOR
+      - DIRECT_CASH
+      - INTUIT
+      - MCA
+      - OPTIMAL
+      - PAYSAFE_RETAIL_RESELLER
+      - PROTOCOL
+      - SAGE
+      - SONA
+      - SOFT_TECH
+      - TILL_PAYMENTS
+      - UEAT
+      - CLEVERPAYS
+      - PAYLITE
+      - ILIXIUM
+      - LOYALTY_SENSE
+      - POWER_PAYMENTS
+      - PAYMENT_EXPERTS
+      - INTERNATIONAL_PAYMENT_SOLUTIONS
+      - PAYOLOGY
+      - NATIONAL_PAYMENTS
+    settlementTime:
+      type:
+      - string
+      - 'null'
+      description: A timestamp indicating the time when a transaction is settled.
+      format: time
+      example: '18:10:00'
+    discoverTransactionVolume:
       type: integer
+      description: A numeric value representing the total transaction volume generated through Discover payments.
       format: int32
+      example: 1000
+    last:
+      description: Pagination link pointing to the last page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    softwareVendors:
+      type: array
+      description: A list of software vendors associated with the device.
+      items:
+        type: string
+    supplyType:
+      type:
+      - string
+      - 'null'
+      description: The type of supply associated with the device.
+    transitNumber:
+      type:
+      - string
+      - 'null'
+      description: Attribute representing the five-digit branch number of a financial institution.
+      maxLength: 10
+    pinpadType:
+      type:
+      - string
+      - 'null'
+      description: The type of pinpad associated with the device.
+    institutionNumber:
+      type: string
+      description: The name or identifier of the financial institution.
+      maxLength: 5
+      example: 809
+      pattern: ^\d{5}
+    unionPayTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through UnionPay payments.
+      format: int32
+      example: 1000
+    motoTransactionPercentage:
+      description: The percentage of transactions processed through mail order / telephone order.
+      type: number
+      format: decimal
       minimum: 0
-      maximum: 999999999
-      example: 10000
-      description: Amount
-    legalEntity:
+      maximum: 100
+      example: 90.5
+    previous:
+      description: Pagination link pointing to the previous page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    supplyName:
+      type: string
+      description: Indicates the name of the good available for fulfillment or distribution.
+      maxLength: 100
+      example: 2-PLY Sales Draft Slips (25)
+    bank:
       type: object
-      title: Legal Entity
-      description: An object containing all details about the legal entity of the business.
+      description: An object that contains information about the bank associated with the account or transaction.
       required:
-      - businessType
+      - currency
+      - institutionNumber
+      - transitNumber
+      - accountNumber
       properties:
-        businessType:
-          $ref: '#/components/schemas/businessType'
+        currency:
+          $ref: '#/components/schemas/currency'
+        institutionNumber:
+          $ref: '#/components/schemas/institutionNumber'
+        transitNumber:
+          $ref: '#/components/schemas/transitNumber'
+        accountNumber:
+          $ref: '#/components/schemas/accountNumber'
+    masterCardDebitTransactionVolume:
+      type: integer
+      description: A numeric value representing the total transaction volume generated through MasterCard Debit payments.
+      format: int32
+      example: 1000
+    currency:
+      type: string
+      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
+      minLength: 3
+      maxLength: 4
+      example: CAD
+      format: iso-4217
+    self:
+      description: Pagination link pointing to the current page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
   responses:
-    forbidden:
-      description: Forbidden. The user does not have permission to access the requested resource.
+    internalServer:
+      description: Unexpected error.
       headers:
         Api-Version:
           $ref: '#/components/headers/apiVersion'
@@ -2991,39 +2984,18 @@ components:
           $ref: '#/components/headers/rateLimitCount'
         X-RateLimit-Remaining:
           $ref: '#/components/headers/rateLimitRemaining'
-        WWW-Authenticate:
-          schema:
-            type: string
-            example: Bearer, error="insufficient_scope"
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/error'
           example:
-            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: FORBIDDEN_REQUEST
-            status: 403
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
             detail: null
             instance: null
-            category: UNAUTHORIZED_ERROR
+            category: INTERNAL_SERVER_ERROR
             errors: []
-    tooManyRequests:
-      description: Too Many Requests
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        X-RateLimit-Reset:
-          $ref: '#/components/headers/rateLimitReset'
-        Retry-After:
-          $ref: '#/components/headers/rateLimitReset'
     conflict:
       description: Request could not be completed due to a conflict with resource state or existing idempotency key.
       headers:
@@ -3073,63 +3045,6 @@ components:
             instance: null
             category: UNAUTHORIZED_ERROR
             errors: []
-    serviceUnavailable:
-      description: Service Temporarily Unavailable
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        Retry-After:
-          $ref: '#/components/headers/retryAfter'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://api-developer.moneris.com/responsehandling/
-            title: SERVICE_UNAVAILABLE
-            status: 503
-            detail: null
-            instance: null
-            category: INTERNAL_SERVER_ERROR
-            errors: []
-    badRequest:
-      description: Bad Request.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-    unprocessableContent:
-      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
     notFound:
       description: Not Found.
       headers:
@@ -3155,8 +3070,54 @@ components:
             instance: /payments/pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
             category: INVALID_REQUEST_ERROR
             errors: []
-    internalServer:
-      description: Unexpected error.
+    forbidden:
+      description: Forbidden. The user does not have permission to access the requested resource.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="insufficient_scope"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: FORBIDDEN_REQUEST
+            status: 403
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
+    unprocessableContent:
+      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
       headers:
         Api-Version:
           $ref: '#/components/headers/apiVersion'
@@ -3172,10 +3133,42 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/error'
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
           example:
             type: https://api-developer.moneris.com/responsehandling/
-            title: INTERNAL_SERVER_ERROR
-            status: 500
+            title: SERVICE_UNAVAILABLE
+            status: 503
             detail: null
             instance: null
             category: INTERNAL_SERVER_ERROR
@@ -3189,14 +3182,6 @@ components:
       description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
       schema:
         $ref: '#/components/schemas/apiVersion'
-    prm-merchants_merchantId:
-      in: path
-      name: merchant-id
-      example: 0123456789101
-      required: true
-      description: "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
-      schema:
-        $ref: '#/components/schemas/merchantId'
     correlationId:
       in: header
       name: X-Correlation-Id
@@ -3206,6 +3191,14 @@ components:
       schema:
         type: string
         example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+    prm-merchants_merchantId:
+      in: path
+      name: merchant-id
+      example: 0123456789101
+      required: true
+      description: "Thirteen character identification code. \nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      schema:
+        $ref: '#/components/schemas/merchantId'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

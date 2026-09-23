@@ -5,8 +5,7 @@ info:
   description: 'Moneris API Platform
 
 
-
-    [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height:32px;">](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
+    [](https://god.gw.postman.com/run-collection/25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8?action=collection%2Ffork&collection-url=entityId%3D25575461-f04750a0-88e9-4c83-8b58-a3aff15eeea8%26entityType%3Dcollection%26workspaceId%3D5d2a9a0f-57a7-441c-b2af-fe6315e80a08)'
   termsOfService: https://www.moneris.com/en/legal/terms-of-use
   contact:
     url: https://api-developer.moneris.com
@@ -200,6 +199,48 @@ paths:
           $ref: '#/components/responses/serviceUnavailable'
 components:
   schemas:
+    customData:
+      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+      type:
+      - object
+      - 'null'
+      additionalProperties:
+        type: string
+        minLength: 1
+        maxLength: 50
+      maxProperties: 10
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
     customerList:
       title: customerList
       type: object
@@ -221,6 +262,558 @@ components:
           $ref: '#/components/schemas/previous'
       required:
       - data
+    modifiedAt:
+      description: Time at which the object was modified
+      type:
+      - string
+      - 'null'
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    resourceId:
+      type: string
+      description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    lastName:
+      type:
+      - string
+      - 'null'
+      description: Last name.
+      minLength: 1
+      maxLength: 30
+      example: Doe
+    merchantId:
+      type: string
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    companyName:
+      type:
+      - string
+      - 'null'
+      description: Identifies the associated company name
+      minLength: 1
+      maxLength: 50
+      example: SP Ltd
+    firstName:
+      type:
+      - string
+      - 'null'
+      description: First name.
+      minLength: 1
+      maxLength: 30
+      example: John
+    error:
+      description: Error response details.
+      properties:
+        type:
+          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
+
+            '
+          type: string
+          format: uri
+          example: https://api-developer.moneris.com/responsehandling
+        title:
+          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
+
+            '
+          type:
+          - string
+          - 'null'
+          example: INSUFFICIENT_FUNDS
+        status:
+          description: 'it conveys the HTTP status code used for the convenience of the consumer.
+
+            '
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 100
+          maximum: 505
+        detail:
+          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: Funds are insufficient to execute the operation.
+        instance:
+          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
+
+            '
+          type:
+          - string
+          - 'null'
+          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
+          format: uri-reference
+        category:
+          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
+          enum:
+          - API_ERROR
+          - IDEMPOTENCY_ERROR
+          - INVALID_REQUEST_ERROR
+          - DECLINED_ERROR
+          - UNAUTHORIZED_ERROR
+          - INTERNAL_SERVER_ERROR
+          - null
+          type:
+          - string
+          - 'null'
+          example: DECLINED_ERROR
+        errors:
+          type: array
+          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
+          items:
+            type: object
+            $ref: '#/components/schemas/parameterError'
+          example:
+          - parameterName: address.postalCode
+            parameterValue: MAP3J8
+            errorMessage: address.Postal code does not match regular expression
+            reasonCode: INVALID_FORMAT
+      title: API Error
+      type: object
+      required:
+      - type
+    customerRequest:
+      title: customerRequest
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        companyName:
+          $ref: '#/components/schemas/companyName'
+        address:
+          title: customerAddress
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        shippingAddress:
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          pattern: ^\+[1-9]\d{1,14}$
+          minLength: 3
+          maxLength: 16
+          example: '+18663197450'
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+          description: 'Contains the customer''s email address.
+
+
+            For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+            '
+          minLength: 1
+          maxLength: 320
+          example: moneris@moneris.com
+        customData:
+          $ref: '#/components/schemas/customData'
+    createCustomerRequest:
+      title: customerRequest
+      type: object
+      properties:
+        idempotencyKey:
+          $ref: '#/components/schemas/idempotencyKey'
+        firstName:
+          $ref: '#/components/schemas/firstName'
+        middleName:
+          $ref: '#/components/schemas/middleName'
+        lastName:
+          $ref: '#/components/schemas/lastName'
+        companyName:
+          $ref: '#/components/schemas/companyName'
+        address:
+          title: customerAddress
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        shippingAddress:
+          type:
+          - object
+          - 'null'
+          description: 'The postal address including street, town/city, province, and postal code.
+
+            Optionally an unit number can be provided.
+
+            '
+          properties:
+            unitNumber:
+              type:
+              - string
+              - 'null'
+              description: Unit number
+              minLength: 1
+              maxLength: 19
+              example: 123A
+            streetNumber:
+              type:
+              - string
+              - 'null'
+              description: Street number
+              minLength: 1
+              maxLength: 19
+              example: '3300'
+            streetName:
+              type:
+              - string
+              - 'null'
+              description: Street name
+              minLength: 1
+              maxLength: 100
+              example: Bloor
+            city:
+              type:
+              - string
+              - 'null'
+              description: 'Identifies the city.
+
+                '
+              minLength: 1
+              maxLength: 50
+              example: Toronto
+            province:
+              type:
+              - string
+              - 'null'
+              description: 'Province or state ISO 3166-2 code '
+              minLength: 1
+              maxLength: 3
+              format: iso-3166-2
+              example: 'ON'
+            postalCode:
+              type:
+              - string
+              - 'null'
+              description: Postal or zip code
+              minLength: 1
+              maxLength: 30
+              example: M8X 2X2
+            country:
+              type:
+              - string
+              - 'null'
+              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
+              minLength: 2
+              maxLength: 2
+              example: CA
+              format: iso-3166
+          example:
+            unitNumber: 123A
+            streetNumber: '3300'
+            streetName: Bloor Street West
+            city: Toronto
+            province: 'ON'
+            postalCode: M8X 2X2
+            country: CA
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: Phone number.
+          pattern: ^\+[1-9]\d{1,14}$
+          minLength: 3
+          maxLength: 16
+          example: '+18663197450'
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+          description: 'Contains the customer''s email address.
+
+
+            For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
+
+            '
+          minLength: 1
+          maxLength: 320
+          example: moneris@moneris.com
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - idempotencyKey
+    last:
+      description: Pagination link pointing to the last page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    createdAt:
+      description: Time at which the object was created
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+    previous:
+      description: Pagination link pointing to the previous page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
+    dateTime:
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
+      description: Date & Time
+    customerId:
+      type: string
+      description: Unique Identification for the Customer
+      example: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+    next:
+      description: Pagination link pointing to the next page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
     customer:
       title: customer
       type: object
@@ -426,88 +1019,8 @@ components:
       - customerId
       - merchantId
       - createdAt
-    companyName:
-      type:
-      - string
-      - 'null'
-      description: Identifies the associated company name
-      minLength: 1
-      maxLength: 50
-      example: SP Ltd
-    modifiedAt:
-      description: Time at which the object was modified
-      type:
-      - string
-      - 'null'
-      format: date-time
-      example: '2019-07-30T06:43:40.252Z'
-    dateTime:
-      type: string
-      format: date-time
-      example: '2019-07-30T06:43:40.252Z'
-      description: Date & Time
-    customData:
-      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
-      type:
-      - object
-      - 'null'
-      additionalProperties:
-        type: string
-        minLength: 1
-        maxLength: 50
-      maxProperties: 10
     self:
       description: Pagination link pointing to the current page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    customerId:
-      type: string
-      description: Unique Identification for the Customer
-      example: ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
-      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
-      minLength: 30
-      maxLength: 30
-    parameterError:
-      title: Parameter error
-      description: Request property or header related error.
-      type: object
-      properties:
-        parameterName:
-          type: string
-          description: Property or header name. Can contain nested path separated by '.'
-          example: address.postalCode
-        parameterValue:
-          type:
-          - string
-          - 'null'
-          description: Property or header value string representation.
-          example: MAP3J8
-        reasonCode:
-          type: string
-          description: Reason that triggered the error.
-          enum:
-          - INVALID_FORMAT
-          - REQUIRED_FIELD
-          - INVALID_VALUE
-          example: INVALID_FORMAT
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Human readable description of the error.
-          example: String 'MAP3J8' does not match the postal code pattern.
-      required:
-      - parameterName
-      - reasonCode
-    createdAt:
-      description: Time at which the object was created
-      type: string
-      format: date-time
-      example: '2019-07-30T06:43:40.252Z'
-    next:
-      description: Pagination link pointing to the next page.
       type:
       - string
       - 'null'
@@ -518,6 +1031,12 @@ components:
       minLength: 1
       maxLength: 36
       example: 6q5w4e7r8t9y
+    first:
+      description: Pagination link pointing to the first page.
+      type:
+      - string
+      - 'null'
+      format: uri-reference
     middleName:
       type:
       - string
@@ -526,641 +1045,78 @@ components:
       minLength: 1
       maxLength: 30
       example: J.
-    error:
-      description: Error response details.
-      properties:
-        type:
-          description: 'A URI reference that identifies the problem type.  Ideally it should be a stable URL to the documentation of the details about this type of error but it also can be a URN.  If nothing can be provided, a "about:blank" value is returned.
-
-            '
-          type: string
-          format: uri
-          example: https://api-developer.moneris.com/responsehandling
-        title:
-          description: 'A short, human-readable summary of the problem type.   It SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization
-
-            '
-          type:
-          - string
-          - 'null'
-          example: INSUFFICIENT_FUNDS
-        status:
-          description: 'it conveys the HTTP status code used for the convenience of the consumer.
-
-            '
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 100
-          maximum: 505
-        detail:
-          description: 'A human-readable message providing more details about the error. For card errors, these messages can be shown to your users.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: Funds are insufficient to execute the operation.
-        instance:
-          description: 'A URI reference that identifies the specific occurrence of the problem. Typically, this resolves to a resource that might include more details about the problem.
-
-            '
-          type:
-          - string
-          - 'null'
-          example: /payments/12f3e0a8-1d68-2b86-dd30-4ca51bb66e10
-          format: uri-reference
-        category:
-          description: "The type of error returned. \n - `API_ERROR`: This occurs due to an intermittent issue.  \n - `IDEMPOTENCY_ERROR`: The idempotency key has already been used.\n - `INVALID_REQUEST_ERROR`: The data provided in the request is invalid.\n - `DECLINED_ERROR`: Transaction was declined by the issuer.\n - `UNAUTHORIZED_ERROR`: Caller not authenticated, or not allowed to execute the current operation.\n - `INTERNAL_SERVER_ERROR`: An internal issue with our servers has occured.\n"
-          enum:
-          - API_ERROR
-          - IDEMPOTENCY_ERROR
-          - INVALID_REQUEST_ERROR
-          - DECLINED_ERROR
-          - UNAUTHORIZED_ERROR
-          - INTERNAL_SERVER_ERROR
-          - null
-          type:
-          - string
-          - 'null'
-          example: DECLINED_ERROR
-        errors:
-          type: array
-          description: List of validation errors when error category is INVALID_REQUEST_ERROR.
-          items:
-            type: object
-            $ref: '#/components/schemas/parameterError'
-          example:
-          - parameterName: address.postalCode
-            parameterValue: MAP3J8
-            errorMessage: address.Postal code does not match regular expression
-            reasonCode: INVALID_FORMAT
-      title: API Error
-      type: object
-      required:
-      - type
-    lastName:
-      type:
-      - string
-      - 'null'
-      description: Last name.
-      minLength: 1
-      maxLength: 30
-      example: Doe
-    customerRequest:
-      title: customerRequest
-      type: object
-      properties:
-        firstName:
-          $ref: '#/components/schemas/firstName'
-        middleName:
-          $ref: '#/components/schemas/middleName'
-        lastName:
-          $ref: '#/components/schemas/lastName'
-        companyName:
-          $ref: '#/components/schemas/companyName'
-        address:
-          title: customerAddress
-          type:
-          - object
-          - 'null'
-          description: 'The postal address including street, town/city, province, and postal code.
-
-            Optionally an unit number can be provided.
-
-            '
-          properties:
-            unitNumber:
-              type:
-              - string
-              - 'null'
-              description: Unit number
-              minLength: 1
-              maxLength: 19
-              example: 123A
-            streetNumber:
-              type:
-              - string
-              - 'null'
-              description: Street number
-              minLength: 1
-              maxLength: 19
-              example: '3300'
-            streetName:
-              type:
-              - string
-              - 'null'
-              description: Street name
-              minLength: 1
-              maxLength: 100
-              example: Bloor
-            city:
-              type:
-              - string
-              - 'null'
-              description: 'Identifies the city.
-
-                '
-              minLength: 1
-              maxLength: 50
-              example: Toronto
-            province:
-              type:
-              - string
-              - 'null'
-              description: 'Province or state ISO 3166-2 code '
-              minLength: 1
-              maxLength: 3
-              format: iso-3166-2
-              example: 'ON'
-            postalCode:
-              type:
-              - string
-              - 'null'
-              description: Postal or zip code
-              minLength: 1
-              maxLength: 30
-              example: M8X 2X2
-            country:
-              type:
-              - string
-              - 'null'
-              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
-              minLength: 2
-              maxLength: 2
-              example: CA
-              format: iso-3166
-          example:
-            unitNumber: 123A
-            streetNumber: '3300'
-            streetName: Bloor Street West
-            city: Toronto
-            province: 'ON'
-            postalCode: M8X 2X2
-            country: CA
-        shippingAddress:
-          type:
-          - object
-          - 'null'
-          description: 'The postal address including street, town/city, province, and postal code.
-
-            Optionally an unit number can be provided.
-
-            '
-          properties:
-            unitNumber:
-              type:
-              - string
-              - 'null'
-              description: Unit number
-              minLength: 1
-              maxLength: 19
-              example: 123A
-            streetNumber:
-              type:
-              - string
-              - 'null'
-              description: Street number
-              minLength: 1
-              maxLength: 19
-              example: '3300'
-            streetName:
-              type:
-              - string
-              - 'null'
-              description: Street name
-              minLength: 1
-              maxLength: 100
-              example: Bloor
-            city:
-              type:
-              - string
-              - 'null'
-              description: 'Identifies the city.
-
-                '
-              minLength: 1
-              maxLength: 50
-              example: Toronto
-            province:
-              type:
-              - string
-              - 'null'
-              description: 'Province or state ISO 3166-2 code '
-              minLength: 1
-              maxLength: 3
-              format: iso-3166-2
-              example: 'ON'
-            postalCode:
-              type:
-              - string
-              - 'null'
-              description: Postal or zip code
-              minLength: 1
-              maxLength: 30
-              example: M8X 2X2
-            country:
-              type:
-              - string
-              - 'null'
-              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
-              minLength: 2
-              maxLength: 2
-              example: CA
-              format: iso-3166
-          example:
-            unitNumber: 123A
-            streetNumber: '3300'
-            streetName: Bloor Street West
-            city: Toronto
-            province: 'ON'
-            postalCode: M8X 2X2
-            country: CA
-        phoneNumber:
-          type:
-          - string
-          - 'null'
-          description: Phone number.
-          pattern: ^\+[1-9]\d{1,14}$
-          minLength: 3
-          maxLength: 16
-          example: '+18663197450'
-        email:
-          type:
-          - string
-          - 'null'
-          format: email
-          description: 'Contains the customer''s email address.
-
-
-            For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
-
-            '
-          minLength: 1
-          maxLength: 320
-          example: moneris@moneris.com
-        customData:
-          $ref: '#/components/schemas/customData'
-    last:
-      description: Pagination link pointing to the last page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    first:
-      description: Pagination link pointing to the first page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
-    previous:
-      description: Pagination link pointing to the previous page.
-      type:
-      - string
-      - 'null'
-      format: uri-reference
+  parameters:
+    correlationId:
+      in: header
+      name: X-Correlation-Id
+      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
+      required: false
+      schema:
+        type: string
+        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+    createdTo:
+      name: created_to
+      in: query
+      description: "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
+      required: false
+      example: '2024-05-16T04:00:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
+    pageBeforeCursor:
+      in: query
+      name: cursor
+      description: Pagination cursor to return items located after it.
+      required: false
+      example: d41d8cd98f00b204e9800998ecf8427e
+      schema:
+        type: string
+        example: d41d8cd98f00b204e9800998ecf8427e
+    pageLimit:
+      in: query
+      name: limit
+      description: Maximum number of items to return in the response.
+      example: 10
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 20
+        example: 10
+    createdFrom:
+      name: created_from
+      in: query
+      description: Returns items created after the specified date, defaults to the current date starting from 12 AM.
+      required: false
+      example: '2024-05-16T04:00:00Z'
+      schema:
+        $ref: '#/components/schemas/dateTime'
     apiVersion:
-      description: 'The endpoint''s API Version.  Must be provided through headers.
-
-        '
-      type: string
-      example: '2025-08-14'
-      default: '2025-08-14'
+      in: header
+      name: Api-Version
+      required: true
+      example: '2024-09-17'
+      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
+      schema:
+        $ref: '#/components/schemas/apiVersion'
+    customerId:
+      in: path
+      name: customer-id
+      description: The unique identifier of the customer
+      required: true
+      schema:
+        $ref: '#/components/schemas/resourceId'
     merchantId:
-      type: string
-      description: "Thirteen character long identification provided to merchants by Moneris. \n"
-      minLength: 13
-      maxLength: 13
+      in: header
+      name: X-Merchant-Id
       example: 0123456789101
-    firstName:
-      type:
-      - string
-      - 'null'
-      description: First name.
-      minLength: 1
-      maxLength: 30
-      example: John
-    resourceId:
-      type: string
-      description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
-      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
-      minLength: 30
-      maxLength: 30
-      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
-    createCustomerRequest:
-      title: customerRequest
-      type: object
-      properties:
-        idempotencyKey:
-          $ref: '#/components/schemas/idempotencyKey'
-        firstName:
-          $ref: '#/components/schemas/firstName'
-        middleName:
-          $ref: '#/components/schemas/middleName'
-        lastName:
-          $ref: '#/components/schemas/lastName'
-        companyName:
-          $ref: '#/components/schemas/companyName'
-        address:
-          title: customerAddress
-          type:
-          - object
-          - 'null'
-          description: 'The postal address including street, town/city, province, and postal code.
-
-            Optionally an unit number can be provided.
-
-            '
-          properties:
-            unitNumber:
-              type:
-              - string
-              - 'null'
-              description: Unit number
-              minLength: 1
-              maxLength: 19
-              example: 123A
-            streetNumber:
-              type:
-              - string
-              - 'null'
-              description: Street number
-              minLength: 1
-              maxLength: 19
-              example: '3300'
-            streetName:
-              type:
-              - string
-              - 'null'
-              description: Street name
-              minLength: 1
-              maxLength: 100
-              example: Bloor
-            city:
-              type:
-              - string
-              - 'null'
-              description: 'Identifies the city.
-
-                '
-              minLength: 1
-              maxLength: 50
-              example: Toronto
-            province:
-              type:
-              - string
-              - 'null'
-              description: 'Province or state ISO 3166-2 code '
-              minLength: 1
-              maxLength: 3
-              format: iso-3166-2
-              example: 'ON'
-            postalCode:
-              type:
-              - string
-              - 'null'
-              description: Postal or zip code
-              minLength: 1
-              maxLength: 30
-              example: M8X 2X2
-            country:
-              type:
-              - string
-              - 'null'
-              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
-              minLength: 2
-              maxLength: 2
-              example: CA
-              format: iso-3166
-          example:
-            unitNumber: 123A
-            streetNumber: '3300'
-            streetName: Bloor Street West
-            city: Toronto
-            province: 'ON'
-            postalCode: M8X 2X2
-            country: CA
-        shippingAddress:
-          type:
-          - object
-          - 'null'
-          description: 'The postal address including street, town/city, province, and postal code.
-
-            Optionally an unit number can be provided.
-
-            '
-          properties:
-            unitNumber:
-              type:
-              - string
-              - 'null'
-              description: Unit number
-              minLength: 1
-              maxLength: 19
-              example: 123A
-            streetNumber:
-              type:
-              - string
-              - 'null'
-              description: Street number
-              minLength: 1
-              maxLength: 19
-              example: '3300'
-            streetName:
-              type:
-              - string
-              - 'null'
-              description: Street name
-              minLength: 1
-              maxLength: 100
-              example: Bloor
-            city:
-              type:
-              - string
-              - 'null'
-              description: 'Identifies the city.
-
-                '
-              minLength: 1
-              maxLength: 50
-              example: Toronto
-            province:
-              type:
-              - string
-              - 'null'
-              description: 'Province or state ISO 3166-2 code '
-              minLength: 1
-              maxLength: 3
-              format: iso-3166-2
-              example: 'ON'
-            postalCode:
-              type:
-              - string
-              - 'null'
-              description: Postal or zip code
-              minLength: 1
-              maxLength: 30
-              example: M8X 2X2
-            country:
-              type:
-              - string
-              - 'null'
-              description: "Provides the two letter country code according the ISO 3166-1 alpha-2 standard. \nFor a complete list of country codes, visit: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.\n"
-              minLength: 2
-              maxLength: 2
-              example: CA
-              format: iso-3166
-          example:
-            unitNumber: 123A
-            streetNumber: '3300'
-            streetName: Bloor Street West
-            city: Toronto
-            province: 'ON'
-            postalCode: M8X 2X2
-            country: CA
-        phoneNumber:
-          type:
-          - string
-          - 'null'
-          description: Phone number.
-          pattern: ^\+[1-9]\d{1,14}$
-          minLength: 3
-          maxLength: 16
-          example: '+18663197450'
-        email:
-          type:
-          - string
-          - 'null'
-          format: email
-          description: 'Contains the customer''s email address.
-
-
-            For standard email protocols, visit: https://www.rfc-editor.org/rfc/rfc5322
-
-            '
-          minLength: 1
-          maxLength: 320
-          example: moneris@moneris.com
-        customData:
-          $ref: '#/components/schemas/customData'
-      required:
-      - idempotencyKey
+      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      required: true
+      schema:
+        $ref: '#/components/schemas/merchantId'
   responses:
-    invalidListbadRequest:
-      description: Bad Request.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          examples:
-            idempotency_error:
-              $ref: '#/components/examples/InvalidListRequestErrorResponse'
-    conflict:
-      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          examples:
-            idempotency_error:
-              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
-    unauthorized:
-      description: Not authorized. The user does not have a valid API Key or Access Token.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        WWW-Authenticate:
-          schema:
-            type: string
-            example: Bearer, error="invalid_token"
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: UNAUTHORIZED_REQUEST
-            status: 401
-            detail: null
-            instance: null
-            category: UNAUTHORIZED_ERROR
-            errors: []
-    concurrencyConflict:
-      description: Request could not be completed due to a concurrent access issue.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          examples:
-            concurrency_error:
-              $ref: '#/components/examples/concurrentRequestErrorResponse'
-    serviceUnavailable:
-      description: Service Temporarily Unavailable
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        Retry-After:
-          $ref: '#/components/headers/retryAfter'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://api-developer.moneris.com/responsehandling/
-            title: SERVICE_UNAVAILABLE
-            status: 503
-            detail: null
-            instance: null
-            category: INTERNAL_SERVER_ERROR
-            errors: []
-    customerUpdateSuccessResponse:
-      description: Customer updated successfully.
+    createCustomerSuccessResponse:
+      description: Customer operation result response
       headers:
         Api-Version:
           $ref: '#/components/headers/apiVersion'
@@ -1205,6 +1161,201 @@ components:
             instance: null
             category: UNAUTHORIZED_ERROR
             errors: []
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
+    concurrencyConflict:
+      description: Request could not be completed due to a concurrent access issue.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            concurrency_error:
+              $ref: '#/components/examples/concurrentRequestErrorResponse'
+    unprocessableContent:
+      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    conflict:
+      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
+    invalidListbadRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/InvalidListRequestErrorResponse'
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: UNAUTHORIZED_REQUEST
+            status: 401
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    customerDeleteSuccessResponse:
+      description: Customer deleted successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+    customerNotFoundResponse:
+      description: Customer not found
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: NOT_FOUND
+            status: 404
+            detail: null
+            instance: /customers/ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            category: INVALID_REQUEST_ERROR
+            errors: []
+    customerUpdateSuccessResponse:
+      description: Customer updated successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/customer'
     listCustomersSuccessResponse:
       description: List of all customers
       headers:
@@ -1222,8 +1373,31 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/customerList'
-    createCustomerSuccessResponse:
-      description: Customer operation result response
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    retrieveCustomerSuccessResponse:
+      description: The customer corresponding to the provided `customerId`
       headers:
         Api-Version:
           $ref: '#/components/headers/apiVersion'
@@ -1264,181 +1438,6 @@ components:
             instance: null
             category: INTERNAL_SERVER_ERROR
             errors: []
-    tooManyRequests:
-      description: Too Many Requests
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        X-RateLimit-Reset:
-          $ref: '#/components/headers/rateLimitReset'
-        Retry-After:
-          $ref: '#/components/headers/rateLimitReset'
-    retrieveCustomerSuccessResponse:
-      description: The customer corresponding to the provided `customerId`
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/customer'
-    customerNotFoundResponse:
-      description: Customer not found
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: NOT_FOUND
-            status: 404
-            detail: null
-            instance: /customers/ci0105ARZ3NDEKTSV4RRFFQ69G5FAV
-            category: INVALID_REQUEST_ERROR
-            errors: []
-    badRequest:
-      description: Bad Request.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-    customerDeleteSuccessResponse:
-      description: Customer deleted successfully.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-    unprocessableContent:
-      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-  parameters:
-    pageLimit:
-      in: query
-      name: limit
-      description: Maximum number of items to return in the response.
-      example: 10
-      schema:
-        type: integer
-        default: 10
-        minimum: 1
-        maximum: 20
-        example: 10
-    createdFrom:
-      name: created_from
-      in: query
-      description: Returns items created after the specified date, defaults to the current date starting from 12 AM.
-      required: false
-      example: '2024-05-16T04:00:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
-    customerId:
-      in: path
-      name: customer-id
-      description: The unique identifier of the customer
-      required: true
-      schema:
-        $ref: '#/components/schemas/resourceId'
-    pageBeforeCursor:
-      in: query
-      name: cursor
-      description: Pagination cursor to return items located after it.
-      required: false
-      example: d41d8cd98f00b204e9800998ecf8427e
-      schema:
-        type: string
-        example: d41d8cd98f00b204e9800998ecf8427e
-    correlationId:
-      in: header
-      name: X-Correlation-Id
-      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
-      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
-      required: false
-      schema:
-        type: string
-        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
-    apiVersion:
-      in: header
-      name: Api-Version
-      required: true
-      example: '2024-09-17'
-      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
-      schema:
-        $ref: '#/components/schemas/apiVersion'
-    merchantId:
-      in: header
-      name: X-Merchant-Id
-      example: 0123456789101
-      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
-      required: true
-      schema:
-        $ref: '#/components/schemas/merchantId'
-    createdTo:
-      name: created_to
-      in: query
-      description: "Returns items created before the specified date, up to one day earlier. \n\nDefaults to current date and time, must be no more than 1 day later than `created_from` date. \n"
-      required: false
-      example: '2024-05-16T04:00:00Z'
-      schema:
-        $ref: '#/components/schemas/dateTime'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
