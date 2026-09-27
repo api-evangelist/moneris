@@ -170,8 +170,8 @@ paths:
           $ref: '#/components/responses/serviceUnavailable'
 components:
   responses:
-    notFound:
-      description: Not Found.
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
       headers:
         Api-Version:
           $ref: '#/components/headers/apiVersion'
@@ -183,48 +183,22 @@ components:
           $ref: '#/components/headers/rateLimitCount'
         X-RateLimit-Remaining:
           $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/error'
           example:
             type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: NOT_FOUND
-            status: 404
+            title: UNAUTHORIZED_REQUEST
+            status: 401
             detail: null
-            instance: /payments/pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
-            category: INVALID_REQUEST_ERROR
+            instance: null
+            category: UNAUTHORIZED_ERROR
             errors: []
-    disputeAcceptSuccess:
-      description: The dispute has been accepted successfully.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-    getUploadStatusSuccess:
-      description: Upload Status retrieved successfully.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/uploadStatus'
     getDisputeSuccess:
       description: OK
       headers:
@@ -262,6 +236,161 @@ components:
                 pageNo: 1
               - image: base64encodedstring
                 pageNo: 2
+    notFound:
+      description: Not Found.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: NOT_FOUND
+            status: 404
+            detail: null
+            instance: /payments/pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+            category: INVALID_REQUEST_ERROR
+            errors: []
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    internalServer:
+      description: Unexpected error.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    getUploadStatusSuccess:
+      description: Upload Status retrieved successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/uploadStatus'
+    uploadDisputeImagesSuccess:
+      description: Dispute image upload has been accepted.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        Location:
+          $ref: '#/components/headers/location'
+    conflict:
+      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          examples:
+            idempotency_error:
+              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    disputeAcceptSuccess:
+      description: The dispute has been accepted successfully.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
     forbidden:
       description: Forbidden. The user does not have permission to access the requested resource.
       headers:
@@ -308,154 +437,7 @@ components:
           $ref: '#/components/headers/rateLimitReset'
         Retry-After:
           $ref: '#/components/headers/rateLimitReset'
-    conflict:
-      description: Request could not be completed due to a conflict with resource state or existing idempotency key.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          examples:
-            idempotency_error:
-              $ref: '#/components/examples/IdempotencyRequestErrorResponse'
-    unauthorized:
-      description: Not authorized. The user does not have a valid API Key or Access Token.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        WWW-Authenticate:
-          schema:
-            type: string
-            example: Bearer, error="invalid_token"
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: UNAUTHORIZED_REQUEST
-            status: 401
-            detail: null
-            instance: null
-            category: UNAUTHORIZED_ERROR
-            errors: []
-    badRequest:
-      description: Bad Request.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-    serviceUnavailable:
-      description: Service Temporarily Unavailable
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        Retry-After:
-          $ref: '#/components/headers/retryAfter'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://api-developer.moneris.com/responsehandling/
-            title: SERVICE_UNAVAILABLE
-            status: 503
-            detail: null
-            instance: null
-            category: INTERNAL_SERVER_ERROR
-            errors: []
-    internalServer:
-      description: Unexpected error.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://api-developer.moneris.com/responsehandling/
-            title: INTERNAL_SERVER_ERROR
-            status: 500
-            detail: null
-            instance: null
-            category: INTERNAL_SERVER_ERROR
-            errors: []
-    uploadDisputeImagesSuccess:
-      description: Dispute image upload has been accepted.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        Location:
-          $ref: '#/components/headers/location'
   parameters:
-    correlationId:
-      in: header
-      name: X-Correlation-Id
-      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
-      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
-      required: false
-      schema:
-        type: string
-        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
-    caseId:
-      name: case-id
-      in: path
-      description: The case ID associated with the uploaded files.
-      required: true
-      example: '121719004438'
-      schema:
-        type: string
-        pattern: ^[a-zA-Z0-9]{12}$
     uploadReferenceId:
       description: Upload reference Id.
       example: IU1001ARZ3NDEKTSV4RRFFQ69G5FAV
@@ -472,6 +454,32 @@ components:
       description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
       schema:
         $ref: '#/components/schemas/apiVersion'
+    caseId:
+      name: case-id
+      in: path
+      description: The case ID associated with the uploaded files.
+      required: true
+      example: '121719004438'
+      schema:
+        type: string
+        pattern: ^[a-zA-Z0-9]{12}$
+    merchantId:
+      in: header
+      name: X-Merchant-Id
+      example: 0123456789101
+      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      required: true
+      schema:
+        $ref: '#/components/schemas/merchantId'
+    correlationId:
+      in: header
+      name: X-Correlation-Id
+      example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
+      description: "Correlates a series of requests within the same flow.\n\nNote: This ID is generated by Moneris with every request or response, if it doesn't exist. \nMerchants are to echo back the value with every request that is part of the call flow.\"\n"
+      required: false
+      schema:
+        type: string
+        example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
     caseRecNo:
       name: case-record-number
       in: path
@@ -482,53 +490,42 @@ components:
         type: integer
         minimum: 0
         maximum: 99
-    merchantId:
-      in: header
-      name: X-Merchant-Id
-      example: 0123456789101
-      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
-      required: true
-      schema:
-        $ref: '#/components/schemas/merchantId'
   schemas:
-    parameterError:
-      title: Parameter error
-      description: Request property or header related error.
+    disputeDocument:
+      description: Return the image details for the specific case.
       type: object
-      properties:
-        parameterName:
-          type: string
-          description: Property or header name. Can contain nested path separated by '.'
-          example: address.postalCode
-        parameterValue:
-          type:
-          - string
-          - 'null'
-          description: Property or header value string representation.
-          example: MAP3J8
-        reasonCode:
-          type: string
-          description: Reason that triggered the error.
-          enum:
-          - INVALID_FORMAT
-          - REQUIRED_FIELD
-          - INVALID_VALUE
-          example: INVALID_FORMAT
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Human readable description of the error.
-          example: String 'MAP3J8' does not match the postal code pattern.
       required:
-      - parameterName
-      - reasonCode
-    merchantId:
-      type: string
-      description: "Thirteen character long identification provided to merchants by Moneris. \n"
-      minLength: 13
-      maxLength: 13
-      example: 0123456789101
+      - receivedAt
+      - fileName
+      - images
+      properties:
+        receivedAt:
+          description: Date when the original image received.
+          type: string
+          format: date-time
+        fileName:
+          description: Name of the image file.
+          type: string
+        totalPages:
+          description: Number of pages in the file.
+          type: integer
+          format: int32
+        images:
+          description: Images.
+          type: array
+          items:
+            type: object
+            required:
+            - image
+            properties:
+              image:
+                description: Image file.
+                type: string
+                format: base64url
+              pageNo:
+                description: Page number.
+                type: integer
+                format: int32
     uploadStatus:
       description: Response for status check endpoint call.
       type: object
@@ -547,13 +544,23 @@ components:
           - PENDING
           - FAILED
           - SUCCESSFUL
-    apiVersion:
-      description: 'The endpoint''s API Version.  Must be provided through headers.
-
-        '
+    merchantId:
       type: string
-      example: '2025-08-14'
-      default: '2025-08-14'
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
+    uploadImagesRequest:
+      description: Information of files.
+      type: object
+      properties:
+        files:
+          description: Array of file objects.
+          type: array
+          maxItems: 5
+          items:
+            type: string
+            format: binary
     error:
       description: Error response details.
       properties:
@@ -628,52 +635,6 @@ components:
       type: object
       required:
       - type
-    uploadImagesRequest:
-      description: Information of files.
-      type: object
-      properties:
-        files:
-          description: Array of file objects.
-          type: array
-          maxItems: 5
-          items:
-            type: string
-            format: binary
-    disputeDocument:
-      description: Return the image details for the specific case.
-      type: object
-      required:
-      - receivedAt
-      - fileName
-      - images
-      properties:
-        receivedAt:
-          description: Date when the original image received.
-          type: string
-          format: date-time
-        fileName:
-          description: Name of the image file.
-          type: string
-        totalPages:
-          description: Number of pages in the file.
-          type: integer
-          format: int32
-        images:
-          description: Images.
-          type: array
-          items:
-            type: object
-            required:
-            - image
-            properties:
-              image:
-                description: Image file.
-                type: string
-                format: base64url
-              pageNo:
-                description: Page number.
-                type: integer
-                format: int32
     dispute:
       description: Dispute information for specific case.
       type: object
@@ -699,6 +660,45 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/disputeDocument'
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
+      type: string
+      example: '2025-08-14'
+      default: '2025-08-14'
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
+      type: object
+      properties:
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
+      required:
+      - parameterName
+      - reasonCode
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

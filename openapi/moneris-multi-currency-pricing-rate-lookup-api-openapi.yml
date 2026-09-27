@@ -98,84 +98,182 @@ paths:
         '503':
           $ref: '#/components/responses/serviceUnavailable'
 components:
+  responses:
+    unauthorized:
+      description: Not authorized. The user does not have a valid API Key or Access Token.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="invalid_token"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: UNAUTHORIZED_REQUEST
+            status: 401
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    badRequest:
+      description: Bad Request.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    internalServer:
+      description: Unexpected error.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: INTERNAL_SERVER_ERROR
+            status: 500
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    multiCurrencyPricingRateLookup:
+      description: Multi-Currency Pricing (MCP) Rate lookup Response
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/multiCurrencyPricingRateLookup'
+    unprocessableContent:
+      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+    serviceUnavailable:
+      description: Service Temporarily Unavailable
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        Retry-After:
+          $ref: '#/components/headers/retryAfter'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://api-developer.moneris.com/responsehandling/
+            title: SERVICE_UNAVAILABLE
+            status: 503
+            detail: null
+            instance: null
+            category: INTERNAL_SERVER_ERROR
+            errors: []
+    forbidden:
+      description: Forbidden. The user does not have permission to access the requested resource.
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        WWW-Authenticate:
+          schema:
+            type: string
+            example: Bearer, error="insufficient_scope"
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
+            title: FORBIDDEN_REQUEST
+            status: 403
+            detail: null
+            instance: null
+            category: UNAUTHORIZED_ERROR
+            errors: []
+    tooManyRequests:
+      description: Too Many Requests
+      headers:
+        Api-Version:
+          $ref: '#/components/headers/apiVersion'
+        X-Correlation-Id:
+          $ref: '#/components/headers/correlationId'
+        Sunset:
+          $ref: '#/components/headers/sunset'
+        X-RateLimit-Limit:
+          $ref: '#/components/headers/rateLimitCount'
+        X-RateLimit-Remaining:
+          $ref: '#/components/headers/rateLimitRemaining'
+        X-RateLimit-Reset:
+          $ref: '#/components/headers/rateLimitReset'
+        Retry-After:
+          $ref: '#/components/headers/rateLimitReset'
   schemas:
-    customData:
-      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
-      type:
-      - object
-      - 'null'
-      additionalProperties:
-        type: string
-        minLength: 1
-        maxLength: 50
-      maxProperties: 10
-    parameterError:
-      title: Parameter error
-      description: Request property or header related error.
-      type: object
-      properties:
-        parameterName:
-          type: string
-          description: Property or header name. Can contain nested path separated by '.'
-          example: address.postalCode
-        parameterValue:
-          type:
-          - string
-          - 'null'
-          description: Property or header value string representation.
-          example: MAP3J8
-        reasonCode:
-          type: string
-          description: Reason that triggered the error.
-          enum:
-          - INVALID_FORMAT
-          - REQUIRED_FIELD
-          - INVALID_VALUE
-          example: INVALID_FORMAT
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Human readable description of the error.
-          example: String 'MAP3J8' does not match the postal code pattern.
-      required:
-      - parameterName
-      - reasonCode
-    resourceId:
-      type: string
-      description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
-      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
-      minLength: 30
-      maxLength: 30
-      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
-    merchantId:
-      type: string
-      description: "Thirteen character long identification provided to merchants by Moneris. \n"
-      minLength: 13
-      maxLength: 13
-      example: 0123456789101
-    amount:
-      type: integer
-      format: int32
-      minimum: 0
-      maximum: 999999999
-      example: 10000
-      description: Amount
-    multiCurrencyPricingRateCardholderInformation:
-      type: object
-      description: Multi-Currency Pricing (MCP) Rate Information Object
-      properties:
-        amountType:
-          type: string
-          description: The type of rate lookup to perform.
-          enum:
-          - CARDHOLDER
-          example: CARDHOLDER
-        amount:
-          $ref: '#/components/schemas/money'
-      required:
-      - amount
-      - amountType
     multiCurrencyPricingRateMerchantSettlementInformation:
       type: object
       description: Multi-Currency Pricing (MCP) Rate Merchant Settlement Information Object
@@ -194,13 +292,146 @@ components:
       - amount
       - amountType
       - cardholderCurrency
-    apiVersion:
-      description: 'The endpoint''s API Version.  Must be provided through headers.
-
-        '
+    customData:
+      description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+      type:
+      - object
+      - 'null'
+      additionalProperties:
+        type: string
+        minLength: 1
+        maxLength: 50
+      maxProperties: 10
+    amount:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 999999999
+      example: 10000
+      description: Amount
+    multiCurrencyPricingRateInformationRequest:
+      description: Multi-Currency Pricing (MCP) Rate Information Request Object
+      oneOf:
+      - $ref: '#/components/schemas/multiCurrencyPricingRateCardholderInformation'
+      - $ref: '#/components/schemas/multiCurrencyPricingRateMerchantSettlementInformation'
+      discriminator:
+        propertyName: amountType
+        mapping:
+          CARDHOLDER: '#/components/schemas/multiCurrencyPricingRateCardholderInformation'
+          MERCHANT_SETTLEMENT: '#/components/schemas/multiCurrencyPricingRateMerchantSettlementInformation'
+    resourceId:
       type: string
-      example: '2025-08-14'
-      default: '2025-08-14'
+      description: Used to identify API resources which may be required for future follow-on transactions; i.e. Refunds, Corrections, Completions, Reversals, etc.
+      pattern: ^[A-Za-z]{2}\d{2}[A-Za-z0-9]{26}$
+      minLength: 30
+      maxLength: 30
+      example: pi0105ARZ3NDEKTSV4RRFFQ69G5FAV
+    multiCurrencyPricingTransactionType:
+      type: string
+      description: Value representing the type of subsequent transaction request that the rate token will be used for
+      enum:
+      - PAYMENT
+      - REFUND
+      example: PAYMENT
+    multiCurrencyPricingRateLookup:
+      title: Multi-Currency Pricing (MCP) Rate Response
+      type: object
+      properties:
+        multiCurrencyPricingRateLookupId:
+          $ref: '#/components/schemas/resourceId'
+        multiCurrencyPricingTransactionType:
+          $ref: '#/components/schemas/multiCurrencyPricingTransactionType'
+        rateValidityEndTime:
+          $ref: '#/components/schemas/dateTime'
+        rateConversions:
+          type: array
+          items:
+            $ref: '#/components/schemas/multiCurrencyPricingRateConversion'
+          example:
+          - cardholderAmount:
+              amount: 3000
+              currency: USD
+            merchantSettlementAmount:
+              amount: 4024
+              currency: CAD
+            multiCurrencyPricingExchangeRate: 1.3413
+            multiCurrencyPricingStatusCode: 200
+            multiCurrencyPricingStatusMessage: ''
+          - cardholderAmount:
+              amount: 2993
+              currency: USD
+            merchantSettlementAmount:
+              amount: 4015
+              currency: CAD
+            multiCurrencyPricingExchangeRate: 1.3413
+            multiCurrencyPricingStatusCode: 200
+            multiCurrencyPricingStatusMessage: ''
+        customData:
+          description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+            minLength: 1
+            maxLength: 50
+          maxProperties: 10
+        createdAt:
+          $ref: '#/components/schemas/createdAt'
+      required:
+      - multiCurrencyPricingRateLookupId
+      - multiCurrencyPricingTransactionType
+      - rateValidityEndTime
+      - rateConversions
+      - createdAt
+    multiCurrencyPricingRateCardholderInformation:
+      type: object
+      description: Multi-Currency Pricing (MCP) Rate Information Object
+      properties:
+        amountType:
+          type: string
+          description: The type of rate lookup to perform.
+          enum:
+          - CARDHOLDER
+          example: CARDHOLDER
+        amount:
+          $ref: '#/components/schemas/money'
+      required:
+      - amount
+      - amountType
+    multiCurrencyPricingRateLookupRequest:
+      title: Multi-Currency Pricing (MCP) Rate Request
+      type: object
+      properties:
+        multiCurrencyPricingTransactionType:
+          $ref: '#/components/schemas/multiCurrencyPricingTransactionType'
+        multiCurrencyPricingRateInformationRequests:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/multiCurrencyPricingRateInformationRequest'
+          example:
+          - amount:
+              currency: USD
+              amount: 3000
+            amountType: CARDHOLDER
+          - amount:
+              currency: USD
+              amount: 4015
+            cardholderCurrency: USD
+            amountType: MERCHANT_SETTLEMENT
+        customData:
+          $ref: '#/components/schemas/customData'
+      required:
+      - multiCurrencyPricingTransactionType
+      - multiCurrencyPricingRateInformationRequests
+    merchantId:
+      type: string
+      description: "Thirteen character long identification provided to merchants by Moneris. \n"
+      minLength: 13
+      maxLength: 13
+      example: 0123456789101
     money:
       type: object
       description: "Monetary amount. \nNote: The value must be in cents. Therefore $10.59 must be sent as 1059.\n"
@@ -215,57 +446,18 @@ components:
       example:
         amount: 16000
         currency: CAD
-    multiCurrencyPricingRateConversion:
-      type: object
-      description: Exchange rate for use in a subsequent MCP financial transaction
-      properties:
-        cardholderAmount:
-          $ref: '#/components/schemas/money'
-        merchantSettlementAmount:
-          description: The amount that will be paid to the merchant, in settlement currency
-          type: object
-          properties:
-            amount:
-              $ref: '#/components/schemas/amount'
-            currency:
-              $ref: '#/components/schemas/currency'
-          required:
-          - amount
-          - currency
-          example:
-            amount: 16000
-            currency: CAD
-        multiCurrencyPricingExchangeRate:
-          description: The foreign exchange rate (foreign currency to CAD) that will be used for the transaction
-          type: number
-          format: decimal
-          example: 1.2346
-        multiCurrencyPricingStatusCode:
-          description: HTTP Status code of the MCP transaction
-          type: integer
-          format: int32
-          minimum: 100
-          maximum: 9999
-          example: 200
-        multiCurrencyPricingStatusMessage:
-          description: Message corresponding to the MCP Status Code
-          type: string
-      required:
-      - cardholderAmount
-      - merchantSettlementAmount
-      - multiCurrencyPricingExchangeRate
-      - multiCurrencyPricingStatusCode
-      - multiCurrencyPricingStatusMessage
-      example:
-        cardholderAmount:
-          currency: USD
-          amount: 30000
-        merchantSettlementAmount:
-          currency: CAD
-          amount: 25000
-        multiCurrencyPricingRate: 1.2345
-        multiCurrencyPricingStatusCode: 200
-        multiCurrencyPricingStatusMessage: OK
+    currency:
+      type: string
+      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
+      minLength: 3
+      maxLength: 4
+      example: CAD
+      format: iso-4217
+    createdAt:
+      description: Time at which the object was created
+      type: string
+      format: date-time
+      example: '2019-07-30T06:43:40.252Z'
     error:
       description: Error response details.
       properties:
@@ -340,119 +532,125 @@ components:
       type: object
       required:
       - type
-    multiCurrencyPricingRateLookup:
-      title: Multi-Currency Pricing (MCP) Rate Response
-      type: object
-      properties:
-        multiCurrencyPricingRateLookupId:
-          $ref: '#/components/schemas/resourceId'
-        multiCurrencyPricingTransactionType:
-          $ref: '#/components/schemas/multiCurrencyPricingTransactionType'
-        rateValidityEndTime:
-          $ref: '#/components/schemas/dateTime'
-        rateConversions:
-          type: array
-          items:
-            $ref: '#/components/schemas/multiCurrencyPricingRateConversion'
-          example:
-          - cardholderAmount:
-              amount: 3000
-              currency: USD
-            merchantSettlementAmount:
-              amount: 4024
-              currency: CAD
-            multiCurrencyPricingExchangeRate: 1.3413
-            multiCurrencyPricingStatusCode: 200
-            multiCurrencyPricingStatusMessage: ''
-          - cardholderAmount:
-              amount: 2993
-              currency: USD
-            merchantSettlementAmount:
-              amount: 4015
-              currency: CAD
-            multiCurrencyPricingExchangeRate: 1.3413
-            multiCurrencyPricingStatusCode: 200
-            multiCurrencyPricingStatusMessage: ''
-        customData:
-          description: Merchant can send custom meta data with the transaction in this object. Moneris will echo these values back in response.
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-            minLength: 1
-            maxLength: 50
-          maxProperties: 10
-        createdAt:
-          $ref: '#/components/schemas/createdAt'
-      required:
-      - multiCurrencyPricingRateLookupId
-      - multiCurrencyPricingTransactionType
-      - rateValidityEndTime
-      - rateConversions
-      - createdAt
-    multiCurrencyPricingRateInformationRequest:
-      description: Multi-Currency Pricing (MCP) Rate Information Request Object
-      oneOf:
-      - $ref: '#/components/schemas/multiCurrencyPricingRateCardholderInformation'
-      - $ref: '#/components/schemas/multiCurrencyPricingRateMerchantSettlementInformation'
-      discriminator:
-        propertyName: amountType
-        mapping:
-          CARDHOLDER: '#/components/schemas/multiCurrencyPricingRateCardholderInformation'
-          MERCHANT_SETTLEMENT: '#/components/schemas/multiCurrencyPricingRateMerchantSettlementInformation'
-    createdAt:
-      description: Time at which the object was created
-      type: string
-      format: date-time
-      example: '2019-07-30T06:43:40.252Z'
     dateTime:
       type: string
       format: date-time
       example: '2019-07-30T06:43:40.252Z'
       description: Date & Time
-    currency:
+    multiCurrencyPricingRateConversion:
+      type: object
+      description: Exchange rate for use in a subsequent MCP financial transaction
+      properties:
+        cardholderAmount:
+          $ref: '#/components/schemas/money'
+        merchantSettlementAmount:
+          description: The amount that will be paid to the merchant, in settlement currency
+          type: object
+          properties:
+            amount:
+              $ref: '#/components/schemas/amount'
+            currency:
+              $ref: '#/components/schemas/currency'
+          required:
+          - amount
+          - currency
+          example:
+            amount: 16000
+            currency: CAD
+        multiCurrencyPricingExchangeRate:
+          description: The foreign exchange rate (foreign currency to CAD) that will be used for the transaction
+          type: number
+          format: decimal
+          example: 1.2346
+        multiCurrencyPricingStatusCode:
+          description: HTTP Status code of the MCP transaction
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 9999
+          example: 200
+        multiCurrencyPricingStatusMessage:
+          description: Message corresponding to the MCP Status Code
+          type: string
+      required:
+      - cardholderAmount
+      - merchantSettlementAmount
+      - multiCurrencyPricingExchangeRate
+      - multiCurrencyPricingStatusCode
+      - multiCurrencyPricingStatusMessage
+      example:
+        cardholderAmount:
+          currency: USD
+          amount: 30000
+        merchantSettlementAmount:
+          currency: CAD
+          amount: 25000
+        multiCurrencyPricingRate: 1.2345
+        multiCurrencyPricingStatusCode: 200
+        multiCurrencyPricingStatusMessage: OK
+    apiVersion:
+      description: 'The endpoint''s API Version.  Must be provided through headers.
+
+        '
       type: string
-      description: "Provides the three letter currency code according the ISO 4217 standard. \n\nFor a complete list of currency codes, visit: https://en.wikipedia.org/wiki/ISO_4217\n"
-      minLength: 3
-      maxLength: 4
-      example: CAD
-      format: iso-4217
-    multiCurrencyPricingRateLookupRequest:
-      title: Multi-Currency Pricing (MCP) Rate Request
+      example: '2025-08-14'
+      default: '2025-08-14'
+    parameterError:
+      title: Parameter error
+      description: Request property or header related error.
       type: object
       properties:
-        multiCurrencyPricingTransactionType:
-          $ref: '#/components/schemas/multiCurrencyPricingTransactionType'
-        multiCurrencyPricingRateInformationRequests:
-          type: array
-          minItems: 1
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/multiCurrencyPricingRateInformationRequest'
-          example:
-          - amount:
-              currency: USD
-              amount: 3000
-            amountType: CARDHOLDER
-          - amount:
-              currency: USD
-              amount: 4015
-            cardholderCurrency: USD
-            amountType: MERCHANT_SETTLEMENT
-        customData:
-          $ref: '#/components/schemas/customData'
+        parameterName:
+          type: string
+          description: Property or header name. Can contain nested path separated by '.'
+          example: address.postalCode
+        parameterValue:
+          type:
+          - string
+          - 'null'
+          description: Property or header value string representation.
+          example: MAP3J8
+        reasonCode:
+          type: string
+          description: Reason that triggered the error.
+          enum:
+          - INVALID_FORMAT
+          - REQUIRED_FIELD
+          - INVALID_VALUE
+          example: INVALID_FORMAT
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Human readable description of the error.
+          example: String 'MAP3J8' does not match the postal code pattern.
       required:
-      - multiCurrencyPricingTransactionType
-      - multiCurrencyPricingRateInformationRequests
-    multiCurrencyPricingTransactionType:
-      type: string
-      description: Value representing the type of subsequent transaction request that the rate token will be used for
-      enum:
-      - PAYMENT
-      - REFUND
-      example: PAYMENT
+      - parameterName
+      - reasonCode
   parameters:
+    apiVersion:
+      in: header
+      name: Api-Version
+      required: true
+      example: '2024-09-17'
+      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
+      schema:
+        $ref: '#/components/schemas/apiVersion'
+    multiCurrencyPricingRateLookupId:
+      in: path
+      name: multi-currency-pricing-rate-lookup-id
+      description: The unique identifier of the multiCurrencyPricing Rate Operation
+      required: true
+      schema:
+        $ref: '#/components/schemas/resourceId'
+    merchantId:
+      in: header
+      name: X-Merchant-Id
+      example: 0123456789101
+      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
+      required: true
+      schema:
+        $ref: '#/components/schemas/merchantId'
     correlationId:
       in: header
       name: X-Correlation-Id
@@ -462,204 +660,6 @@ components:
       schema:
         type: string
         example: 06f1e47b-a1b5-4902-be9c-bccc506127c4
-    multiCurrencyPricingRateLookupId:
-      in: path
-      name: multi-currency-pricing-rate-lookup-id
-      description: The unique identifier of the multiCurrencyPricing Rate Operation
-      required: true
-      schema:
-        $ref: '#/components/schemas/resourceId'
-    apiVersion:
-      in: header
-      name: Api-Version
-      required: true
-      example: '2024-09-17'
-      description: "The endpoint's API Version. \n\nMust be provided through the headers section. \n"
-      schema:
-        $ref: '#/components/schemas/apiVersion'
-    merchantId:
-      in: header
-      name: X-Merchant-Id
-      example: 0123456789101
-      description: "Thirteen character identification code. \n\nNote: This code is provided by Moneris and is required to identify the Merchant executing the transaction.\"\n"
-      required: true
-      schema:
-        $ref: '#/components/schemas/merchantId'
-  responses:
-    forbidden:
-      description: Forbidden. The user does not have permission to access the requested resource.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        WWW-Authenticate:
-          schema:
-            type: string
-            example: Bearer, error="insufficient_scope"
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: FORBIDDEN_REQUEST
-            status: 403
-            detail: null
-            instance: null
-            category: UNAUTHORIZED_ERROR
-            errors: []
-    tooManyRequests:
-      description: Too Many Requests
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        X-RateLimit-Reset:
-          $ref: '#/components/headers/rateLimitReset'
-        Retry-After:
-          $ref: '#/components/headers/rateLimitReset'
-    unprocessableContent:
-      description: "The API cannot complete the requested action due to semantic or business validation errors. \n"
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-    unauthorized:
-      description: Not authorized. The user does not have a valid API Key or Access Token.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-        WWW-Authenticate:
-          schema:
-            type: string
-            example: Bearer, error="invalid_token"
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://developer.moneris.com/en/More/Testing/Response%20Codes
-            title: UNAUTHORIZED_REQUEST
-            status: 401
-            detail: null
-            instance: null
-            category: UNAUTHORIZED_ERROR
-            errors: []
-    badRequest:
-      description: Bad Request.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-    serviceUnavailable:
-      description: Service Temporarily Unavailable
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        Retry-After:
-          $ref: '#/components/headers/retryAfter'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://api-developer.moneris.com/responsehandling/
-            title: SERVICE_UNAVAILABLE
-            status: 503
-            detail: null
-            instance: null
-            category: INTERNAL_SERVER_ERROR
-            errors: []
-    internalServer:
-      description: Unexpected error.
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            type: https://api-developer.moneris.com/responsehandling/
-            title: INTERNAL_SERVER_ERROR
-            status: 500
-            detail: null
-            instance: null
-            category: INTERNAL_SERVER_ERROR
-            errors: []
-    multiCurrencyPricingRateLookup:
-      description: Multi-Currency Pricing (MCP) Rate lookup Response
-      headers:
-        Api-Version:
-          $ref: '#/components/headers/apiVersion'
-        X-Correlation-Id:
-          $ref: '#/components/headers/correlationId'
-        Sunset:
-          $ref: '#/components/headers/sunset'
-        X-RateLimit-Limit:
-          $ref: '#/components/headers/rateLimitCount'
-        X-RateLimit-Remaining:
-          $ref: '#/components/headers/rateLimitRemaining'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/multiCurrencyPricingRateLookup'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
