@@ -47,3 +47,16 @@
     detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
+- slug: moneris-salesforce-commerce-cloud-own
+  label: Salesforce Commerce Cloud (own)
+  partner: salesforce-commerce-cloud
+  partner_name: Salesforce Commerce Cloud (own)
+  category: paymentsProcessing
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appexchange.salesforce.com/appxListingDetail?listingId=2349a4f5-5cc5-4c1b-ad5e-824e81d33305
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
