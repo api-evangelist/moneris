@@ -768,6 +768,8 @@ apis:
   - type: APIReference
     url: https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/moneris/overview
 - type: CapabilityMap
   url: capabilities/moneris-capability-edges.yml
   name: Moneris Business Capability Map
