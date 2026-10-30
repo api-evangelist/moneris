@@ -1,4 +1,4 @@
-# Moneris (moneris)
+# Moneris
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,140 +64,147 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Moneris (Moneris Solutions Corporation) is Canada's largest payment processor and merchant-acquiring company, founded in December 2000 as a joint venture equally owned by Royal Bank of Canada (RBC) and Bank of Montreal (BMO). It is a payment-technology company in the payments-infrastructure layer of Canadian financial services — not a deposit-taking Schedule I bank — serving roughly 325,000 points of commerce and processing close to five billion transactions a year. Moneris runs a public developer portal documenting the Moneris Unified API, a REST/OpenAPI 3.0.3 platform on `api.moneris.io` (production) and `api.sb.moneris.io` (sandbox), secured with OAuth 2.0 client credentials and API keys.
+Moneris (Moneris Solutions Corporation) is Canada's largest payment processor and merchant-acquiring company, founded in December 2000 as a joint venture equally owned by Royal Bank of Canada (RBC) and Bank of Montreal (BMO). It is a payment-technology and card-acquiring company rather than a deposit-taking Schedule I bank, sitting in the payments-infrastructure layer of Canadian financial services: it serves roughly 325,000 points of commerce, processes close to five billion transactions a year, and handles on the order of one in three Canadian card transactions. In 2025-2026 RBC and BMO explored a sale of the venture, with Francisco Partners (owner of Verifone) reported as the lead buyer. Unlike its bank owners, Moneris is not subject to Canada's coming Consumer-Driven Banking framework; its "open" surface is a commercial, self-serve first-party developer program. Moneris runs a real, public developer portal at developer.moneris.com documenting the Moneris Unified API (REST, OpenAPI 3.0.3, hosts api.moneris.io production / api.sb.moneris.io sandbox) covering payments, tokenized payment methods, refunds, recurring billing/subscriptions, 3-D Secure, Kount fraud/risk, disputes, multi-currency pricing, and third-party merchant onboarding, secured with OAuth 2.0 client credentials and API keys, with a published Postman workspace.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/moneris/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/moneris/refs/heads/main/apis.yml)
+**Areas:** Financial Services · Payments · Payment Processing · Card Payments · Merchant Services · Acquiring · Canada · Fintech · Infrastructure
 
-## Open-Finance Posture
+## Moneris on APIs.io
 
-Canada has no operational open-banking mandate; the federal Consumer-Driven Banking (CDB) framework legislated in Budget 2024 / Fall Economic Statement 2024 (overseen by the FCAC) is not yet live. As a payment processor rather than a chartered bank, Moneris is not itself a CDB reporting entity — that obligation falls on its bank owners RBC and BMO. Moneris's public API surface is therefore a commercial, self-serve merchant-payments program, not a consumer data-sharing / FDX interface. Access to production requires tying a Developer Portal account to a recognized Moneris merchant account.
+Everything profiled for Moneris is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/moneris/](https://apis.io/providers/moneris/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (15)
 
-- Financial Services
-- Payments
-- Payment Processing
-- Card Payments
-- Merchant Services
-- Acquiring
-- Canada
-- Fintech
-- Infrastructure
+- [Moneris 3D Secure API](https://apis.io/apis/moneris/moneris-3d-secure-api/) — Perform 3D Secure authentications against payment methods
+- [Moneris Customers API](https://apis.io/apis/moneris/moneris-customers-api/) — Perform and Manage customers
+- [Moneris Disputes API](https://apis.io/apis/moneris/moneris-disputes-api/) — Perform and Manage Disputes
+- [Moneris Installments API](https://apis.io/apis/moneris/moneris-installments-api/) — Perform and Manage Installments
+- [Moneris Kount API](https://apis.io/apis/moneris/moneris-kount-api/) — Perform and Manage Kount risk assessment inquiries
+- [Moneris Merchant Onboarding API](https://apis.io/apis/moneris/moneris-merchant-onboarding-api/) — Manage Merchants onboarding
+- [Moneris Multi-Currency Pricing Rate Lookup API](https://apis.io/apis/moneris/moneris-multi-currency-pricing-rate-lookup-api/) — Retrieve Multi-Currency Pricing Rate Lookups
+- [Moneris Payment Methods API](https://apis.io/apis/moneris/moneris-payment-methods-api/) — Create and Manage payment methods
+- [Moneris Payments API](https://apis.io/apis/moneris/moneris-payments-api/) — Perform and Manage payments
+- [Moneris Products API](https://apis.io/apis/moneris/moneris-products-api/) — Product recommendations
+- [Moneris Refunds API](https://apis.io/apis/moneris/moneris-refunds-api/) — Perform and Manage payment refunds
+- [Moneris Subscriptions API](https://apis.io/apis/moneris/moneris-subscriptions-api/) — Perform and Manage Subscriptions
+- [Moneris Surcharge Lookup API](https://apis.io/apis/moneris/moneris-surcharge-lookup-api/) — The Surcharge Lookup API from Moneris — 1 operation(s) for surcharge lookup.
+- [Moneris Terminal & Service Orders API](https://apis.io/apis/moneris/moneris-terminal-service-orders-api/) — Manage Moneris Terminal & Service Orders
+- [Moneris Validations API](https://apis.io/apis/moneris/moneris-validations-api/) — Perform and Manage card validations
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-07-23
-- **Modified:** 2026-07-23
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-All API products below are resource groups of the single Moneris Unified API (OpenAPI 3.0.3, version 2.6.1). Base URL `https://api.moneris.io` (sandbox `https://api.sb.moneris.io`). Authentication is OAuth 2.0 client credentials (fine-grained scopes) or an `X-Api-Key` API key.
+Event-driven and webhook contracts.
 
-### Moneris Payments API
+- [Moneris Subscriptions Webhooks](https://apis.io/asyncapis/moneris/moneris-subscriptions-webhooks/)
 
-Create, retrieve, list, cancel, complete, and increment card payments — purchase, pre-authorization/completion, incremental authorization, and multiple completions.
+#### MCP servers (1)
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/purchase](https://developer.moneris.com/moneris-api/docs/purchase)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/getpayments)
+Model Context Protocol servers that expose the API to agents.
 
-### Moneris Payment Methods API
+- [moneris](https://apis.io/servers/moneris/moneris/)
 
-Tokenize and manage stored payment methods for purchase-with-token and card-on-file flows.
+#### Agentic access (1)
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token](https://developer.moneris.com/moneris-api/docs/purchase-with-payment-token)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/getpaymentmethods)
+Which operations an agent can call, which act, and which need a human in the loop.
 
-### Moneris Refunds API
+- [Moneris Agentic Access](https://apis.io/agentic-access/moneris/moneris-agentic-access/)
 
-Create, retrieve, and list payment refunds and independent refunds.
+#### Collections (1)
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/reference/getrefunds](https://developer.moneris.com/moneris-api/reference/getrefunds)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/getrefunds)
+Postman and Open Collection request collections.
 
-### Moneris Subscriptions API
+- [Moneris API](https://apis.io/collections/moneris/open-moneris-unified-api/)
 
-Recurring-billing subscriptions — create, update, pause, resume, extend, cancel — with recurring-payment webhook events.
+#### Overlays (1)
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/recurring-billing](https://developer.moneris.com/moneris-api/docs/recurring-billing)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/getsubscriptions)
+OpenAPI overlays, including conversational phrasing for each operation.
 
-### Moneris Customers API
+- [Moneris Unified Api Overlay](https://apis.io/overlays/moneris/moneris-unified-api-overlay/)
 
-Create, retrieve, list, update, and delete customer records.
+#### Security (2)
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/reference/getcustomers](https://developer.moneris.com/moneris-api/reference/getcustomers)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/getcustomers)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Moneris 3-D Secure Authentication API
+- [Moneris Authentication](https://apis.io/security/moneris/moneris-authentication/)
+- [Moneris Domain Security](https://apis.io/security/moneris/moneris-domain-security/)
 
-3-D Secure cardholder authentication (browser and requestor-initiated channels), including authentication value lookup for the challenge flow.
+#### OAuth scopes (1)
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/3ds-browser](https://developer.moneris.com/moneris-api/docs/3ds-browser)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/createauthentication)
+The permissions the API asks for.
 
-### Moneris Kount Risk Inquiry API
+- [Moneris Scopes](https://apis.io/scopes/moneris/moneris-scopes/)
 
-Fraud and risk scoring through Kount — create, list, retrieve, and assert Kount inquiries.
+## Where to find this API
 
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount](https://developer.moneris.com/moneris-api/docs/risk-inquiry-kount)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/createkountinquiry)
-
-### Moneris Merchant Onboarding API
-
-Third-party merchant onboarding and updating, terminal & service ordering, order-status tracking, supplies, and product recommendations for partners and ISVs.
-
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/onboarding-and-updating](https://developer.moneris.com/moneris-api/docs/onboarding-and-updating)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/createmerchant)
-
-### Moneris Multi-Currency Pricing API
-
-Foreign-currency exchange-rate lookup and rate retrieval to lock a rate for a subsequent MCP transaction.
-
-- **Human URL:** [https://developer.moneris.com/moneris-api/docs/multi-currency-pricing](https://developer.moneris.com/moneris-api/docs/multi-currency-pricing)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/mcprate)
-
-### Moneris Disputes API
-
-Chargeback and dispute handling — accept a dispute, retrieve details, upload response documents, and check upload status.
-
-- **Human URL:** [https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber](https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber)
-- **Base URL:** `https://api.moneris.io`
-- [OpenAPI](openapi/moneris-unified-api-openapi.json)
-- [API Reference](https://developer.moneris.com/moneris-api/reference/getdisputebycaseidandrecordnumber)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.moneris.com)
-- [Developer Portal](https://developer.moneris.com)
 - [Documentation](https://developer.moneris.com/moneris-api/docs/introduction)
-- [Registration](https://developer.moneris.com/login)
-- [Postman](https://www.postman.com/moneris)
-- [GitHub Organization](https://github.com/moneris)
-- [LinkedIn](https://www.linkedin.com/company/moneris)
-- [Blog](https://www.moneris.com/en/blog)
-- [Terms of Service](https://www.moneris.com/en/legal/terms-of-use)
-- [Privacy Policy](https://www.moneris.com/en/legal/privacy-policy)
+- [Getting started](https://developer.moneris.com/moneris-api/docs/getting-started-guide)
+- [Sign up](https://developer.moneris.com/login)
 - [Support](https://www.moneris.com/en/support/contact)
+- [Changelog](https://developer.moneris.com/changelog)
+- [Blog](https://www.moneris.com/en/blog)
+- [Compliance](https://www.moneris.com/en/support/compliance-and-security/pci-data-security)
+- [Terms of service](https://www.moneris.com/en/legal/terms-of-use)
+- [Privacy policy](https://www.moneris.com/en/legal/privacy-policy)
+- [GitHub](https://github.com/moneris)
+- [Status](https://status.moneris.com)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 41.7** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 61.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 34.2 |
+| Developer ergonomics | 45.8 |
+| Access clarity | 6.6 |
+
+**Agent readiness 55.2** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | verified |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 36.6** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/moneris/](https://apis.io/providers/moneris/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Moneris: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/moneris/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
